@@ -10,11 +10,11 @@
 		android:supportsRtl="true"
 		android:theme="@style/Theme.MySpaceDemo1">
 		<activity
-			android:name=".activities.user.LoginActivity"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity"
 			android:exported="false"
 			android:windowSoftInputMode="adjustPan"/>
 		<activity
-			android:name=".activities.welcome.WelcomeActivity"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.activities.welcome.WelcomeActivity"
 			android:exported="true"
 			android:theme="@style/Theme.MySpaceDemo1.NoActionBar">
 			<intent-filter>
@@ -24,7 +24,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".activities.main.MainActivity"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity"
 			android:exported="true"
 			android:theme="@style/Theme.MySpaceDemo1.NoActionBar"
 			android:windowSoftInputMode="adjustPan"/>

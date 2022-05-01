@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
-import com.rainbowwolfer.myspacedemo1.fragments.main.home.HomeFragmentDirections
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions

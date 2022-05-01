@@ -10,7 +10,7 @@
 		app:startDestination="@id/item_home">
 		<fragment
 			android:id="@+id/item_home"
-			android:name="com.rainbowwolfer.myspacedemo1.fragments.main.home.HomeFragment"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment"
 			android:label="fragment_home"
 			tools:layout="@layout/fragment_home">
 			<action
@@ -23,7 +23,7 @@
 		</fragment>
 		<fragment
 			android:id="@+id/userFragment"
-			android:name="com.rainbowwolfer.myspacedemo1.fragments.main.user.UserFragment"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
 			android:label="UserFragment">
 			<argument
 				android:name="user"
@@ -32,16 +32,16 @@
 	</navigation>
 	<fragment
 		android:id="@+id/nav_settings"
-		android:name="com.rainbowwolfer.myspacedemo1.fragments.main.settings.SettingsFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.settings.SettingsFragment"
 		android:label="SettingsFragment"/>
 	<fragment
 		android:id="@+id/nav_about"
-		android:name="com.rainbowwolfer.myspacedemo1.fragments.main.about.AboutFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.about.AboutFragment"
 		android:label="fragment_about"
 		tools:layout="@layout/fragment_about"/>
 	<fragment
 		android:id="@+id/nav_collection"
-		android:name="com.rainbowwolfer.myspacedemo1.fragments.main.user.CollectionFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.CollectionFragment"
 		android:label="fragment_collection"
 		tools:layout="@layout/fragment_collection"/>
 	<navigation
@@ -49,12 +49,12 @@
 		app:startDestination="@id/nav_message">
 		<fragment
 			android:id="@+id/nav_detailMessage"
-			android:name="com.rainbowwolfer.myspacedemo1.fragments.main.message.MessageDetailFragment"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageDetailFragment"
 			android:label="fragment_message_detail"
 			tools:layout="@layout/fragment_message_detail"/>
 		<fragment
 			android:id="@+id/nav_message"
-			android:name="com.rainbowwolfer.myspacedemo1.fragments.main.message.MessageFragment"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageFragment"
 			android:label="fragment_message"
 			tools:layout="@layout/fragment_message">
 			<action
@@ -68,7 +68,7 @@
 	</navigation>
 	<fragment
 		android:id="@+id/nav_profile"
-		android:name="com.rainbowwolfer.myspacedemo1.fragments.main.user.UserFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
 		android:label="UserFragment"/>
 
 </navigation>
