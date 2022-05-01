@@ -10,4 +10,6 @@
 	<color name="gray_darker">#552c2c2c</color>
 	<color name="gray_lighter">#222c2c2c</color>
 	<color name="gray">#B3ADADAD</color>
+	<color name="contrast_background">#FFdcdcdc</color>
+	<color name="red">#ED2E2E</color>
 </resources>

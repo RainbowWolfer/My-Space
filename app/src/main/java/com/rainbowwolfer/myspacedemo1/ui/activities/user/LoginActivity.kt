@@ -8,6 +8,7 @@ import android.viewbinding.library.activity.viewBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityLoginBinding
+import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.LoginViewPagerAdapter
 
 class LoginActivity : AppCompatActivity() {
@@ -37,12 +38,9 @@ class LoginActivity : AppCompatActivity() {
 		}
 	}
 	
-	fun getBack() {
-		val data = Intent().apply {
-			putExtra("key1", "value1")
-			putExtra("key2", "value2")
-			putExtra("key3", "value3")
-			
+	fun getBack(user: User) {
+		Intent().apply {
+			putExtra("user", user)
 			setResult(Activity.RESULT_OK, this)
 		}
 		finish()

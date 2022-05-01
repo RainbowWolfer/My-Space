@@ -1,8 +1,11 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.main
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.activity.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +19,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
+import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 
 class MainActivity : AppCompatActivity() {
@@ -24,17 +28,14 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var appBarConfiguration: AppBarConfiguration
 	private lateinit var navController: NavController
 	
-	private lateinit var navHeaderMain: NavHeaderMain
+	private lateinit var navViewHeaderBinding: NavHeaderMainBinding
 	
 	private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		if (result.resultCode == Activity.RESULT_OK) {
-			val v1 = result.data?.getStringExtra("key1")
-			val v2 = result.data?.getStringExtra("key2")
-			val v3 = result.data?.getStringExtra("key3")
-			println(v1)
-			println(v2)
-			println(v3)
-			updateNavMenu()
+			val user = result.data?.getParcelableExtra<User>("user")
+			User.current = user
+			println(user)
+			updateNav()
 		}
 	}
 	
@@ -63,15 +64,27 @@ class MainActivity : AppCompatActivity() {
 		binding.navView.setCheckedItem(R.id.subnav_home)
 		
 		val viewGroup: ViewGroup = binding.navView.getHeaderView(0) as ViewGroup
-		navHeaderMain = NavHeaderMain(this, viewGroup)
-//		registerForActivityResult(ActivityResultContract, ActivityResultCallback)
-		navHeaderMain.buttonLogin.setOnClickListener {
-//			startActivityForResult(Intent(this, LoginActivity::class.java))
-//			registerForActivityResult()
+		navViewHeaderBinding = NavHeaderMainBinding.bind(viewGroup)
+		
+		navViewHeaderBinding.headerButtonLogin.setOnClickListener {
 			intentLauncher.launch(Intent(this, LoginActivity::class.java))
 		}
 		
-		updateNavMenu()
+		navViewHeaderBinding.headerButtonSignOut.setOnClickListener {
+			AlertDialog.Builder(this).apply {
+				setTitle("Confirm")
+				setMessage("Are you sure to sign out?")
+				setNegativeButton("No", null)
+				setPositiveButton("Yes") { _, _ ->
+					User.current = null
+					updateNav()
+//					binding.drawerLayout.closeDrawers()
+				}
+				show()
+			}
+		}
+		
+		updateNav()
 	}
 
 //	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -88,13 +101,17 @@ class MainActivity : AppCompatActivity() {
 		binding.drawerLayout.closeDrawers()
 	}
 	
-	private fun updateNavMenu() {
+	private fun updateNav() {
 		arrayListOf(
 			R.id.subnav_message,
 			R.id.nav_collection,
 			R.id.nav_profile,
 		).forEach {
-			binding.navView.menu.findItem(it).isEnabled = User.current != null
+			binding.navView.menu.findItem(it).isEnabled = User.isLoggedIn()
 		}
+		navViewHeaderBinding.headerTextTitle.text = if (User.isLoggedIn()) User.current!!.username else "Welcome"
+		navViewHeaderBinding.headerButtonLogin.visibility = if (User.isLoggedIn()) View.GONE else View.VISIBLE
+		navViewHeaderBinding.headerButtonSignOut.visibility = if (User.isLoggedIn()) View.VISIBLE else View.GONE
+		//update avatar
 	}
 }

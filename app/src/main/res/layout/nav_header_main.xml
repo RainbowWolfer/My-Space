@@ -9,6 +9,20 @@
 	android:gravity="bottom"
 	android:theme="@style/ThemeOverlay.AppCompat.Dark">
 	
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/header_image_avatar"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_marginTop="46dp"
+		android:src="@drawable/ic_food"
+		app:civ_border_color="@color/black"
+		app:civ_border_overlay="true"
+		app:civ_border_width="2dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
 	<TextView
 		android:id="@+id/header_text_title"
 		android:layout_width="0dp"
@@ -36,17 +50,16 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/header_text_title"/>
 	
-	<de.hdodenhof.circleimageview.CircleImageView
-		android:id="@+id/header_image_avatar"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:layout_marginTop="46dp"
-		android:src="@drawable/ic_food"
-		app:civ_border_color="@color/black"
-		app:civ_border_overlay="true"
-		app:civ_border_width="2dp"
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/header_button_signOut"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="14dp"
+		android:text="Sign Out"
+		app:icon="@drawable/ic_baseline_arrow_back_24"
+		app:iconGravity="textStart"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"/>
+		app:layout_constraintTop_toBottomOf="@+id/header_button_login"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

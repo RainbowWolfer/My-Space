@@ -13,13 +13,19 @@ import com.rainbowwolfer.myspacedemo1.models.User
 class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()
 	
+	var isSelf: Boolean = false
+		private set
+	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		val user: User? = if (arguments != null) {
-			UserFragmentArgs.fromBundle(requireArguments()).user
+		val user: User?
+		if (arguments != null) {
+			user = UserFragmentArgs.fromBundle(requireArguments()).user
+			isSelf = false
 		} else {
-			User.current
+			user = User.current
+			isSelf = true
 		}
 		
 		if (user == null) {

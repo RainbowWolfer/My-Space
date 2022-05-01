@@ -6,19 +6,20 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserFol
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserPostsFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserProfileFragment
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 
 class UserViewPagerAdapter(
-	fragment: Fragment,
+	private val parent: UserFragment,
 	private val user: User,
-) : FragmentStateAdapter(fragment) {
+) : FragmentStateAdapter(parent) {
 	override fun getItemCount(): Int = 3
 	
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {
-			0 -> UserProfileFragment(user)
-			1 -> UserPostsFragment()
-			2 -> UserFollowersFragment()
-			else -> UserProfileFragment(user)
+			0 -> UserProfileFragment(parent, user)
+			1 -> UserPostsFragment(parent)
+			2 -> UserFollowersFragment(parent)
+			else -> UserProfileFragment(parent, user)
 		}
 	}
 }
