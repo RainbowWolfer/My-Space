@@ -1,0 +1,37 @@
+<resources>
+	<string name="app_name">MySpace</string>
+	<string name="app_name_space">My Space</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="nav_header_title">Android Studio</string>
+	<string name="nav_header_subtitle">android.studio@android.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+	<string name="action_settings">Settings</string>
+	
+	<string name="open">Open</string>
+	<string name="close">Close</string>
+	
+	<string name="welcome1_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+	<string name="welcome2_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable.</string>
+	
+	
+	<string name="menu_home">Home</string>
+	<string name="menu_gallery">Gallery</string>
+	<string name="menu_slideshow">Slideshow</string>
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<!-- Preference Titles -->
+	<string name="messages_header">Messages</string>
+	<string name="sync_header">Sync</string>
+	
+	<!-- Messages Preferences -->
+	<string name="signature_title">Your signature</string>
+	<string name="reply_title">Default reply action</string>
+	
+	<!-- Sync Preferences -->
+	<string name="sync_title">Sync email periodically</string>
+	<string name="attachment_title">Download incoming attachments</string>
+	<string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+	<string name="attachment_summary_off">Only download attachments when manually requested</string>
+	<string name="default_long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at nisl posuere libero laoreet pulvinar. Sed mauris metus, vulputate eu volutpat nec, cursus non augue. Nulla ac quam leo. Cras tincidunt maximus justo, id elementum metus. Donec tempus ipsum a eros ultrices egestas. Pellentesque accumsan orci ut erat sollicitudin, in convallis libero pretium. Duis blandit elementum nibh eu tempor. Vivamus accumsan, dui vestibulum fringilla commodo, odio magna commodo lectus, ac tempor augue augue vel sem. Duis non eleifend dui, ut imperdiet tellus.</string>
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="10dp"
+	android:background="@drawable/card_background">
+	
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/row_image_publisherAvatar"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="24dp"
+		android:clickable="true"
+		android:longClickable="true"
+		android:src="@drawable/ic_food"
+		app:civ_border_color="@color/black"
+		app:civ_border_width="1dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<TextView
+		android:id="@+id/row_text_publisherName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="Publisher Name"
+		android:textSize="20sp"
+		android:textStyle="bold"
+		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"
+		app:layout_constraintTop_toTopOf="@+id/row_image_publisherAvatar"/>
+	
+	<TextView
+		android:id="@+id/row_text_publishDateTime"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="2022/4/26 19:33:22"
+		app:layout_constraintBottom_toBottomOf="@+id/row_image_publisherAvatar"
+		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"/>
+	
+	<TextView
+		android:id="@+id/row_text_content"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginBottom="8dp"
+		android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.501"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/row_image_publisherAvatar"/>
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/row_button_more"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="24dp"
+		android:background="#00ffffff"
+		android:contentDescription="@string/app_name"
+		android:minWidth="48dp"
+		android:minHeight="48dp"
+		android:src="@drawable/ic_baseline_more_vert_24"
+		app:layout_constraintBottom_toBottomOf="@+id/row_text_publishDateTime"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/row_text_publisherName"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

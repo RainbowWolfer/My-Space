@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:showIn="navigation_view">
+	<group android:checkableBehavior="single">
+		<item android:title="My Space">
+			<menu>
+				<item
+					android:id="@+id/subnav_home"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_home_24"
+					android:title="Home"/>
+				<item
+					android:id="@+id/subnav_message"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_message_24"
+					android:title="Message"/>
+			</menu>
+		</item>
+		<item android:title="User">
+			<menu>
+				<item
+					android:id="@+id/nav_collection"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_flag_24"
+					android:title="Collection"/>
+				<item
+					android:id="@+id/nav_profile"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_person_24"
+					android:title="Profile"/>
+			</menu>
+		</item>
+		<item android:title="More">
+			<menu>
+				<item
+					android:id="@+id/nav_about"
+					android:checkable="false"
+					android:icon="@drawable/ic_baseline_info_24"
+					android:title="About"/>
+				<item
+					android:id="@+id/nav_settings"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_settings_24"
+					android:title="Settings"/>
+			</menu>
+		</item>
+	</group>
+</menu>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:contentDescription="@string/app_name"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+		
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/user_title_layout"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="16dp"
+				android:layout_marginEnd="16dp"
+				android:background="@drawable/card_background"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:paddingStart="20dp"
+				android:paddingTop="20dp"
+				android:paddingEnd="20dp"
+				android:paddingBottom="20dp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent">
+				
+				<de.hdodenhof.circleimageview.CircleImageView
+					android:id="@+id/user_image_avatar"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_food"
+					app:civ_border_color="@color/purple_200"
+					app:civ_border_overlay="true"
+					app:civ_border_width="2dp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					tools:ignore="ImageContrastCheck"/>
+				
+				<TextView
+					android:id="@+id/user_text_username"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:text="RainbowWolfer"
+					android:textSize="24sp"
+					android:textStyle="bold"
+					app:layout_constraintEnd_toEndOf="@+id/user_image_avatar"
+					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
+					app:layout_constraintTop_toBottomOf="@+id/user_image_avatar"/>
+				
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/user_follow_button"
+					android:layout_width="150dp"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:text="Follow"
+					app:icon="@drawable/ic_baseline_favorite_border_24"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/user_text_username"/>
+				
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/user_button_message"
+					android:layout_width="150dp"
+					android:layout_height="wrap_content"
+					android:text="Message"
+					app:icon="@drawable/ic_baseline_message_24"
+					app:layout_constraintEnd_toEndOf="@+id/user_follow_button"
+					app:layout_constraintStart_toStartOf="@+id/user_follow_button"
+					app:layout_constraintTop_toBottomOf="@+id/user_follow_button"/>
+			</androidx.constraintlayout.widget.ConstraintLayout>
+			
+			<View
+				android:id="@+id/view"
+				android:layout_width="4dp"
+				android:layout_height="20dp"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="16dp"
+				android:background="#FF0000"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/user_title_layout"/>
+			
+			<TextView
+				android:id="@+id/user_text_description"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="8dp"
+				android:layout_marginEnd="16dp"
+				android:text="@string/welcome2_text"
+				android:textSize="18sp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHorizontal_bias="0.0"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+			
+			<TextView
+				android:id="@+id/textView6"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="8dp"
+				android:layout_marginTop="16dp"
+				android:layout_marginEnd="16dp"
+				android:text="Profile Description"
+				android:textAlignment="viewStart"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@+id/view"
+				app:layout_constraintTop_toBottomOf="@+id/user_title_layout"/>
+		
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
