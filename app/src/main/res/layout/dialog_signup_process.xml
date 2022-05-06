@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:background="@drawable/round_background"
+	android:minWidth="300dp"
+	android:minHeight="230dp"
+	android:padding="5dp">
+	
+	<ProgressBar
+		android:id="@+id/signup_progressBar"
+		style="?android:attr/progressBarStyleLarge"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="16dp"
+		android:indeterminate="true"
+		android:indeterminateBehavior="cycle"
+		android:minWidth="200dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/signup_image_error"/>
+	
+	<ImageView
+		android:id="@+id/signup_image_error"
+		android:layout_width="76dp"
+		android:layout_height="76dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="16dp"
+		android:contentDescription="@string/error"
+		android:visibility="gone"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:srcCompat="@drawable/ic_baseline_close_24"
+		app:tint="@color/red"/>
+	
+	<TextView
+		android:id="@+id/signup_text_checkingUsername"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="16dp"
+		android:text="@string/checking_username"
+		android:textAlignment="center"
+		android:textColor="@color/normal_text"
+		android:textSize="20sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/signup_progressBar"/>
+	
+	<TextView
+		android:id="@+id/signup_text_checkingEmail"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:text="@string/checking_email"
+		android:textAlignment="center"
+		android:textColor="@color/gray_text"
+		android:textSize="20sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/signup_text_checkingUsername"/>
+	
+	<TextView
+		android:id="@+id/signup_text_sendingEmail"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:text="@string/sending_validatoin_email"
+		android:textAlignment="center"
+		android:textColor="@color/gray_text"
+		android:textSize="20sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.498"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/signup_text_checkingEmail"/>
+	
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/signup_button_back"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="32dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="32dp"
+		android:layout_marginBottom="8dp"
+		android:text="Back"
+		android:visibility="gone"
+		app:icon="@drawable/ic_baseline_arrow_back_24"
+		app:iconGravity="textStart"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/signup_text_sendingEmail"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

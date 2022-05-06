@@ -30,28 +30,4 @@ data class Post(
 		}
 	}
 	
-	override fun equals(other: Any?): Boolean {
-		if (this === other) return true
-		if (javaClass != other?.javaClass) return false
-		
-		other as Post
-		
-		if (id != other.id) return false
-		if (publisher != other.publisher) return false
-		if (publishDateTime != other.publishDateTime) return false
-		if (content != other.content) return false
-		if (attachedImagesBase64 != other.attachedImagesBase64) return false
-		
-		return true
-	}
-	
-	override fun hashCode(): Int {
-		var result = id.hashCode()
-		result = 31 * result + publisher.hashCode()
-		result = 31 * result + publishDateTime.hashCode()
-		result = 31 * result + content.hashCode()
-		result = 31 * result + attachedImagesBase64.hashCode()
-		return result
-	}
-	
 }

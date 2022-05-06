@@ -16,6 +16,9 @@
 		android:layout_marginTop="24dp"
 		android:layout_marginEnd="24dp"
 		android:hint="Username"
+		app:counterEnabled="true"
+		app:counterMaxLength="20"
+		app:errorEnabled="true"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
@@ -29,17 +32,47 @@
 	</com.google.android.material.textfield.TextInputLayout>
 	
 	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/signup_input_email"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="24dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="24dp"
+		android:hint="Email"
+		app:errorEnabled="true"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/signup_input_username"
+		app:startIconDrawable="@drawable/ic_baseline_email_24">
+		
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/signup_editText_email"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="textPersonName"
+			android:maxLength="100"/>
+	</com.google.android.material.textfield.TextInputLayout>
+	
+	<com.google.android.material.textfield.TextInputLayout
 		android:id="@+id/signup_input_password"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="24dp"
-		android:layout_marginTop="24dp"
+		android:layout_marginTop="8dp"
 		android:layout_marginEnd="24dp"
 		android:hint="Password"
+		app:counterEnabled="true"
+		app:counterMaxLength="30"
+		app:endIconDrawable="@drawable/ic_baseline_error_outline_24"
+		app:endIconMode="none"
+		app:errorEnabled="true"
+		app:helperText=""
+		app:helperTextTextColor="@color/red"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/signup_input_username"
+		app:layout_constraintTop_toBottomOf="@id/signup_input_email"
 		app:startIconDrawable="@drawable/ic_baseline_lock_24">
 		
 		<com.google.android.material.textfield.TextInputEditText
@@ -55,9 +88,10 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="24dp"
-		android:layout_marginTop="24dp"
+		android:layout_marginTop="8dp"
 		android:layout_marginEnd="24dp"
 		android:hint="Confirm Password"
+		app:errorEnabled="true"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/signup_input_password"

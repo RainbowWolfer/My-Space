@@ -1,21 +1,23 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentLoginBinding
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.*
+import retrofit2.Response
+import java.lang.Exception
 
 class LoginFragment(
 	private val loginActivity: LoginActivity,
@@ -25,43 +27,69 @@ class LoginFragment(
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		
+		loginActivity.loginFragment = this
+		loginActivity.signupFragment = null
+		
 		binding.loginButtonLogin.setOnClickListener {
 			if (isLoading || !checkParametersValid()) {
 				return@setOnClickListener
 			}
-			val dialog = LoadingDialog(requireContext()).apply {
-				showDialog()
-			}
 			CoroutineScope(Dispatchers.IO).launch {
-				isLoading = true
-				val jobLogin = withTimeoutOrNull(3000) {
-					delay(1500)
-					//check username & password
+				try {
+					isLoading = true
+					var response: Response<User>? = null
+					var user: User? = null
+					val dialog = LoadingDialog(requireContext())
 					withContext(Dispatchers.Main) {
-						loginActivity.getBack(User.getTestLogUser())
-					}
-				}
-				if (jobLogin == null) {
-					withContext(Dispatchers.Main) {
-						dialog.hideDialog()
-						AlertDialog.Builder(requireContext()).apply {
-							setCancelable(false)
-							setTitle("Error")
-							setMessage("Sign in action timed out")
-							setNegativeButton("Back", null)
-							show()
+						val jobLogin = withTimeoutOrNull(3000) {
+							dialog.showDialog()
+							val email = binding.loginEditTextEmail.text.toString()
+							val password = binding.loginEditTextPassword.text.toString()
+							response = RetrofitInstance.api.tryLogin(email, password)
+							println(response)
+							if (response!!.isSuccessful) {
+								user = response!!.body()
+								val editor = activity?.getSharedPreferences("", Context.MODE_PRIVATE)?.edit()
+								//TODO:
+								editor?.apply()
+								println(user)
+								if (user != null) {
+									dialog.hideDialog()
+									loginActivity.getBack(user!!)
+								}
+							}
+						}
+						if (jobLogin == null || response?.isSuccessful != true || user == null) {
+							println("result $jobLogin - ${response?.isSuccessful} - $user")
+							val r = response?.getHttpResponse()
+							val errorMessage = when (r?.errorCode) {
+								1 -> "Your registration has not been validated through email"
+								2 -> "Email or Password is wrong"
+								else -> "Somethign went wrong. Please try agian later"
+							}
+							dialog.hideDialog()
+							AlertDialog.Builder(requireContext()).apply {
+								setCancelable(false)
+								setTitle("Error")
+								setMessage(errorMessage)
+								setNegativeButton("Back", null)
+								show()
+							}
 						}
 					}
+					isLoading = false
+				} catch (ex: Exception) {
+					ex.printStackTrace()
 				}
-				isLoading = false
 			}
 		}
 		
-		binding.loginEditTextUsername.doAfterTextChanged {
+		binding.loginEditTextEmail.doAfterTextChanged {
 			if (TextUtils.isEmpty(it.toString())) {
-				binding.loginEditTextUsername.error = "Empty Username"
+				binding.loginEditTextEmail.error = "Empty Username"
 			} else {
-				binding.loginEditTextUsername.error = null
+				binding.loginEditTextEmail.error = null
 			}
 		}
 		
@@ -76,8 +104,8 @@ class LoginFragment(
 	
 	private fun checkParametersValid(): Boolean {
 		var error = false
-		if (TextUtils.isEmpty(binding.loginEditTextUsername.text)) {
-			binding.loginEditTextUsername.error = "Empty Username"
+		if (TextUtils.isEmpty(binding.loginEditTextEmail.text)) {
+			binding.loginEditTextEmail.error = "Empty Username"
 			error = true
 		}
 		if (TextUtils.isEmpty(binding.loginEditTextPassword.text)) {
@@ -85,32 +113,16 @@ class LoginFragment(
 			error = true
 		}
 		return !error
-		
+	}
+	
+	fun fill(email: String?, password: String?) {
+		println(email)
+		println(password)
+		if (!TextUtils.isEmpty(email)) {
+			binding.loginEditTextEmail.setText(email)
+		}
+		if (!TextUtils.isEmpty(password)) {
+			binding.loginEditTextPassword.setText(password)
+		}
 	}
 }
-
-/**
- * --- Coroutine Sample Code ---
- *
- * CoroutineScope(Dispatchers.IO).launch {
-val jobLogin = withTimeoutOrNull(2000) {
-println("STARTING!")
-delay(1900)
-println("OK!")
-withContext(Dispatchers.Main) {
-loginActivity.getBack()
-}
-}
-val cancellableJob = launch {
-
-}
-cancellableJob.join()
-cancellableJob.cancel()
-if (jobLogin == null) {
-//canceled
-}
-}
- *
- *
- *
- */

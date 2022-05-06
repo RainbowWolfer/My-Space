@@ -14,7 +14,7 @@
 		android:layout_width="100dp"
 		android:layout_height="100dp"
 		android:layout_marginTop="46dp"
-		android:src="@drawable/ic_food"
+		android:src="@drawable/default_avatar"
 		app:civ_border_color="@color/black"
 		app:civ_border_overlay="true"
 		app:civ_border_width="2dp"

@@ -7,37 +7,41 @@
 	android:layout_height="match_parent"
 	tools:context=".ui.fragments.main.user.LoginFragment">
 	
-	<ImageView
+	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/login_icon"
 		android:layout_width="120dp"
 		android:layout_height="120dp"
 		android:layout_marginTop="32dp"
 		android:contentDescription="@string/app_icon"
-		android:src="@drawable/icon_my_space"
+		android:src="@drawable/default_avatar"
+		app:civ_border_color="@color/normal_text"
+		app:civ_border_overlay="true"
+		app:civ_border_width="2dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"/>
 	
 	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/login_input_username"
+		android:id="@+id/login_input_email"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="24dp"
 		android:layout_marginTop="24dp"
 		android:layout_marginEnd="24dp"
-		android:hint="@string/username"
+		android:hint="@string/email"
 		app:errorEnabled="true"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/login_icon"
-		app:startIconDrawable="@drawable/ic_baseline_person_24">
+		app:startIconDrawable="@drawable/ic_baseline_email_24">
 		
 		<com.google.android.material.textfield.TextInputEditText
-			android:id="@+id/login_editText_username"
+			android:id="@+id/login_editText_email"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:inputType="textPersonName"/>
+			android:inputType="textPersonName"
+			android:text="RainbowWolfer@Outlook.com"/>
 	</com.google.android.material.textfield.TextInputLayout>
 	
 	<com.google.android.material.textfield.TextInputLayout
@@ -52,14 +56,15 @@
 		app:errorEnabled="true"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/login_input_username"
+		app:layout_constraintTop_toBottomOf="@+id/login_input_email"
 		app:startIconDrawable="@drawable/ic_baseline_lock_24">
 		
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/login_editText_password"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:inputType="textPassword"/>
+			android:inputType="textPassword"
+			android:text="123456"/>
 	</com.google.android.material.textfield.TextInputLayout>
 	
 	<com.google.android.material.button.MaterialButton

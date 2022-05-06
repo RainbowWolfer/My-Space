@@ -1,6 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.util
 
+import com.google.gson.Gson
+import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
+import org.json.JSONObject
+import retrofit2.Response
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
@@ -44,6 +50,28 @@ class EasyFunctions {
 			val second = calendar.get(Calendar.SECOND)
 			
 			return "$year/$month/$day $hour:$minute:$second"
+		}
+		
+		@JvmStatic
+		fun convertMD5(input: String): String {
+			val md = MessageDigest.getInstance("MD5")
+			return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
+		}
+		
+		@JvmStatic
+		fun String.toMD5(): String {
+			return convertMD5(this)
+		}
+		
+		@JvmStatic
+		fun Response<*>.getHttpResponse(): GoResponse {
+			return try {
+				val jsonResponse = JSONObject(this.errorBody()?.string().toString()).toString()
+				Gson().fromJson(jsonResponse, GoResponse::class.java)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+				GoResponse(0, "Http Response Json Convert Error", 0)
+			}
 		}
 	}
 }

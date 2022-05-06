@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/newUsername_motionLayout_root"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginStart="30dp"
+	android:layout_marginEnd="30dp"
+	android:background="@drawable/round_background"
+	android:padding="5dp"
+	app:layoutDescription="@xml/layout_change_username_scene">
+	
+	<TextView
+		android:id="@+id/newUsername_text_title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="15dp"
+		android:layout_marginTop="15dp"
+		android:layout_marginEnd="25dp"
+		android:layout_marginBottom="15dp"
+		android:text="Change your username"
+		android:textAlignment="viewStart"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:textSize="22sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/newUsername_input_new"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="15dp"
+		android:layout_marginTop="15dp"
+		android:layout_marginEnd="25dp"
+		android:layout_marginBottom="15dp"
+		android:alpha="1"
+		android:minWidth="300dp"
+		app:counterEnabled="true"
+		app:counterMaxLength="20"
+		app:errorEnabled="true"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/newUsername_text_title"
+		app:startIconDrawable="@drawable/ic_baseline_person_24">
+		
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/newUsername_editText_new"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="New Username"
+			android:maxLines="1"/>
+	</com.google.android.material.textfield.TextInputLayout>
+	
+	<ProgressBar
+		android:id="@+id/newUsername_progressBar"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:layout_width="0dp"
+		android:layout_height="1dp"
+		android:layout_marginStart="15dp"
+		android:layout_marginEnd="15dp"
+		android:alpha="0"
+		android:indeterminate="true"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/newUsername_input_new"/>
+	
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/newUsername_button_confirm"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="15dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginEnd="25dp"
+		android:layout_marginBottom="15dp"
+		android:background="@drawable/enable_disable_button_background"
+		android:enabled="false"
+		android:text="Confirm"
+		android:textColor="@drawable/enable_disable_button_foreground"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/newUsername_progressBar"/>
+	
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/newUsername_button_back"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp"
+		android:layout_marginRight="2dp"
+		android:background="@drawable/enable_disable_button_background"
+		android:enabled="true"
+		android:text="Back"
+		android:textColor="@drawable/enable_disable_button_foreground"
+		app:iconTint="@color/purple_500"
+		app:layout_constraintRight_toLeftOf="@id/newUsername_button_confirm"
+		app:layout_constraintTop_toBottomOf="@+id/newUsername_progressBar"/>
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -41,4 +41,21 @@
 	<string name="sumbit">Sumbit</string>
 	<string name="forget_password">Forget Password</string>
 	<string name="app_icon">App Icon</string>
+	<string name="updating">Updating</string>
+	<string name="email">Email</string>
+	
+	<string name="checking_username">Checking Username</string>
+	<string name="checking_email">Checking Email</string>
+	<string name="sending_validatoin_email">Sending Validatoin Email</string>
+	
+	<string name="username_checked">Username Checked</string>
+	<string name="email_checked">Email Checked</string>
+	<string name="email_sent">Email Sent Successfully</string>
+	
+	<string name="username_duplicate">Username Existed</string>
+	<string name="email_duplicate">Email Existed</string>
+	<string name="email_sent_fail">Email Sending Failed</string>
+	<string name="email_already_sent">Email Already Sent Before</string>
+	<string name="error">Error</string>
+	<string name="timeout_error">Timeout Error</string>
 </resources>

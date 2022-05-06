@@ -35,7 +35,7 @@
 			<menu>
 				<item
 					android:id="@+id/nav_about"
-					android:checkable="false"
+					android:checkable="true"
 					android:icon="@drawable/ic_baseline_info_24"
 					android:title="About"/>
 				<item

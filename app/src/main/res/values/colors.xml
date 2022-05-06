@@ -12,4 +12,13 @@
 	<color name="gray">#B3ADADAD</color>
 	<color name="contrast_background">#FFdcdcdc</color>
 	<color name="red">#ED2E2E</color>
+	<color name="transparent">#00ffffff</color>
+	<color name="gray_text">#AD5C5C5C</color>
+	<color name="green">#398F06</color>
+	<color name="normal_text">#3E3D3D</color>
+	
+	<color name="weak">#FF4646</color>
+	<color name="medium">#ff8f00</color>
+	<color name="strong">#FCCA3F</color>
+	<color name="bulletproof">#00c853</color>
 </resources>

@@ -40,9 +40,9 @@
 				
 				<de.hdodenhof.circleimageview.CircleImageView
 					android:id="@+id/user_image_avatar"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:src="@drawable/ic_food"
+					android:layout_width="150dp"
+					android:layout_height="150dp"
+					android:src="@drawable/default_avatar"
 					app:civ_border_color="@color/purple_200"
 					app:civ_border_overlay="true"
 					app:civ_border_width="2dp"
@@ -63,26 +63,69 @@
 					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
 					app:layout_constraintTop_toBottomOf="@+id/user_image_avatar"/>
 				
-				<com.google.android.material.button.MaterialButton
-					android:id="@+id/user_follow_button"
-					android:layout_width="150dp"
+				<TextView
+					android:id="@+id/user_text_email"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="8dp"
-					android:text="Follow"
-					app:icon="@drawable/ic_baseline_favorite_border_24"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
+					android:text="RainbowWolfer@outlook.com"
+					android:textSize="18sp"
+					app:layout_constraintEnd_toEndOf="@+id/user_image_avatar"
+					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
 					app:layout_constraintTop_toBottomOf="@+id/user_text_username"/>
 				
-				<com.google.android.material.button.MaterialButton
-					android:id="@+id/user_button_message"
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:text="Message"
-					app:icon="@drawable/ic_baseline_message_24"
-					app:layout_constraintEnd_toEndOf="@+id/user_follow_button"
-					app:layout_constraintStart_toStartOf="@+id/user_follow_button"
-					app:layout_constraintTop_toBottomOf="@+id/user_follow_button"/>
+				<LinearLayout
+					android:id="@+id/user_layout_others"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginTop="8dp"
+					android:gravity="center"
+					android:orientation="vertical"
+					android:visibility="gone"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/user_text_email">
+					
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/user_button_message"
+						android:layout_width="150dp"
+						android:layout_height="wrap_content"
+						android:text="Message"
+						app:icon="@drawable/ic_baseline_message_24"/>
+					
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/user_follow_button"
+						android:layout_width="150dp"
+						android:layout_height="wrap_content"
+						android:text="Follow"
+						app:icon="@drawable/ic_baseline_favorite_border_24"/>
+				</LinearLayout>
+				
+				<LinearLayout
+					android:id="@+id/user_layout_self"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginTop="8dp"
+					android:gravity="center"
+					android:orientation="vertical"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/user_text_email">
+					
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/user_button_editAvatar"
+						android:layout_width="200dp"
+						android:layout_height="wrap_content"
+						android:text="Edit Avatar"
+						app:icon="@drawable/ic_baseline_person_24"/>
+					
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/user_button_editUsername"
+						android:layout_width="200dp"
+						android:layout_height="wrap_content"
+						android:text="Edit Username"
+						app:icon="@drawable/ic_baseline_edit_24"/>
+				</LinearLayout>
+			
 			</androidx.constraintlayout.widget.ConstraintLayout>
 			
 			<View

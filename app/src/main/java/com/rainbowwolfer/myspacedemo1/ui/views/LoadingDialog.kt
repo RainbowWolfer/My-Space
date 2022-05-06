@@ -10,12 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LoadingDialogBinding
+import com.rainbowwolfer.myspacedemo1.ui.views.interfaces.ViewDialog
 
 class LoadingDialog(
-	private val context: Context,
+	override val context: Context,
 	private val showCancelButton: Boolean = false,
-) {
-	private lateinit var dialog: Dialog
+) : ViewDialog {
+	override lateinit var dialog: Dialog
 	private lateinit var binding: LoadingDialogBinding
 	
 	fun showDialog(content: String? = null) {
@@ -35,16 +36,5 @@ class LoadingDialog(
 			create()
 			show()
 		}
-	}
-	
-	fun hideDialog() {
-		if (!dialog.isShowing) {
-			return
-		}
-		dialog.hide()
-	}
-	
-	fun dismiss() {
-		dialog.dismiss()
 	}
 }

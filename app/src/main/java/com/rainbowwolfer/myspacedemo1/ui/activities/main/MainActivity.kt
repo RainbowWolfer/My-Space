@@ -2,8 +2,8 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.main
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +17,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.rainbowwolfer.myspacedemo1.R
-import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class MainActivity : AppCompatActivity() {
 	private val binding: ActivityMainBinding by viewBinding()
@@ -36,6 +42,22 @@ class MainActivity : AppCompatActivity() {
 			User.current = user
 			println(user)
 			updateNav()
+			
+			CoroutineScope(Dispatchers.IO).launch {
+				try {
+					if (user == null) {
+						return@launch
+					}
+					val response = RetrofitInstance.api.getAvatar(user.id)
+					
+					withContext(Dispatchers.Main) {
+						User.avatar.value = BitmapFactory.decodeStream(response.byteStream())
+						navViewHeaderBinding.headerImageAvatar.setImageBitmap(User.avatar.value)
+					}
+				} catch (ex: Exception) {
+					ex.printStackTrace()
+				}
+			}
 		}
 	}
 	
@@ -77,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 				setNegativeButton("No", null)
 				setPositiveButton("Yes") { _, _ ->
 					User.current = null
+					User.avatar.value = null
 					updateNav()
 //					binding.drawerLayout.closeDrawers()
 				}
@@ -85,6 +108,16 @@ class MainActivity : AppCompatActivity() {
 		}
 		
 		updateNav()
+		
+		User.avatar.observe(this) {
+			navViewHeaderBinding.headerImageAvatar.setImageBitmap(
+				if (User.avatar.value == null) {
+					BitmapFactory.decodeResource(resources, R.drawable.default_avatar)
+				} else {
+					User.avatar.value
+				}
+			)
+		}
 	}
 
 //	override fun onCreateOptionsMenu(menu: Menu): Boolean {
