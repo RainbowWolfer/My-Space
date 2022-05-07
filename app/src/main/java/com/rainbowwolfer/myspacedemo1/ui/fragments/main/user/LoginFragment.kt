@@ -19,17 +19,12 @@ import kotlinx.coroutines.*
 import retrofit2.Response
 import java.lang.Exception
 
-class LoginFragment(
-	private val loginActivity: LoginActivity,
-) : Fragment(R.layout.fragment_login) {
+class LoginFragment : Fragment(R.layout.fragment_login) {
 	private val binding: FragmentLoginBinding by viewBinding()
 	private var isLoading = false
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
-		loginActivity.loginFragment = this
-		loginActivity.signupFragment = null
 		
 		binding.loginButtonLogin.setOnClickListener {
 			if (isLoading || !checkParametersValid()) {
@@ -56,7 +51,7 @@ class LoginFragment(
 								println(user)
 								if (user != null) {
 									dialog.hideDialog()
-									loginActivity.getBack(user!!)
+									LoginActivity.Instance?.getBack(user!!)
 								}
 							}
 						}
@@ -66,7 +61,7 @@ class LoginFragment(
 							val errorMessage = when (r?.errorCode) {
 								1 -> "Your registration has not been validated through email"
 								2 -> "Email or Password is wrong"
-								else -> "Somethign went wrong. Please try agian later"
+								else -> "Something went wrong. Please try agian later"
 							}
 							dialog.hideDialog()
 							AlertDialog.Builder(requireContext()).apply {
@@ -116,8 +111,6 @@ class LoginFragment(
 	}
 	
 	fun fill(email: String?, password: String?) {
-		println(email)
-		println(password)
 		if (!TextUtils.isEmpty(email)) {
 			binding.loginEditTextEmail.setText(email)
 		}

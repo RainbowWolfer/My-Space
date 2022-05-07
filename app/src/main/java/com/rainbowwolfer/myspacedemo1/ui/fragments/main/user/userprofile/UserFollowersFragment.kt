@@ -9,11 +9,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserFollowersBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.FollowersRecylerViewAdapter
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
-
-class UserFollowersFragment(
-	private val parent: UserFragment,
-) : Fragment(R.layout.fragment_user_followers) {
+class UserFollowersFragment : Fragment(R.layout.fragment_user_followers) {
 	private val binding: FragmentUserFollowersBinding by viewBinding()
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,8 +34,7 @@ class UserFollowersFragment(
 				User.generateDefault(),
 				User.generateDefault(),
 				User.generateDefault(),
-				
-				)
+			)
 		)
 	}
 }

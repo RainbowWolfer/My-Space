@@ -17,9 +17,9 @@ class LoginViewPagerAdapter(
 	
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {
-			0 -> LoginFragment(loginActivity)
-			1 -> SignUpFragment(loginActivity)
-			else -> LoginFragment(loginActivity)
+			0 -> LoginFragment()
+			1 -> SignUpFragment()
+			else -> LoginFragment()
 		}
 	}
 }

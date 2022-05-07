@@ -13,6 +13,14 @@ import com.rainbowwolfer.myspacedemo1.models.User
 class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()
 	
+	companion object {
+		var Instance: UserFragment? = null
+	}
+	
+	init {
+		Instance = this
+	}
+	
 	var isSelf: Boolean = false
 		private set
 	

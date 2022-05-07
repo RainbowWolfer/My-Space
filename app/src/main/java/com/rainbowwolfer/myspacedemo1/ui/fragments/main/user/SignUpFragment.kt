@@ -16,16 +16,13 @@ import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
 import com.rainbowwolfer.myspacedemo1.services.PasswordStrengthCalculator
 import com.rainbowwolfer.myspacedemo1.ui.views.SignUpProcessDialog
 
-class SignUpFragment(
-	private val loginActivity: LoginActivity,
-) : Fragment(R.layout.fragment_sign_up) {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 	private val binding: FragmentSignUpBinding by viewBinding()
+	
+	private var skip = false
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
-		loginActivity.loginFragment = null
-		loginActivity.signupFragment = this
 		
 		binding.signupEditTextUsername.setText("rainbow_wolfer")
 		binding.signupEditTextEmail.setText("1519787190@qq.com")
@@ -33,6 +30,9 @@ class SignUpFragment(
 		binding.signupEditTextConfirmPassword.setText("123456789")
 		
 		binding.signupEditTextUsername.doAfterTextChanged {
+			if (skip) {
+				return@doAfterTextChanged
+			}
 			val text = it.toString()
 			binding.signupInputUsername.error = if (TextUtils.isEmpty(text)) {
 				"Username cannot be empty"
@@ -42,6 +42,9 @@ class SignUpFragment(
 		}
 		
 		binding.signupEditTextEmail.doAfterTextChanged {
+			if (skip) {
+				return@doAfterTextChanged
+			}
 			val text = it.toString()
 			val emailValidation = Patterns.EMAIL_ADDRESS.matcher(text).matches()
 			binding.signupInputEmail.error = if (emailValidation) {
@@ -55,6 +58,9 @@ class SignUpFragment(
 		binding.signupEditTextPassword.addTextChangedListener(passwordStrengthCalculator)
 		
 		passwordStrengthCalculator.count.observe(viewLifecycleOwner) {
+			if (skip) {
+				return@observe
+			}
 			binding.signupInputPassword.error = when (it) {
 				0 -> "Password cannot be empty"
 				in 1..6 -> "Password must be at least 7 length"
@@ -64,6 +70,9 @@ class SignUpFragment(
 		}
 		
 		passwordStrengthCalculator.strengthLevel.observe(viewLifecycleOwner) {
+			if (skip) {
+				return@observe
+			}
 			if (binding.signupInputPassword.error == null) {
 				binding.signupInputPassword.helperText = it.toString()
 				binding.signupInputPassword.endIconMode = TextInputLayout.END_ICON_CUSTOM
@@ -71,6 +80,9 @@ class SignUpFragment(
 		}
 		
 		passwordStrengthCalculator.strengthColor.observe(viewLifecycleOwner) {
+			if (skip) {
+				return@observe
+			}
 			if (binding.signupInputPassword.error == null) {
 				val color = resources.getColorStateList(it, null)
 				binding.signupInputPassword.setHelperTextColor(color)
@@ -80,6 +92,9 @@ class SignUpFragment(
 		}
 		
 		binding.signupEditTextConfirmPassword.doAfterTextChanged {
+			if (skip) {
+				return@doAfterTextChanged
+			}
 			val password = binding.signupEditTextPassword.text.toString()
 			if (TextUtils.isEmpty(password)) {
 				binding.signupInputConfirmPassword.error = "No password entered yet"
@@ -127,13 +142,21 @@ class SignUpFragment(
 			}
 			dialog.dialog.setOnDismissListener {
 				if (dialog.success.value == true) {
+					skip = true
 					val email = binding.signupEditTextEmail.text.toString()
 					val password = binding.signupEditTextPassword.text.toString()
 					binding.signupEditTextConfirmPassword.setText("")
 					binding.signupEditTextPassword.setText("")
 					binding.signupEditTextEmail.setText("")
 					binding.signupEditTextUsername.setText("")
-					loginActivity.toLoginFragment(email, password)
+					binding.signupInputEmail.error = null
+					binding.signupInputConfirmPassword.error = null
+					binding.signupInputPassword.error = null
+					binding.signupInputUsername.error = null
+					binding.signupInputPassword.helperText = null
+					binding.signupInputPassword.endIconMode = TextInputLayout.END_ICON_NONE
+					LoginActivity.Instance?.toLoginFragment(email, password)
+					skip = false
 				}
 			}
 		}

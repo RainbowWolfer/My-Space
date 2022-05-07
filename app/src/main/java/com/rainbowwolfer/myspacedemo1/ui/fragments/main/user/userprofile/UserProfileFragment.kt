@@ -10,6 +10,7 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
@@ -18,6 +19,7 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.share.BlankFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
@@ -30,15 +32,26 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 
 
-class UserProfileFragment(
-	private val parent: UserFragment,
-	private val user: User
-) : Fragment(R.layout.fragment_user_profile) {
+class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
+	companion object {
+		const val ARGS_USER = "user"
+		
+		@JvmStatic
+		fun newInstance(user: User) = UserProfileFragment().apply {
+			arguments = Bundle().apply {
+				putParcelable(ARGS_USER, user)
+			}
+		}
+	}
+	
+	//	private val viewModel: UserProfileViewModel by activityViewModels()
+	private lateinit var user: User
+	
 	private val binding: FragmentUserProfileBinding by viewBinding()
+	private val isSelf: Boolean get() = UserFragment.Instance?.isSelf ?: false
 	
 	private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		if (result.resultCode == Activity.RESULT_OK && result.data != null) {
@@ -85,16 +98,23 @@ class UserProfileFragment(
 		return byteBuffer.toByteArray()
 	}
 	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		arguments?.let {
+			user = it.getParcelable(ARGS_USER)!!
+		}
+	}
+	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.userTextUsername.text = user.username
 		binding.userTextDescription.text = user.profileDescription
 		binding.userTextEmail.text = user.email
 		
-		binding.userLayoutOthers.visibility = if (parent.isSelf) View.GONE else View.VISIBLE
-		binding.userLayoutSelf.visibility = if (parent.isSelf) View.VISIBLE else View.GONE
+		binding.userLayoutOthers.visibility = if (isSelf) View.GONE else View.VISIBLE
+		binding.userLayoutSelf.visibility = if (isSelf) View.VISIBLE else View.GONE
 		
-		if (parent.isSelf) {
+		if (isSelf) {
 			binding.userImageAvatar.setImageBitmap(User.avatar.value)
 		} else {
 			//load form api

@@ -16,16 +16,17 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.LoginFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.SignUpFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.LoginViewPagerAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 	private val binding: ActivityLoginBinding by viewBinding()
 	
-	var loginFragment: LoginFragment? = null
-	var signupFragment: SignUpFragment? = null
+	companion object {
+		var Instance: LoginActivity? = null
+	}
+	
+	init {
+		Instance = this
+	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -55,19 +56,10 @@ class LoginActivity : AppCompatActivity() {
 		binding.materialButtonToggleGroup.check(R.id.button_login)
 		binding.loginViewPager.currentItem = 0
 		
-		println(binding.loginViewPager.currentItem)
 		val fragment = binding.loginViewPager.findFragmentAtPosition(supportFragmentManager, 0)
-		println(fragment)
 		if (fragment is LoginFragment) {
-			println(fragment)
 			fragment.fill(email, password)
 		}
-//		CoroutineScope(Dispatchers.Main).launch {
-//			delay(100)
-//			if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && loginFragment != null) {
-//				loginFragment!!.fill(email, password)
-//			}
-//		}
 	}
 	
 	fun ViewPager2.findFragmentAtPosition(

@@ -68,7 +68,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="RainbowWolfer@outlook.com"
-					android:textSize="18sp"
+					android:textSize="16sp"
 					app:layout_constraintEnd_toEndOf="@+id/user_image_avatar"
 					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
 					app:layout_constraintTop_toBottomOf="@+id/user_text_username"/>
