@@ -5,6 +5,8 @@ import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
 import org.json.JSONObject
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
@@ -72,6 +74,18 @@ class EasyFunctions {
 				ex.printStackTrace()
 				GoResponse(0, "Http Response Json Convert Error", 0)
 			}
+		}
+		
+		@JvmStatic
+		fun getBytes(inputStream: InputStream): ByteArray {
+			val byteBuffer = ByteArrayOutputStream()
+			val bufferSize = 1024
+			val buffer = ByteArray(bufferSize)
+			var len: Int
+			while (inputStream.read(buffer).also { len = it } != -1) {
+				byteBuffer.write(buffer, 0, len)
+			}
+			return byteBuffer.toByteArray()
 		}
 	}
 }

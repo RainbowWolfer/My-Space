@@ -58,4 +58,14 @@
 	<string name="email_already_sent">Email Already Sent Before</string>
 	<string name="error">Error</string>
 	<string name="timeout_error">Timeout Error</string>
+	<string name="image">Image</string>
+	
+	<string name="save">Save</string>
+	
+	<string name="post_text1">What\'s happening?</string>
+	<string name="post_text2">What\'s in your mind?</string>
+	<string name="post_text3">Got a story to tell?</string>
+	<string name="post_text4">Life is great, isn\'t it?</string>
+	<string name="post_text5">Tell the world!</string>
+
 </resources>

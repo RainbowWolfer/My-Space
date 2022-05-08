@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+		
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			
+			<de.hdodenhof.circleimageview.CircleImageView
+				android:id="@+id/post_image_avatar"
+				android:layout_width="60dp"
+				android:layout_height="60dp"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="16dp"
+				android:src="@drawable/default_avatar"
+				app:civ_border_color="@color/normal_text"
+				app:civ_border_width="2dp"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"/>
+			
+			<TextView
+				android:id="@+id/post_text_count"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:text="0/300"
+				app:layout_constraintEnd_toEndOf="@+id/post_image_avatar"
+				app:layout_constraintStart_toStartOf="@+id/post_image_avatar"
+				app:layout_constraintTop_toBottomOf="@+id/post_image_avatar"/>
+			
+			<EditText
+				android:id="@+id/post_editText_content"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="32dp"
+				android:layout_marginEnd="16dp"
+				android:autofillHints=""
+				android:background="@null"
+				android:gravity="start|top"
+				android:hint="What's happening?"
+				android:inputType="textMultiLine"
+				android:maxLines="10"
+				android:minHeight="200dp"
+				android:textSize="20sp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@+id/post_image_avatar"
+				app:layout_constraintTop_toTopOf="parent"/>
+			
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/post_editText_content">
+				
+				<View
+					android:id="@+id/post_view_1"
+					android:layout_width="4dp"
+					android:layout_height="23dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="16dp"
+					android:background="#FF0000"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent"/>
+				
+				<View
+					android:id="@+id/post_view_2"
+					android:layout_width="4dp"
+					android:layout_height="23dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="16dp"
+					android:background="#FF0000"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_tableLayout"/>
+				
+				<View
+					android:id="@+id/post_view_3"
+					android:layout_width="4dp"
+					android:layout_height="23dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="16dp"
+					android:background="#FF0000"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_inputLayout_reply"/>
+				
+				<TextView
+					android:id="@+id/post_text_imagesTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16sp"
+					android:text="Attached Images"
+					android:textSize="18sp"
+					app:layout_constraintBottom_toBottomOf="@+id/post_view_1"
+					app:layout_constraintStart_toEndOf="@+id/post_view_1"
+					app:layout_constraintTop_toTopOf="@+id/post_view_1"/>
+				
+				<TextView
+					android:id="@+id/post_text_imageCount"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="24dp"
+					android:text="0/9"
+					app:layout_constraintBottom_toBottomOf="@+id/post_text_imagesTitle"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="@+id/post_text_imagesTitle"/>
+				
+				<!--				-->
+				<!--				<GridView-->
+				<!--					android:id="@+id/post_gridview_images"-->
+				<!--					android:layout_width="0dp"-->
+				<!--					android:layout_height="wrap_content"-->
+				<!--					android:layout_marginStart="24dp"-->
+				<!--					android:layout_marginTop="16dp"-->
+				<!--					android:layout_marginEnd="24dp"-->
+				<!--					app:layout_constraintEnd_toEndOf="parent"-->
+				<!--					app:layout_constraintStart_toStartOf="parent"-->
+				<!--					app:layout_constraintTop_toBottomOf="@+id/textView5"/>-->
+				
+				
+				<TextView
+					android:id="@+id/post_text_tagsCount"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="24dp"
+					android:text="0/15"
+					app:layout_constraintBottom_toBottomOf="@+id/post_text_miscellaneous2"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="@+id/post_text_miscellaneous2"/>
+				
+				<TableLayout
+					android:id="@+id/post_tableLayout"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="24dp"
+					android:layout_marginTop="16dp"
+					android:layout_marginEnd="24dp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_text_imagesTitle">
+					
+					<TableRow
+						android:id="@+id/post_row_1"
+						android:layout_height="20dp">
+						
+						<include
+							android:id="@+id/post_11"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"/>
+						
+						<include
+							android:id="@+id/post_12"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"/>
+						
+						<include
+							android:id="@+id/post_13"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"/>
+					
+					</TableRow>
+					
+					<TableRow
+						android:id="@+id/post_row_2"
+						android:layout_height="150dp"
+						android:visibility="gone">
+						
+						<include
+							android:id="@+id/post_21"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+						
+						<include
+							android:id="@+id/post_22"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+						
+						<include
+							android:id="@+id/post_23"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+					
+					</TableRow>
+					
+					<TableRow
+						android:id="@+id/post_row_3"
+						android:layout_height="150dp"
+						android:visibility="gone">
+						
+						<include
+							android:id="@+id/post_31"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+						
+						<include
+							android:id="@+id/post_32"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+						
+						<include
+							android:id="@+id/post_33"
+							layout="@layout/layout_post_image_view"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:visibility="invisible"/>
+					
+					</TableRow>
+				</TableLayout>
+				
+				<TextView
+					android:id="@+id/post_text_miscellaneous"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="Miscellaneous"
+					android:textSize="18sp"
+					app:layout_constraintBottom_toBottomOf="@+id/post_view_2"
+					app:layout_constraintStart_toEndOf="@+id/post_view_2"
+					app:layout_constraintTop_toTopOf="@+id/post_view_2"/>
+				
+				<TextView
+					android:id="@+id/post_text_miscellaneous2"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="Tags"
+					android:textSize="18sp"
+					app:layout_constraintBottom_toBottomOf="@+id/post_view_3"
+					app:layout_constraintStart_toEndOf="@+id/post_view_2"
+					app:layout_constraintTop_toTopOf="@+id/post_view_3"/>
+				
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/post_inputLayout_visibility"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="32dp"
+					android:layout_marginTop="16dp"
+					android:layout_marginEnd="32dp"
+					android:hint="Visibility"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_text_miscellaneous"
+					app:startIconDrawable="@drawable/ic_baseline_visibility_24">
+					
+					<AutoCompleteTextView
+						android:id="@+id/post_autoText_visibility"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_weight="1"
+						android:inputType="none"
+						android:text="All can see"/>
+				</com.google.android.material.textfield.TextInputLayout>
+				
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/post_inputLayout_reply"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="32dp"
+					android:layout_marginTop="16dp"
+					android:layout_marginEnd="32dp"
+					android:hint="Reply Limit"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_inputLayout_visibility"
+					app:startIconDrawable="@drawable/ic_baseline_reply_24">
+					
+					<AutoCompleteTextView
+						android:id="@+id/post_autoText_reply"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_weight="1"
+						android:inputType="none"
+						android:text="All can reply"/>
+				</com.google.android.material.textfield.TextInputLayout>
+				
+				<com.google.android.material.chip.ChipGroup
+					android:id="@+id/post_chips_tags"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="32dp"
+					android:layout_marginTop="16dp"
+					android:layout_marginEnd="32dp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/post_text_miscellaneous2">
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip4"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip5"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip6"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip7"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip8"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip9"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip14"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip15"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip16"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello"
+						app:closeIcon="@drawable/ic_baseline_close_24"
+						app:closeIconEnabled="true"/>
+					
+					<com.google.android.material.chip.Chip
+						android:id="@+id/chip10"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						app:chipIcon="@drawable/ic_baseline_add_24"
+						app:iconStartPadding="16dp"/>
+				</com.google.android.material.chip.ChipGroup>
+			
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

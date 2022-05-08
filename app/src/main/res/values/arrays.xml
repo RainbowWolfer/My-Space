@@ -9,4 +9,16 @@
 		<item>reply</item>
 		<item>reply_all</item>
 	</string-array>
+	
+	<string-array name="post_visiblities">
+		<item>All can see</item>
+		<item>Friends can see</item>
+		<item>No one can see</item>
+	</string-array>
+	
+	<string-array name="reply_visiblities">
+		<item>All can reply</item>
+		<item>Friends can reply</item>
+		<item>No one can reply</item>
+	</string-array>
 </resources>

@@ -11,7 +11,7 @@ object RetrofitInstance {
 		addInterceptor(MultiPartIntercepector())
 	}.build()
 	
-	private val retrofit_post_image by lazy {
+	private val retrofit_post_mutilpart by lazy {
 		Retrofit.Builder()
 			.baseUrl(MyApi.BASE_URL)
 			.client(client)
@@ -26,8 +26,8 @@ object RetrofitInstance {
 			.build()
 	}
 	
-	val api_postImage: MyApi by lazy {
-		retrofit_post_image.create(MyApi::class.java)
+	val api_postMultipart: MyApi by lazy {
+		retrofit_post_mutilpart.create(MyApi::class.java)
 	}
 	
 	val api: MyApi by lazy {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="150dp"
+	android:layout_height="150dp">
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/postImageView_button_add"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:contentDescription="@string/app_name_space"
+		android:src="@drawable/ic_baseline_add_48"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/postImageView_layout_imageRoot"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+		
+		<ImageView
+			android:id="@+id/postImageView_image"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:contentDescription="@string/image"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_food"/>
+		
+		<androidx.appcompat.widget.AppCompatImageButton
+			android:id="@+id/postImageView_button_close"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:background="@drawable/button_background_half_transparent"
+			android:contentDescription="@string/app_name_space"
+			android:elevation="30dp"
+			android:foreground="?android:attr/selectableItemBackground"
+			android:src="@drawable/ic_baseline_close_24"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="TouchTargetSizeCheck"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

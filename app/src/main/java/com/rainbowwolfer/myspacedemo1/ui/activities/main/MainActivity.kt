@@ -19,6 +19,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
+import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
@@ -29,6 +30,14 @@ import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
+	companion object {
+		var Instance: MainActivity? = null
+	}
+	
+	init {
+		Instance = this
+	}
+	
 	private val binding: ActivityMainBinding by viewBinding()
 	
 	private lateinit var appBarConfiguration: AppBarConfiguration
@@ -36,29 +45,42 @@ class MainActivity : AppCompatActivity() {
 	
 	private lateinit var navViewHeaderBinding: NavHeaderMainBinding
 	
-	private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-		if (result.resultCode == Activity.RESULT_OK) {
-			val user = result.data?.getParcelableExtra<User>("user")
-			User.current = user
-			println(user)
-			updateNav()
-			
-			CoroutineScope(Dispatchers.IO).launch {
-				try {
-					if (user == null) {
-						return@launch
-					}
-					val response = RetrofitInstance.api.getAvatar(user.id)
-					
-					withContext(Dispatchers.Main) {
-						User.avatar.value = BitmapFactory.decodeStream(response.byteStream())
-						navViewHeaderBinding.headerImageAvatar.setImageBitmap(User.avatar.value)
-					}
-				} catch (ex: Exception) {
-					ex.printStackTrace()
+	val loginIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+		if (result.resultCode != Activity.RESULT_OK) {
+			return@registerForActivityResult
+		}
+		val user = result.data?.getParcelableExtra<User>("user")
+		User.current = user
+		updateNav()
+		CoroutineScope(Dispatchers.IO).launch {
+			try {
+				if (user == null) {
+					return@launch
 				}
+				val response = RetrofitInstance.api.getAvatar(user.id)
+				
+				withContext(Dispatchers.Main) {
+					User.avatar.value = BitmapFactory.decodeStream(response.byteStream())
+					navViewHeaderBinding.headerImageAvatar.setImageBitmap(User.avatar.value)
+				}
+			} catch (ex: Exception) {
+				ex.printStackTrace()
 			}
 		}
+		
+	}
+	
+	val postIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+		if (result.resultCode != Activity.RESULT_OK) {
+			return@registerForActivityResult
+		}
+		val post = result.data?.getParcelableExtra<PostResult>("post") ?: return@registerForActivityResult
+		if (result.data?.getBooleanExtra("send", false) == true) {
+			println("send")
+		} else {
+			println("draft")
+		}
+		println(post)
 	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 		navViewHeaderBinding = NavHeaderMainBinding.bind(viewGroup)
 		
 		navViewHeaderBinding.headerButtonLogin.setOnClickListener {
-			intentLauncher.launch(Intent(this, LoginActivity::class.java))
+			loginIntentLauncher.launch(Intent(this, LoginActivity::class.java))
 		}
 		
 		navViewHeaderBinding.headerButtonSignOut.setOnClickListener {

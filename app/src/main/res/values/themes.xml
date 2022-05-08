@@ -13,13 +13,24 @@
 		<item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 		<!-- Customize your theme here. -->
 	</style>
-
+	
 	<style name="Theme.MySpaceDemo1.NoActionBar">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 	</style>
-
+	
 	<style name="Theme.MySpaceDemo1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
+	
 	<style name="Theme.MySpaceDemo1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+	
+	<style name="CustomizedBottomDialogStyle">
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:backgroundDimEnabled">true</item>
+		<item name="android:backgroundDimAmount">0.7</item>
+		<item name="android:windowIsFloating">false</item>
+		<item name="android:windowAnimationStyle">@android:style/Animation.InputMethod</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowSoftInputMode">adjustResize</item>
+		<item name="android:background">@android:color/transparent</item>
+	</style>
 </resources>

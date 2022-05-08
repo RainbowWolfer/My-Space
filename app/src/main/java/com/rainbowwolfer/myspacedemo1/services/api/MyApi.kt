@@ -1,9 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
+import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
+import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -53,4 +56,14 @@ interface MyApi {
 		@Query("email") email: String
 	): Response<Boolean>
 	
+	@Multipart
+	@POST("post")
+	suspend fun post(
+		@Part("publisher_id") id: RequestBody,
+		@Part("content") content: RequestBody,
+		@Part("post_visibility") postVisibility: RequestBody,
+		@Part("reply_visibility") replyVisibility: RequestBody,
+		@Part("tags") tags: RequestBody,
+		@Part images: ArrayList<MultipartBody.Part>,
+	): ResponseBody
 }

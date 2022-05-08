@@ -10,7 +10,6 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
@@ -19,10 +18,10 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.share.BlankFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,9 +30,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
-import java.io.ByteArrayOutputStream
 import java.io.InputStream
-
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {
@@ -57,7 +54,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		if (result.resultCode == Activity.RESULT_OK && result.data != null) {
 			val uri = result.data!!.data!!
 			val iStream: InputStream? = requireActivity().contentResolver.openInputStream(uri)
-			val bytes: ByteArray = getBytes(iStream!!)
+			val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
 			CoroutineScope(Dispatchers.Main).launch {
 				lateinit var dialog: LoadingDialog
 				try {
@@ -66,7 +63,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 					}
 					val body = bytes.toRequestBody("multipart/form-data".toMediaTypeOrNull(), 0, bytes.size)
 					val data = MultipartBody.Part.createFormData("file", "file", body)
-					val response = RetrofitInstance.api_postImage.updateAvatar(user.id, data)
+					val response = RetrofitInstance.api_postMultipart.updateAvatar(user.id, data)
 					
 					User.avatar.value = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 					val image = binding.userImageAvatar
@@ -85,17 +82,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 				}
 			}
 		}
-	}
-	
-	private fun getBytes(inputStream: InputStream): ByteArray {
-		val byteBuffer = ByteArrayOutputStream()
-		val bufferSize = 1024
-		val buffer = ByteArray(bufferSize)
-		var len = 0
-		while (inputStream.read(buffer).also { len = it } != -1) {
-			byteBuffer.write(buffer, 0, len)
-		}
-		return byteBuffer.toByteArray()
 	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
