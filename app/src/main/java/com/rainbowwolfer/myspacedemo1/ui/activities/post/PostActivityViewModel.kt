@@ -10,7 +10,7 @@ import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 
 class PostActivityViewModel : ViewModel() {
 	val content: MutableLiveData<String> by lazy { MutableLiveData("") }
-	val images: MutableLiveData<Array<Pair<Bitmap, ByteArray>?>> by lazy { MutableLiveData(arrayOfNulls(9)) }
+	val images: MutableLiveData<Array<Triple<Bitmap, ByteArray, String>?>> by lazy { MutableLiveData(arrayOfNulls(9)) }
 	
 	val postVisibility: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
 	val replyVisiblity: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
@@ -24,20 +24,22 @@ class PostActivityViewModel : ViewModel() {
 	}
 	
 	fun addTag(tag: String) {
-		if (hasTag(tag)) {
+		val t = tag.trim()
+		if (hasTag(t)) {
 			return
 		}
 		val clone = tags.value!!
-		clone.add(tag)
+		clone.add(t)
 		tags.value = clone
 	}
 	
 	fun removeTag(tag: String) {
-		if (!hasTag(tag) || tags.value == null) {
+		val t = tag.trim()
+		if (!hasTag(t) || tags.value == null) {
 			return
 		}
 		val clone = tags.value!!
-		clone.remove(tag)
+		clone.remove(t)
 		tags.value = clone
 	}
 	
@@ -56,7 +58,13 @@ class PostActivityViewModel : ViewModel() {
 		}
 	}
 	
-	private fun setImages(array: Array<Pair<Bitmap, ByteArray>?>) {
+	fun getExtensions(): List<String?> {
+		return images.value!!.map {
+			it?.third
+		}
+	}
+	
+	private fun setImages(array: Array<Triple<Bitmap, ByteArray, String>?>) {
 		images.value = array
 	}
 	
@@ -74,13 +82,13 @@ class PostActivityViewModel : ViewModel() {
 //		setImages(clone)
 //	}
 	
-	private fun Array<Pair<Bitmap, ByteArray>?>.sortImages() {
+	private fun Array<Triple<Bitmap, ByteArray, String>?>.sortImages() {
 		this.sortWith(compareBy(nullsFirst()) {
 			it == null
 		})
 	}
 	
-	fun addImage(image: Pair<Bitmap, ByteArray>) {
+	fun addImage(image: Triple<Bitmap, ByteArray, String>) {
 		val index = getImages().indexOfFirst {
 			it == null
 		}

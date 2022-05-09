@@ -15,6 +15,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.viewbinding.library.activity.viewBinding
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
@@ -37,6 +39,7 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
+import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,10 +64,13 @@ class PostActivity : AppCompatActivity() {
 	
 	private val imageSelectIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		val uri = result.data?.data ?: return@registerForActivityResult
+		val fileName = uri.pathSegments.last()
+		val ext = fileName.substring(fileName.lastIndexOf("."))
+		println(ext)
 		val iStream: InputStream? = contentResolver.openInputStream(uri)
 		val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
 		val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-		viewModel.addImage(Pair(bitmap, bytes))
+		viewModel.addImage(Triple(bitmap, bytes, ext))
 	}
 	
 	@SuppressLint("SetTextI18n")
@@ -227,9 +233,8 @@ class PostActivity : AppCompatActivity() {
 			}
 			
 			tagInputBinding.bottomSheetDialogEditTextTag.doAfterTextChanged {
-				//&*()_=+{}/.<>|\[\]~-
 				tagInputBinding.bottomSheetDialogInputTag.error = when {
-					arrayListOf('!', '@', '#', '$', '%', '^', '&', '*', '&', '(', ')', '_', '=', '+', '{', '}', '/', '.', '<', '>', '|', '\\', '[', ']', '~', '-').any { c -> it.toString().contains(c) } -> "No Special Character Allowed"
+					arrayListOf('!', '@', '#', '$', '%', '^', '&', '*', '&', '(', ')', '_', '=', '+', '{', '}', '/', '.', '<', '>', '|', '\\', '[', ']', '~', '-', ' ').any { c -> it.toString().contains(c) } -> "No Special Character Allowed"
 					TextUtils.isEmpty(it.toString()) -> "Tag cannot be empty"
 					it.toString().length > 20 -> "Max length is 20"
 					viewModel.hasTag(it.toString()) -> "Already exists"
@@ -244,7 +249,9 @@ class PostActivity : AppCompatActivity() {
 				if (tagInputBinding.bottomSheetDialogInputTag.error != null) {
 					return@setOnClickListener
 				}
-				
+				viewModel.addTag(tagInputBinding.bottomSheetDialogEditTextTag.text.toString().trim())
+				this.dismiss()
+				this.hide()
 			}
 		}
 	}
@@ -252,26 +259,40 @@ class PostActivity : AppCompatActivity() {
 	private fun updateTags(tags: ArrayList<String>) {
 		binding.postChipsTags.removeAllViews()
 		
+		for (tag in tags) {
+			val chip = Chip(this)
+			chip.isCloseIconVisible = true
+			chip.closeIcon = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_close_24)
+			chip.text = tag
+			binding.postChipsTags.addView(chip)
+			chip.setOnCloseIconClickListener {
+				val anim = AlphaAnimation(1f, 0f)
+				anim.duration = 250
+				anim.setAnimationListener(object : Animation.AnimationListener {
+					override fun onAnimationRepeat(animation: Animation?) {}
+					
+					override fun onAnimationEnd(animation: Animation?) {
+						viewModel.removeTag(chip.text.toString())
+					}
+					
+					override fun onAnimationStart(animation: Animation?) {}
+				})
+				it.startAnimation(anim)
+			}
+		}
+		
 		val add = Chip(this)
 		add.chipIcon = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_add_24)
 		add.iconStartPadding = resources.getDimensionPixelSize(R.dimen.chip_add_padding).toFloat()
 		binding.postChipsTags.addView(add)
 		add.setOnClickListener {
-			println("Add")
+			showDialog()
 		}
 		
-		for (tag in tags) {
-			val chip = Chip(this)
-			chip.closeIcon = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_close_24)
-			binding.postChipsTags.addView(chip)
-			chip.setOnCloseIconClickListener {
-				println("Close")
-			}
-		}
 	}
 	
 	@SuppressLint("SetTextI18n")
-	private fun updateImages(array: Array<Pair<Bitmap, ByteArray>?>) {
+	private fun updateImages(array: Array<Triple<Bitmap, ByteArray, String>?>) {
 		if (array.size < 9) {
 			throw Exception("how could this be possible?")
 		}
@@ -301,7 +322,7 @@ class PostActivity : AppCompatActivity() {
 		binding.post33.update(array, 8)
 	}
 	
-	private fun LayoutPostImageViewBinding.update(array: Array<Pair<Bitmap, ByteArray>?>, index: Int) {
+	private fun LayoutPostImageViewBinding.update(array: Array<Triple<Bitmap, ByteArray, String>?>, index: Int) {
 		if (index !in array.indices) {
 			System.err.println("Index is out of bound")
 			return
@@ -340,14 +361,11 @@ class PostActivity : AppCompatActivity() {
 						User.current!!.id,
 						viewModel.getContent(),
 						viewModel.getByteArrays(),
+						viewModel.getExtensions(),
 						viewModel.postVisibility.value!!,
 						viewModel.replyVisiblity.value!!,
-						arrayListOf("furry", "yiff")
+						viewModel.tags.value!!
 					)
-//					post.content.toRequestBody()
-//					val body = bytes.toRequestBody("multipart/form-data".toMediaTypeOrNull(), 0, bytes.size)
-//					val data = MultipartBody.Part.createFormData("file", "file", body)
-					
 					val multipartTypedOutput = arrayListOf<MultipartBody.Part>()
 					
 					for (index in post.images.indices) {
@@ -355,7 +373,7 @@ class PostActivity : AppCompatActivity() {
 							continue
 						}
 						val image = post.images[index]!!.toRequestBody("multipart/form-data".toMediaType())
-						multipartTypedOutput.add(MultipartBody.Part.createFormData("post_images", "$index", image))
+						multipartTypedOutput.add(MultipartBody.Part.createFormData("post_images", "$index${post.extensions[index]}", image))
 					}
 					
 					val contentBody = post.content.toRequestBody("text/plain".toMediaType())
@@ -364,17 +382,22 @@ class PostActivity : AppCompatActivity() {
 					val replyVisibility = post.replyLimit.ordinal.toString().toRequestBody("text/plain".toMediaType())
 					val tags = post.tags.joinToString("&#10;").toRequestBody("text/plain".toMediaType())
 					
-					RetrofitInstance.api_postMultipart.post(
+					val response = RetrofitInstance.api_postMultipart.post(
 						publisherIDBody, contentBody, postVisibility, replyVisibility, tags, multipartTypedOutput
 					)
+					kotlin.runCatching {
+						println(response.string())
+					}
 					
 				} catch (ex: Exception) {
 					ex.printStackTrace()
 				}
 			}
+			dialog.hideDialog()
 		}
-		//show success message and a back button
-//		finish()
+		SuccessBackDialog(this).showDialog {
+			finish()
+		}
 	}
 	
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -390,8 +413,7 @@ class PostActivity : AppCompatActivity() {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.post_draft -> {
-//				complete(false)
-				showDialog()
+				complete(false)
 				true
 			}
 			R.id.post_send -> {

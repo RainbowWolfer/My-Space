@@ -23,4 +23,6 @@
 	<color name="medium">#ff8f00</color>
 	<color name="strong">#FCCA3F</color>
 	<color name="bulletproof">#00c853</color>
+	
+	<color name="contrast_fab">#fff</color>
 </resources>

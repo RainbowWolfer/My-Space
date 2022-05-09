@@ -11,7 +11,7 @@
 		<fragment
 			android:id="@+id/item_home"
 			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment"
-			android:label="fragment_home"
+			android:label="Home"
 			tools:layout="@layout/fragment_home">
 			<action
 				android:id="@+id/action_item_home_to_userFragment3"
@@ -24,7 +24,7 @@
 		<fragment
 			android:id="@+id/userFragment"
 			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
-			android:label="UserFragment">
+			android:label="User">
 			<argument
 				android:name="user"
 				app:argType="com.rainbowwolfer.myspacedemo1.models.User"/>
@@ -33,16 +33,16 @@
 	<fragment
 		android:id="@+id/nav_settings"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.settings.SettingsFragment"
-		android:label="SettingsFragment"/>
+		android:label="Settings"/>
 	<fragment
 		android:id="@+id/nav_about"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.about.AboutFragment"
-		android:label="fragment_about"
+		android:label="About"
 		tools:layout="@layout/fragment_about"/>
 	<fragment
 		android:id="@+id/nav_collection"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.CollectionFragment"
-		android:label="fragment_collection"
+		android:label="Collection"
 		tools:layout="@layout/fragment_collection"/>
 	<navigation
 		android:id="@+id/subnav_message"
@@ -69,6 +69,6 @@
 	<fragment
 		android:id="@+id/nav_profile"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
-		android:label="UserFragment"/>
+		android:label="Profile"/>
 
 </navigation>

@@ -6,21 +6,26 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_margin="10dp"
-	android:background="@drawable/card_background">
+	android:background="@drawable/card_background"
+	android:clickable="true"
+	android:focusable="true"
+	android:foreground="@drawable/ripple_message_row_foreground"
+	android:paddingBottom="10dp">
 	
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/row_image_publisherAvatar"
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_marginStart="16dp"
-		android:layout_marginTop="24dp"
+		android:layout_marginTop="8dp"
 		android:clickable="true"
+		android:contentDescription="@string/app_icon"
 		android:longClickable="true"
 		android:src="@drawable/ic_food"
 		app:civ_border_color="@color/black"
 		app:civ_border_width="1dp"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"/>
+		app:layout_constraintTop_toBottomOf="@+id/row_image_repostIcon"/>
 	
 	<TextView
 		android:id="@+id/row_text_publisherName"
@@ -49,9 +54,7 @@
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
-		android:layout_marginBottom="8dp"
 		android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"
-		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.501"
 		app:layout_constraintStart_toStartOf="parent"
@@ -64,10 +67,257 @@
 		android:layout_marginEnd="24dp"
 		android:background="#00ffffff"
 		android:contentDescription="@string/app_name"
+		android:foreground="@drawable/ripple_message_row_foreground"
 		android:minWidth="48dp"
 		android:minHeight="48dp"
 		android:src="@drawable/ic_baseline_more_vert_24"
 		app:layout_constraintBottom_toBottomOf="@+id/row_text_publishDateTime"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/row_text_publisherName"/>
+	
+	<HorizontalScrollView
+		android:id="@+id/row_horScroll_tags"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:scrollbars="none"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/row_text_content">
+		
+		<com.google.android.material.chip.ChipGroup
+			android:id="@+id/row_chipGroups_tags"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content">
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip11"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip13"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip17"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip18"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip19"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip22"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip23"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip24"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip25"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip26"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip27"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip28"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip29"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip30"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
+		</com.google.android.material.chip.ChipGroup>
+	</HorizontalScrollView>
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/row_button_upvote"
+		android:layout_width="35dp"
+		android:layout_height="35dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:background="@color/transparent"
+		android:contentDescription="@string/app_name"
+		android:foreground="@drawable/ripple_small_corners"
+		android:src="@drawable/ic_outline_thumb_up_24"
+		android:tint="@color/green"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/row_horScroll_tags">
+	
+	</androidx.appcompat.widget.AppCompatImageButton>
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/row_button_downvote"
+		android:layout_width="35dp"
+		android:layout_height="35dp"
+		android:layout_marginEnd="8dp"
+		android:background="@color/transparent"
+		android:contentDescription="@string/app_name"
+		android:foreground="@drawable/ripple_small_corners"
+		android:src="@drawable/ic_outline_thumb_down_24"
+		android:tint="@color/red"
+		app:layout_constraintBottom_toBottomOf="@+id/row_button_upvote"
+		app:layout_constraintEnd_toStartOf="@+id/row_text_score"
+		app:layout_constraintTop_toTopOf="@+id/row_button_upvote">
+	
+	</androidx.appcompat.widget.AppCompatImageButton>
+	
+	<TextView
+		android:id="@+id/row_text_score"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="8dp"
+		android:text="21"
+		android:textSize="18sp"
+		app:layout_constraintBottom_toBottomOf="@+id/row_button_upvote"
+		app:layout_constraintEnd_toStartOf="@+id/row_button_upvote"
+		app:layout_constraintTop_toTopOf="@+id/row_button_upvote"/>
+	
+	<LinearLayout
+		android:id="@+id/row_layout_comment"
+		android:layout_width="wrap_content"
+		android:layout_height="35dp"
+		android:layout_marginEnd="8dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:gravity="center"
+		android:paddingStart="10dp"
+		android:paddingEnd="10dp"
+		app:layout_constraintBottom_toBottomOf="@+id/row_button_downvote"
+		app:layout_constraintEnd_toStartOf="@+id/row_button_downvote"
+		app:layout_constraintTop_toTopOf="@+id/row_button_downvote">
+		
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="5dp"
+			android:src="@drawable/ic_baseline_comment_24"/>
+		
+		<TextView
+			android:id="@+id/row_comment_count"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="5dp"
+			android:text="4"/>
+	</LinearLayout>
+	
+	<LinearLayout
+		android:id="@+id/row_layout_repost"
+		android:layout_width="wrap_content"
+		android:layout_height="35dp"
+		android:layout_marginEnd="8dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:gravity="center"
+		android:paddingStart="10dp"
+		android:paddingEnd="10dp"
+		app:layout_constraintBottom_toBottomOf="@+id/row_button_downvote"
+		app:layout_constraintEnd_toStartOf="@+id/row_layout_comment"
+		app:layout_constraintTop_toTopOf="@+id/row_button_downvote">
+		
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="5dp"
+			android:src="@drawable/ic_baseline_reply_all_24"/>
+		
+		<TextView
+			android:id="@+id/row_repost_count"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="5dp"
+			android:text="20"/>
+	</LinearLayout>
+	
+	<TextView
+		android:id="@+id/row_text_repostInfo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:text="Repost From @RainbowWolfer"
+		app:layout_constraintBottom_toBottomOf="@+id/row_image_repostIcon"
+		app:layout_constraintStart_toEndOf="@+id/row_image_repostIcon"
+		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon"/>
+	
+	<ImageView
+		android:id="@+id/row_image_repostIcon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="24dp"
+		android:layout_marginTop="12dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

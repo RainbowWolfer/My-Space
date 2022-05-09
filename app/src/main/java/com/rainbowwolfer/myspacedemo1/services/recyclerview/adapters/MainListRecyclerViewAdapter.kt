@@ -32,9 +32,9 @@ class MainListRecyclerViewAdapter(
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val data = postsList[position]
-		holder.binding.rowTextPublisherName.text = data.publisher.username
+		holder.binding.rowTextPublisherName.text = data.publisherID
 		holder.binding.rowTextPublishDateTime.text = EasyFunctions.formatDateTime(data.publishDateTime)
-		holder.binding.rowTextContent.text = data.content
+		holder.binding.rowTextContent.text = data.textContent
 		holder.binding.rowButtonMore.setOnClickListener {
 			val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
 			popupMenu.setOnMenuItemClickListener {
@@ -42,7 +42,7 @@ class MainListRecyclerViewAdapter(
 					R.id.item_share -> {
 						val sharedIntent = Intent().apply {
 							this.action = Intent.ACTION_SEND
-							this.putExtra(Intent.EXTRA_TEXT, "")
+							this.putExtra(Intent.EXTRA_TEXT, "This is a test")
 							this.type = "text/plain"
 						}
 						context.startActivity(sharedIntent)
@@ -60,10 +60,10 @@ class MainListRecyclerViewAdapter(
 		}
 		if (enableAvatarClicking) {
 			holder.binding.rowImagePublisherAvatar.setOnClickListener {
-				val navController = Navigation.findNavController(holder.itemView)
-				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisher.username}"
-				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(data.publisher)
-				navController.navigate(action)
+//				val navController = Navigation.findNavController(holder.itemView)
+//				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID.username}"
+//				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(data.publisherID)
+//				navController.navigate(action)
 			}
 		}
 	}

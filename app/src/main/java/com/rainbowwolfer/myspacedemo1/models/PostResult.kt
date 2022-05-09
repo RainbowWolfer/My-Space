@@ -9,6 +9,7 @@ data class PostResult(
 	val publisherID: String,
 	val content: String,
 	val images: List<ByteArray?>,
+	val extensions: List<String?>,
 	val visibility: PostVisibility,
 	val replyLimit: PostVisibility,
 	val tags: List<String>,
