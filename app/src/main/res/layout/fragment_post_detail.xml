@@ -1,15 +1,412 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".ui.fragments.main.home.PostDetailFragment">
 	
-	<!-- TODO: Update blank fragment layout -->
-	<TextView
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<com.google.android.material.appbar.AppBarLayout
+		android:id="@+id/postDetail_appBar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		tools:background="@color/gray_darker">
+		
+		<androidx.appcompat.widget.Toolbar
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:contentInsetStart="0dp"
+			android:contentInsetLeft="0dp"
+			android:contentInsetEnd="0dp"
+			android:contentInsetRight="0dp"
+			android:paddingBottom="8dp"
+			app:contentInsetEnd="0dp"
+			app:contentInsetLeft="0dp"
+			app:contentInsetRight="0dp"
+			app:contentInsetStart="0dp"
+			app:layout_scrollFlags="scroll|snap">
+			
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+				
+				<de.hdodenhof.circleimageview.CircleImageView
+					android:id="@+id/circleImageView"
+					android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="16dp"
+					android:src="@drawable/ic_food"
+					app:civ_border_color="@color/normal_text"
+					app:civ_border_overlay="true"
+					app:civ_border_width="1.5dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent"/>
+				
+				<androidx.appcompat.widget.AppCompatImageButton
+					android:id="@+id/appCompatImageButton"
+					android:layout_width="48dp"
+					android:layout_height="48dp"
+					android:layout_marginEnd="16dp"
+					android:background="@color/transparent"
+					android:contentDescription="@string/app_name_space"
+					android:foreground="@drawable/ripple_small_corners"
+					android:src="@drawable/ic_baseline_more_vert_24"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="@+id/textView5"/>
+				
+				<TextView
+					android:id="@+id/textView5"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginEnd="8dp"
+					android:ellipsize="end"
+					android:maxLines="1"
+					android:text="RainbowWolfer"
+					android:textSize="24sp"
+					android:textStyle="bold"
+					app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton"
+					app:layout_constraintStart_toEndOf="@+id/circleImageView"
+					app:layout_constraintTop_toTopOf="@+id/circleImageView"/>
+				
+				<TextView
+					android:id="@+id/textView9"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginEnd="8dp"
+					android:ellipsize="end"
+					android:maxLines="1"
+					android:text="RainbowWolfer@Outlook.com"
+					android:textSize="16sp"
+					app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+					app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton"
+					app:layout_constraintStart_toEndOf="@+id/circleImageView"/>
+				
+				<TextView
+					android:id="@+id/textView10"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:text="@string/welcome1_text"
+					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+					android:textSize="16sp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/circleImageView"/>
+				
+				<View
+					android:id="@+id/view2"
+					android:layout_width="0dp"
+					android:layout_height="2dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:background="@drawable/separator_background"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"/>
+				
+				<View
+					android:id="@+id/view3"
+					android:layout_width="0dp"
+					android:layout_height="2dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:background="@drawable/separator_background"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/imageView5"/>
+				
+				<View
+					android:id="@+id/view4"
+					android:layout_width="0dp"
+					android:layout_height="2dp"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:background="@drawable/separator_background"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/textView15"/>
+				
+				<TextView
+					android:id="@+id/textView11"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="2022/05/11 23:03:21"
+					android:textSize="14sp"
+					app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+					app:layout_constraintStart_toEndOf="@+id/imageView4"
+					app:layout_constraintTop_toTopOf="@+id/imageView4"/>
+				
+				<ImageView
+					android:id="@+id/imageView4"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/view2"
+					app:srcCompat="@drawable/ic_baseline_calendar_today_24"/>
+				
+				<ImageView
+					android:id="@+id/imageView5"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/imageView4"
+					app:srcCompat="@drawable/ic_baseline_edit_24"/>
+				
+				<TextView
+					android:id="@+id/textView12"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="(2)"
+					android:textSize="14sp"
+					app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+					app:layout_constraintStart_toEndOf="@+id/imageView5"
+					app:layout_constraintTop_toTopOf="@+id/imageView5"/>
+				
+				<TextView
+					android:id="@+id/textView14"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="2022/05/11 23:06:21"
+					android:textSize="14sp"
+					app:layout_constraintBottom_toBottomOf="@+id/textView12"
+					app:layout_constraintStart_toEndOf="@+id/textView12"
+					app:layout_constraintTop_toTopOf="@+id/textView12"/>
+				
+				<TextView
+					android:id="@+id/textView15"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:text="880"
+					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+					android:textSize="18sp"
+					android:textStyle="bold"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/view3"/>
+				
+				<TextView
+					android:id="@+id/textView16"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="Comments"
+					android:textSize="16sp"
+					app:layout_constraintBottom_toBottomOf="@+id/textView15"
+					app:layout_constraintStart_toEndOf="@+id/textView15"
+					app:layout_constraintTop_toTopOf="@+id/textView15"/>
+				
+				<TextView
+					android:id="@+id/textView17"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="6"
+					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+					android:textSize="18sp"
+					android:textStyle="bold"
+					app:layout_constraintBottom_toBottomOf="@+id/textView16"
+					app:layout_constraintStart_toEndOf="@+id/textView16"
+					app:layout_constraintTop_toTopOf="@+id/textView16"/>
+				
+				<TextView
+					android:id="@+id/textView18"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="Reposts"
+					android:textSize="16sp"
+					app:layout_constraintBottom_toBottomOf="@+id/textView16"
+					app:layout_constraintStart_toEndOf="@+id/textView17"
+					app:layout_constraintTop_toTopOf="@+id/textView16"/>
+				
+				<TextView
+					android:id="@+id/textView20"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="8dp"
+					android:text="Scores"
+					android:textSize="16sp"
+					app:layout_constraintBottom_toBottomOf="@+id/textView18"
+					app:layout_constraintStart_toEndOf="@+id/textView19"
+					app:layout_constraintTop_toTopOf="@+id/textView18"/>
+				
+				<TextView
+					android:id="@+id/textView19"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="7,281"
+					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+					android:textSize="18sp"
+					android:textStyle="bold"
+					app:layout_constraintBottom_toBottomOf="@+id/textView17"
+					app:layout_constraintStart_toEndOf="@+id/textView18"
+					app:layout_constraintTop_toTopOf="@+id/textView17"/>
+				
+				<HorizontalScrollView
+					android:id="@+id/horizontalScrollView"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:scrollbars="none"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/textView10">
+					
+					<com.google.android.material.chip.ChipGroup
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent">
+						
+						<com.google.android.material.chip.Chip
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip20"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip21"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip31"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip32"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip33"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+						
+						<com.google.android.material.chip.Chip
+							android:id="@+id/chip34"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:backgroundTint="@color/gray"
+							android:text="Hello"/>
+					</com.google.android.material.chip.ChipGroup>
+				</HorizontalScrollView>
+				
+				<LinearLayout
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:orientation="horizontal"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/view4">
+					
+					<androidx.appcompat.widget.AppCompatImageButton
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_weight="1"
+						android:background="@color/transparent"
+						android:contentDescription="@string/app_name"
+						android:foreground="@drawable/ripple_small_corners"
+						android:src="@drawable/ic_baseline_reply_all_24"/>
+					
+					<androidx.appcompat.widget.AppCompatImageButton
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_weight="1"
+						android:background="@color/transparent"
+						android:contentDescription="@string/app_name"
+						android:foreground="@drawable/ripple_small_corners"
+						android:src="@drawable/ic_baseline_comment_24"/>
+					
+					<androidx.appcompat.widget.AppCompatImageButton
+						android:id="@+id/appCompatImageButton2"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_weight="1"
+						android:background="@color/transparent"
+						android:contentDescription="@string/app_name"
+						android:foreground="@drawable/ripple_small_corners"
+						android:src="@drawable/ic_outline_thumb_down_24"/>
+					
+					<androidx.appcompat.widget.AppCompatImageButton
+						android:id="@+id/appCompatImageButton3"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_weight="1"
+						android:background="@color/transparent"
+						android:contentDescription="@string/app_name"
+						android:foreground="@drawable/ripple_small_corners"
+						android:src="@drawable/ic_outline_thumb_up_24"/>
+				
+				</LinearLayout>
+			
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</androidx.appcompat.widget.Toolbar>
+		
+		
+		<com.google.android.material.tabs.TabLayout
+			android:id="@+id/postDetail_tabsLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Comments"/>
+			
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Repost"/>
+			
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Scores"/>
+		</com.google.android.material.tabs.TabLayout>
+	</com.google.android.material.appbar.AppBarLayout>
+	
+	<androidx.viewpager2.widget.ViewPager2
+		android:id="@+id/postDetail_viewPager2"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:text="@string/hello_blank_fragment"/>
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

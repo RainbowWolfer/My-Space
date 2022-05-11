@@ -218,6 +218,7 @@ class PostActivity : AppCompatActivity() {
 				}
 			}
 			
+			setCanceledOnTouchOutside(true)
 			show()
 			
 			val tagInputBinding = BottomSheetTagInputBinding.inflate(LayoutInflater.from(this@PostActivity))

@@ -20,6 +20,13 @@
 				app:exitAnim="@anim/to_left"
 				app:popEnterAnim="@anim/from_left"
 				app:popExitAnim="@anim/to_right"/>
+			<action
+				android:id="@+id/action_item_home_to_postDetailFragment"
+				app:destination="@id/postDetailFragment"
+				app:enterAnim="@anim/from_right"
+				app:exitAnim="@anim/to_left"
+				app:popEnterAnim="@anim/from_left"
+				app:popExitAnim="@anim/to_right"/>
 		</fragment>
 		<fragment
 			android:id="@+id/userFragment"
@@ -28,6 +35,15 @@
 			<argument
 				android:name="user"
 				app:argType="com.rainbowwolfer.myspacedemo1.models.User"/>
+		</fragment>
+		<fragment
+			android:id="@+id/postDetailFragment"
+			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment"
+			android:label="Post"
+			tools:layout="@layout/fragment_post_detail">
+			<argument
+				android:name="post"
+				app:argType="com.rainbowwolfer.myspacedemo1.models.Post"/>
 		</fragment>
 	</navigation>
 	<fragment

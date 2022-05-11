@@ -26,6 +26,9 @@ data class Post(
 	val repost: Int,
 	val visibility: PostVisibility,
 	val replyLimit: PostVisibility,
+	val isRepost: Boolean,
+	val originID: String,
+	val reposterID: String,
 ) : Parcelable, DatabaseID {
 	companion object : GenerateDefault<Post> {
 		@JvmStatic
@@ -45,6 +48,9 @@ data class Post(
 				Random.nextInt(),
 				PostVisibility.All,
 				PostVisibility.All,
+				false,
+				"",
+				"",
 			)
 		}
 	}

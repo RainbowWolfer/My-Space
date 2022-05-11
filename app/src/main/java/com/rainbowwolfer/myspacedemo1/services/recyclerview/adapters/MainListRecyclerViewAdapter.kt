@@ -14,6 +14,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
+import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 
@@ -35,6 +36,15 @@ class MainListRecyclerViewAdapter(
 		holder.binding.rowTextPublisherName.text = data.publisherID
 		holder.binding.rowTextPublishDateTime.text = EasyFunctions.formatDateTime(data.publishDateTime)
 		holder.binding.rowTextContent.text = data.textContent
+		holder.binding.root.setOnClickListener {
+			val navController = Navigation.findNavController(holder.itemView)
+			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+		}
+		holder.binding.mainLayoutRepost.setOnClickListener {
+			val navController = Navigation.findNavController(holder.itemView)
+			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+		}
+		
 		holder.binding.rowButtonMore.setOnClickListener {
 			val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
 			popupMenu.setOnMenuItemClickListener {
@@ -60,10 +70,10 @@ class MainListRecyclerViewAdapter(
 		}
 		if (enableAvatarClicking) {
 			holder.binding.rowImagePublisherAvatar.setOnClickListener {
-//				val navController = Navigation.findNavController(holder.itemView)
-//				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID.username}"
-//				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(data.publisherID)
-//				navController.navigate(action)
+				val navController = Navigation.findNavController(holder.itemView)
+				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
+				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(User.getTestLogUser())
+				navController.navigate(action)
 			}
 		}
 	}

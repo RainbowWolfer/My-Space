@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.activity.viewBinding
@@ -140,12 +141,8 @@ class MainActivity : AppCompatActivity() {
 				}
 			)
 		}
+		
 	}
-
-//	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//		menuInflater.inflate(R.menu.main, menu)
-//		return true
-//	}
 	
 	override fun onSupportNavigateUp(): Boolean {
 		return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()

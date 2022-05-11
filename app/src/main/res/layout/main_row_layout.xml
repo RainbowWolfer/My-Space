@@ -10,6 +10,7 @@
 	android:clickable="true"
 	android:focusable="true"
 	android:foreground="@drawable/ripple_message_row_foreground"
+	android:longClickable="true"
 	android:paddingBottom="10dp">
 	
 	<de.hdodenhof.circleimageview.CircleImageView
@@ -25,16 +26,49 @@
 		app:civ_border_color="@color/black"
 		app:civ_border_width="1dp"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/row_image_repostIcon"/>
+		app:layout_constraintTop_toBottomOf="@+id/main_layout_repost"/>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/main_layout_repost"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:background="@drawable/card_background"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_message_row_foreground"
+		android:longClickable="true"
+		android:padding="15dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/row_image_repostIcon">
+		
+		<TextView
+			android:id="@+id/main_text_repost"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:text="This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. "
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintHorizontal_bias="0.5"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	<TextView
 		android:id="@+id/row_text_publisherName"
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
+		android:layout_marginEnd="8dp"
+		android:ellipsize="end"
+		android:maxLines="1"
 		android:text="Publisher Name"
 		android:textSize="20sp"
 		android:textStyle="bold"
+		app:layout_constraintEnd_toStartOf="@+id/row_button_more"
 		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"
 		app:layout_constraintTop_toTopOf="@+id/row_image_publisherAvatar"/>
 	
@@ -202,7 +236,7 @@
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/row_button_upvote"
-		android:layout_width="35dp"
+		android:layout_width="48dp"
 		android:layout_height="35dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
@@ -218,7 +252,7 @@
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/row_button_downvote"
-		android:layout_width="35dp"
+		android:layout_width="48dp"
 		android:layout_height="35dp"
 		android:layout_marginEnd="8dp"
 		android:background="@color/transparent"
@@ -303,12 +337,16 @@
 	
 	<TextView
 		android:id="@+id/row_text_repostInfo"
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
+		android:layout_marginEnd="16dp"
+		android:ellipsize="end"
+		android:maxLines="1"
 		android:text="Repost From @RainbowWolfer"
 		app:layout_constraintBottom_toBottomOf="@+id/row_image_repostIcon"
-		app:layout_constraintStart_toEndOf="@+id/row_image_repostIcon"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/main_image_repostAvatar"
 		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon"/>
 	
 	<ImageView
@@ -320,4 +358,17 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
 		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
+	
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/main_image_repostAvatar"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:layout_marginStart="8dp"
+		android:src="@drawable/ic_food"
+		app:civ_border_color="@color/black"
+		app:civ_border_overlay="true"
+		app:civ_border_width="0.5dp"
+		app:layout_constraintBottom_toBottomOf="@+id/row_image_repostIcon"
+		app:layout_constraintStart_toEndOf="@+id/row_image_repostIcon"
+		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

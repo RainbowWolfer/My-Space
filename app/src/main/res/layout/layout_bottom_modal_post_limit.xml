@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginStart="20dp"
+	android:layout_marginEnd="20dp"
+	android:background="@drawable/layout_background_bottom_input_dialog"
+	android:orientation="vertical">
+	
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="15dp">
+		
+		<FrameLayout
+			android:layout_width="70dp"
+			android:layout_height="5dp"
+			android:layout_gravity="center"
+			android:background="@drawable/round_rectangle_background"/>
+	</FrameLayout>
+	
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingStart="30dp"
+		android:paddingTop="25dp"
+		android:paddingBottom="15dp"
+		android:text="Sorts posts by"
+		android:textAllCaps="true"
+		android:textSize="15sp"
+		android:textStyle="bold"/>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/modalPostsLimit_layout_all"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners">
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_image_all"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="16dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_widgets_24"/>
+		
+		<TextView
+			android:id="@+id/modalPostsLimit_text_all"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="All Posts"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="@+id/modalPostsLimit_image_all"
+			app:layout_constraintStart_toEndOf="@+id/modalPostsLimit_image_all"
+			app:layout_constraintTop_toTopOf="@+id/modalPostsLimit_image_all"/>
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_check_all"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginEnd="24dp"
+			android:layout_marginBottom="8dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_check_24"
+			app:tint="@color/green"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/modalPostsLimit_layout_hot"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners">
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_image_hot"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="16dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_whatshot_24"/>
+		
+		<TextView
+			android:id="@+id/modalPostsLimit_text_hot"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="Hot"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="@+id/modalPostsLimit_image_hot"
+			app:layout_constraintStart_toEndOf="@+id/modalPostsLimit_image_hot"
+			app:layout_constraintTop_toTopOf="@+id/modalPostsLimit_image_hot"/>
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_check_hot"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginEnd="24dp"
+			android:layout_marginBottom="8dp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_check_24"
+			app:tint="@color/green"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/modalPostsLimit_layout_following"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners">
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_image_following"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="16dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_people_alt_24"/>
+		
+		<TextView
+			android:id="@+id/modalPostsLimit_text_following"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="Following"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="@+id/modalPostsLimit_image_following"
+			app:layout_constraintStart_toEndOf="@+id/modalPostsLimit_image_following"
+			app:layout_constraintTop_toTopOf="@+id/modalPostsLimit_image_following"/>
+		
+		<ImageView
+			android:id="@+id/modalPostsLimit_check_following"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginEnd="24dp"
+			android:layout_marginBottom="8dp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_baseline_check_24"
+			app:tint="@color/green"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="30dp"/>
+</LinearLayout>

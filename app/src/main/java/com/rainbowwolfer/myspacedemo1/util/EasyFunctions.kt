@@ -43,15 +43,23 @@ class EasyFunctions {
 		
 		@JvmStatic
 		fun formatDateTime(calendar: Calendar): String {
-			val year = calendar.get(Calendar.YEAR)
-			val month = calendar.get(Calendar.MONTH)
-			val day = calendar.get(Calendar.DAY_OF_MONTH)
+			val year = calendar.get(Calendar.YEAR).toDuoNumber()
+			val month = (calendar.get(Calendar.MONTH) + 1).toDuoNumber()
+			val day = calendar.get(Calendar.DAY_OF_MONTH).toDuoNumber()
 			
-			val hour = calendar.get(Calendar.HOUR_OF_DAY)
-			val minute = calendar.get(Calendar.MINUTE)
-			val second = calendar.get(Calendar.SECOND)
+			val hour = calendar.get(Calendar.HOUR_OF_DAY).toDuoNumber()
+			val minute = calendar.get(Calendar.MINUTE).toDuoNumber()
+			val second = calendar.get(Calendar.SECOND).toDuoNumber()
 			
 			return "$year/$month/$day $hour:$minute:$second"
+		}
+		
+		fun Int.toDuoNumber(): String {
+			return if (this < 10) {
+				"0$this"
+			} else {
+				"$this"
+			}
 		}
 		
 		@JvmStatic
