@@ -9,5 +9,10 @@
 	<dimen name="list_item_spacing_half">8dp</dimen>
 	<dimen name="my_corner_radius">20dp</dimen>
 	
+	<dimen name="none">0dp</dimen>
 	<dimen name="chip_add_padding">16dp</dimen>
+	<dimen name="bottom_margin">48dp</dimen>
+	<dimen name="image_preview_row_1">100dp</dimen>
+	<dimen name="image_preview_row_2">200dp</dimen>
+	<dimen name="image_preview_row_3">300dp</dimen>
 </resources>

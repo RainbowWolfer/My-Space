@@ -39,7 +39,6 @@ class LoginActivity : AppCompatActivity() {
 		binding.loginViewPager.adapter = loginViewPagerAdapter
 		binding.loginViewPager.isUserInputEnabled = false
 		
-		
 		binding.materialButtonToggleGroup.check(R.id.button_login)
 		binding.materialButtonToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
 			if (isChecked) {

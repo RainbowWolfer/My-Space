@@ -16,7 +16,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserProfileBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
-import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel

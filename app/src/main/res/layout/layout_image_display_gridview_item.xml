@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+	
+	<ImageView
+		android:id="@+id/gridViewItem_image_display"
+		android:layout_width="wrap_content"
+		android:layout_height="@dimen/image_preview_row_1"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:scaleType="centerCrop"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+	
+	<TextView
+		android:id="@+id/textView24"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="TextView"
+		android:textAlignment="center"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/gridViewItem_image_display"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

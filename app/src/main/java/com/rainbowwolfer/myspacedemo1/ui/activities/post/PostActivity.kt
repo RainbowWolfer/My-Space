@@ -35,8 +35,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.ActivityPostBinding
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetTagInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutPostImageViewBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
-import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
@@ -50,7 +49,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
-import java.util.regex.Pattern
 
 
 class PostActivity : AppCompatActivity() {

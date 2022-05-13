@@ -111,6 +111,20 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/row_text_publisherName"/>
 	
+	<GridView
+		android:id="@+id/row_gridview_images"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:horizontalSpacing="2dp"
+		android:numColumns="3"
+		android:verticalSpacing="2dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/row_text_content"/>
+	
 	<HorizontalScrollView
 		android:id="@+id/row_horScroll_tags"
 		android:layout_width="0dp"
@@ -121,7 +135,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/row_text_content">
+		app:layout_constraintTop_toBottomOf="@+id/row_gridview_images">
 		
 		<com.google.android.material.chip.ChipGroup
 			android:id="@+id/row_chipGroups_tags"
@@ -211,6 +225,7 @@
 		android:id="@+id/row_button_upvote"
 		android:layout_width="48dp"
 		android:layout_height="35dp"
+		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
 		android:background="@color/transparent"
 		android:contentDescription="@string/app_name"

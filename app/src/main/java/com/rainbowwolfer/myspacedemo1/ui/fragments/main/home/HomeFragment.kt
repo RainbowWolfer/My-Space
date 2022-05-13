@@ -17,8 +17,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentHomeBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutBottomModalPostLimitBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
-import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter
@@ -47,16 +46,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		setHasOptionsMenu(true)
 	}
 
-//	override fun onResume() {
-//		super.onResume()
-//	}
-	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.mainRecyvlerViewList.layoutManager = LinearLayoutManager(requireContext())
 		binding.mainRecyvlerViewList.adapter = myAdapter
 		
-		mainActivityViewModel
+		application.currentUser.observe(viewLifecycleOwner) {
+			updateList()
+			MainActivity.Instance?.drawerLayout?.closeDrawers()
+		}
 		
 		viewModel.posts.observe(viewLifecycleOwner) {
 			if (it.isEmpty()) {

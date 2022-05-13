@@ -74,4 +74,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 
     implementation 'com.github.dhaval2404:imagepicker:1.7.1'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 }

@@ -80,4 +80,10 @@ interface MyApi {
 		@Query("password") password: String,
 		@Query("posts_type") postsLimit: PostsLimit,
 	): Response<List<Post>>
+	
+	@GET("post/images")
+	suspend fun getPostImage(
+		@Query("id") id: String,
+		@Query("index") index: Int,
+	): ResponseBody
 }
