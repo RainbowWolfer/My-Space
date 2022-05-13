@@ -330,15 +330,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 	
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		if (item.itemId == R.id.item_refresh) {
-			//scroll to top
-			updateList()
-		} else if (item.itemId == R.id.item_top) {
-			//scroll to top
-		}
-		if (item.itemId == android.R.id.home) {
-			MainActivity.Instance?.drawerLayout?.openDrawer(GravityCompat.START)
-			return true
+		when (item.itemId) {
+			R.id.item_refresh -> {
+				//scroll to top
+				updateList()
+			}
+			R.id.item_top -> {
+				//scroll to top
+			}
+			android.R.id.home -> {
+				MainActivity.Instance?.drawerLayout?.openDrawer(GravityCompat.START)
+			}
 		}
 		return true
 	}

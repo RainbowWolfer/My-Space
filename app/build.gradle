@@ -36,6 +36,7 @@ android {
         viewBinding true
         dataBinding true
     }
+    namespace 'com.rainbowwolfer.myspacedemo1'
 }
 
 dependencies {
