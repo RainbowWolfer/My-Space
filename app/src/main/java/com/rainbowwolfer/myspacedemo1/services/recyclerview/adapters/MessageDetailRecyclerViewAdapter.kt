@@ -59,12 +59,6 @@ class MessageDetailRecyclerViewAdapter(
 		override val avatarImage: CircleImageView = binding.messageDetailRightImageAvatar
 	}
 	
-	init {
-		if (User.current == null) {
-//			throw Exception("???")
-		}
-	}
-	
 	private var list = emptyList<MessageItem>()
 	private lateinit var set: MessageSet
 	

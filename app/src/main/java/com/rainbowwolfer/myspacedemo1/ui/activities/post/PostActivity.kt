@@ -36,6 +36,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetTagInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutPostImageViewBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
@@ -61,6 +62,7 @@ class PostActivity : AppCompatActivity() {
 	
 	private val binding: ActivityPostBinding by viewBinding()
 	private val viewModel: PostActivityViewModel by viewModels()
+	private val application = MySpaceApplication.instance
 	
 	private val imageSelectIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		val uri = result.data?.data ?: return@registerForActivityResult
@@ -98,13 +100,13 @@ class PostActivity : AppCompatActivity() {
 			viewModel.replyVisiblity.value = PostVisibility.values()[position]
 		}
 		
-		binding.postImageAvatar.setImageBitmap(
-			if (User.avatar.value == null) {
-				BitmapFactory.decodeResource(resources, R.drawable.default_avatar)
-			} else {
-				User.avatar.value
-			}
-		)
+		application.currentAvatar.observe(this) {
+			binding.postImageAvatar.setImageBitmap(it)
+		}
+		
+		application.currentUser.observe(this) {
+		
+		}
 		
 		viewModel.content.observe(this) {
 			binding.postTextCount.text = "${it.length}/$MAX_CHARACTERS"
@@ -348,10 +350,6 @@ class PostActivity : AppCompatActivity() {
 	
 	
 	private fun complete(send: Boolean) {
-		if (User.current == null) {
-			//error
-			return
-		}
 		CoroutineScope(Dispatchers.Main).launch {
 			val dialog = LoadingDialog(this@PostActivity).apply {
 				showDialog("Posting...")
@@ -359,7 +357,7 @@ class PostActivity : AppCompatActivity() {
 			withContext(Dispatchers.IO) {
 				try {
 					val post = PostResult(
-						User.current!!.id,
+						application.currentUser.value!!.id,
 						viewModel.getContent(),
 						viewModel.getByteArrays(),
 						viewModel.getExtensions(),

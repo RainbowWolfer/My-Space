@@ -2,7 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 	<item
+		android:id="@+id/item_refresh"
 		android:icon="@drawable/ic_baseline_refresh_24"
 		android:title="Refresh"
+		app:showAsAction="ifRoom"/>
+	<item
+		android:id="@+id/item_top"
+		android:icon="@drawable/ic_baseline_vertical_align_top_24"
+		android:title="Top"
 		app:showAsAction="ifRoom"/>
 </menu>

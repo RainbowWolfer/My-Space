@@ -54,6 +54,11 @@ class EasyFunctions {
 			return "$year/$month/$day $hour:$minute:$second"
 		}
 		
+		@JvmStatic
+		fun Calendar.toFormatDateTime(): String {
+			return formatDateTime(this)
+		}
+		
 		fun Int.toDuoNumber(): String {
 			return if (this < 10) {
 				"0$this"

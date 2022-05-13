@@ -4,14 +4,19 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.UserViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 
 class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()
+	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+	private val application = MySpaceApplication.instance
 	
 	companion object {
 		var Instance: UserFragment? = null
@@ -32,7 +37,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 			user = UserFragmentArgs.fromBundle(requireArguments()).user
 			isSelf = false
 		} else {
-			user = User.current
+			user = application.currentUser.value
 			isSelf = true
 		}
 		

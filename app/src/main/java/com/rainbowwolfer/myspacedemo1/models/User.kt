@@ -40,26 +40,26 @@ data class User(
 				"This is just a simple description and nothing more. I do not know what to say anymore. Leave me alone.",
 			)
 		}
-		
-		@JvmStatic
-		fun List<User>?.getUser(): User? {
-			if (this == null) {
-				return null
-			}
-			return if (this.isEmpty()) null else this[0]
-		}
-		
-		var current: User? = null
-			set(value) {
-				field = value
-			}
-		
-		val avatar: MutableLiveData<Bitmap> = MutableLiveData(null)
-		
-		fun isLoggedIn() = current != null
-		
-		fun User.compareID(user: User): Boolean {
-			return user.id == this.id
-		}
+//
+//		@JvmStatic
+//		fun List<User>?.getUser(): User? {
+//			if (this == null) {
+//				return null
+//			}
+//			return if (this.isEmpty()) null else this[0]
+//		}
+//
+//		var current: User? = null
+//			set(value) {
+//				field = value
+//			}
+//
+//		val avatar: MutableLiveData<Bitmap> = MutableLiveData(null)
+//
+//		fun isLoggedIn() = current != null
+//
+//		fun User.compareID(user: User): Boolean {
+//			return user.id == this.id
+//		}
 	}
 }

@@ -50,6 +50,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:text="This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. "
+			android:textSize="14sp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintHorizontal_bias="0.5"
@@ -85,10 +86,11 @@
 		android:id="@+id/row_text_content"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="16dp"
+		android:layout_marginStart="20dp"
 		android:layout_marginTop="8dp"
-		android:layout_marginEnd="16dp"
+		android:layout_marginEnd="20dp"
 		android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"
+		android:textSize="16sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.501"
 		app:layout_constraintStart_toStartOf="parent"
@@ -111,10 +113,9 @@
 	
 	<HorizontalScrollView
 		android:id="@+id/row_horScroll_tags"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
-		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
 		android:scrollbars="none"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -126,6 +127,13 @@
 			android:id="@+id/row_chipGroups_tags"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content">
+			
+			<com.google.android.material.chip.Chip
+				android:id="@+id/chip28"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/gray"
+				android:text="Hello"/>
 			
 			<com.google.android.material.chip.Chip
 				android:id="@+id/chip11"
@@ -184,41 +192,6 @@
 				android:text="Hello"/>
 			
 			<com.google.android.material.chip.Chip
-				android:id="@+id/chip24"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip25"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip26"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip27"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip28"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
 				android:id="@+id/chip29"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -238,7 +211,6 @@
 		android:id="@+id/row_button_upvote"
 		android:layout_width="48dp"
 		android:layout_height="35dp"
-		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
 		android:background="@color/transparent"
 		android:contentDescription="@string/app_name"

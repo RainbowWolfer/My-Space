@@ -3,21 +3,23 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserProfileBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
+import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
+import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
@@ -26,7 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
@@ -44,7 +46,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		}
 	}
 	
-	//	private val viewModel: UserProfileViewModel by activityViewModels()
+	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+	private val application = MySpaceApplication.instance
+	
 	private lateinit var user: User
 	
 	private val binding: FragmentUserProfileBinding by viewBinding()
@@ -58,17 +62,13 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			CoroutineScope(Dispatchers.Main).launch {
 				lateinit var dialog: LoadingDialog
 				try {
-					dialog = LoadingDialog(requireContext()).also {
-						it.showDialog()
+					dialog = LoadingDialog(requireContext()).apply {
+						showDialog()
 					}
-					val body = bytes.toRequestBody("multipart/form-data".toMediaTypeOrNull(), 0, bytes.size)
+					val body = bytes.toRequestBody("multipart/form-data".toMediaType(), 0, bytes.size)
 					val data = MultipartBody.Part.createFormData("file", "file", body)
-					val response = RetrofitInstance.api_postMultipart.updateAvatar(user.id, data)
-					
-					User.avatar.value = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-					val image = binding.userImageAvatar
-					image.setImageBitmap(Bitmap.createScaledBitmap(User.avatar.value!!, image.width, image.height, false))
-					
+					RetrofitInstance.api_postMultipart.updateAvatar(user.id, data)
+					application.currentAvatar.value = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 				} catch (ex: HttpException) {
 					AlertDialog.Builder(requireContext()).apply {
 						setCancelable(false)
@@ -101,7 +101,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		binding.userLayoutSelf.visibility = if (isSelf) View.VISIBLE else View.GONE
 		
 		if (isSelf) {
-			binding.userImageAvatar.setImageBitmap(User.avatar.value)
+			application.currentAvatar.observe(viewLifecycleOwner) {
+				binding.userImageAvatar.setImageBitmap(it)
+			}
 		} else {
 			//load form api
 		}

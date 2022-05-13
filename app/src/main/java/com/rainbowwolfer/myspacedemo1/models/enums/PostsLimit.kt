@@ -1,5 +1,5 @@
 package com.rainbowwolfer.myspacedemo1.models.enums
 
 enum class PostsLimit {
-	All, Hot, Following
+	All, Hot, Random, Following
 }

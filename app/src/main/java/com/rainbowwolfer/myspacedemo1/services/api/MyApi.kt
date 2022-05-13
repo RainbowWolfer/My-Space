@@ -1,10 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
+import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
+import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -15,6 +17,11 @@ interface MyApi {
 	companion object {
 		const val BASE_URL = "http://www.cqtest.top:4500"
 	}
+	
+	@GET("user")
+	suspend fun getUser(
+		@Query("id") id: String
+	): Response<User>
 	
 	@GET("login")
 	suspend fun tryLogin(
@@ -66,4 +73,11 @@ interface MyApi {
 		@Part("tags") tags: RequestBody,
 		@Part images: ArrayList<MultipartBody.Part>,
 	): ResponseBody
+	
+	@GET("post")
+	suspend fun getPosts(
+		@Query("email") email: String,
+		@Query("password") password: String,
+		@Query("posts_type") postsLimit: PostsLimit,
+	): Response<List<Post>>
 }

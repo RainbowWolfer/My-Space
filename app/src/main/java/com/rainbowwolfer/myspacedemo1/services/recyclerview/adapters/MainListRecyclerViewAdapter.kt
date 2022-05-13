@@ -2,21 +2,34 @@ package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
+import retrofit2.HttpException
 
 class MainListRecyclerViewAdapter(
 	private val context: Context,
@@ -33,13 +46,20 @@ class MainListRecyclerViewAdapter(
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val data = postsList[position]
-		holder.binding.rowTextPublisherName.text = data.publisherID
-		holder.binding.rowTextPublishDateTime.text = EasyFunctions.formatDateTime(data.publishDateTime)
+		holder.binding.rowTextPublisherName.text = "..."
+		holder.binding.rowTextPublishDateTime.text = data.publishDateTime
 		holder.binding.rowTextContent.text = data.textContent
+		
+		holder.binding.setRepostView(data.isRepost)
+		holder.binding.setTags(data.tags)
+		holder.binding.setMetas(data.repost, data.comment, data.downvotes, data.upvotes)
+		holder.binding.loadUser(data.publisherID)
+		
 		holder.binding.root.setOnClickListener {
 			val navController = Navigation.findNavController(holder.itemView)
 			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
 		}
+		
 		holder.binding.mainLayoutRepost.setOnClickListener {
 			val navController = Navigation.findNavController(holder.itemView)
 			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
@@ -74,6 +94,67 @@ class MainListRecyclerViewAdapter(
 				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
 				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(User.getTestLogUser())
 				navController.navigate(action)
+			}
+		}
+	}
+	
+	private fun MainRowLayoutBinding.setRepostView(enable: Boolean) {
+		arrayListOf(
+			this.mainLayoutRepost,
+			this.mainTextRepost,
+			this.mainImageRepostAvatar,
+			this.rowTextRepostInfo,
+			this.rowImageRepostIcon,
+		).forEach {
+			(if (enable) View.VISIBLE else View.GONE).apply {
+				it.visibility = this
+			}
+		}
+	}
+	
+	private fun MainRowLayoutBinding.setTags(tags: String) {
+		this.rowChipGroupsTags.removeAllViews()
+		tags.split(',').forEach {
+			this.rowChipGroupsTags.addView(Chip(context).apply {
+				text = it
+			})
+		}
+	}
+	
+	private fun MainRowLayoutBinding.setMetas(repost: Int, comment: Int, down: Int, up: Int) {
+		this.rowRepostCount.text = "$repost"
+		this.rowCommentCount.text = "$comment"
+		this.rowTextScore.text = "${up - down}"
+	}
+	
+	private fun MainRowLayoutBinding.loadUser(userID: String) {
+		this.rowImagePublisherAvatar.setImageDrawable(null)
+		CoroutineScope(Dispatchers.Main).launch {
+			try {
+				val user: User
+				withContext(Dispatchers.IO) {
+					val response = RetrofitInstance.api.getUser(userID)
+					if (response.isSuccessful) {
+						user = response.body()!!
+					} else {
+						val go = response.getHttpResponse()
+						throw ResponseException(go)
+					}
+				}
+				//update username or something
+				this@loadUser.rowTextPublisherName.text = user.username
+				val avatarBitmap: Bitmap
+				withContext(Dispatchers.IO) {
+					try {
+						val response = RetrofitInstance.api.getAvatar(user.id)
+						avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
+					} catch (ex: HttpException) {
+						throw ResponseException(ex.response()!!.getHttpResponse())
+					}
+				}
+				this@loadUser.rowImagePublisherAvatar.setImageBitmap(avatarBitmap)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
 			}
 		}
 	}

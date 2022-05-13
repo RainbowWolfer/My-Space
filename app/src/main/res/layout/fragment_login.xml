@@ -78,7 +78,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:inputType="textPassword"
-					android:text="123456"/>
+					android:text="myspace"/>
 			</com.google.android.material.textfield.TextInputLayout>
 			
 			<com.google.android.material.button.MaterialButton

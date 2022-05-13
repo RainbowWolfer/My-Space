@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.activity.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,6 +24,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
 import kotlinx.coroutines.CoroutineScope
@@ -40,19 +43,22 @@ class MainActivity : AppCompatActivity() {
 	}
 	
 	private val binding: ActivityMainBinding by viewBinding()
+	private val viewModel: MainActivityViewModel by viewModels()
+	private val application = MySpaceApplication.instance
 	
 	private lateinit var appBarConfiguration: AppBarConfiguration
 	private lateinit var navController: NavController
 	
 	private lateinit var navViewHeaderBinding: NavHeaderMainBinding
 	
+	val drawerLayout get() = binding.drawerLayout
+	
 	val loginIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		if (result.resultCode != Activity.RESULT_OK) {
 			return@registerForActivityResult
 		}
 		val user = result.data?.getParcelableExtra<User>("user")
-		User.current = user
-		updateNav()
+		application.currentUser.value = user
 		CoroutineScope(Dispatchers.IO).launch {
 			try {
 				if (user == null) {
@@ -61,8 +67,7 @@ class MainActivity : AppCompatActivity() {
 				val response = RetrofitInstance.api.getAvatar(user.id)
 				
 				withContext(Dispatchers.Main) {
-					User.avatar.value = BitmapFactory.decodeStream(response.byteStream())
-					navViewHeaderBinding.headerImageAvatar.setImageBitmap(User.avatar.value)
+					application.currentAvatar.value = BitmapFactory.decodeStream(response.byteStream())
 				}
 			} catch (ex: Exception) {
 				ex.printStackTrace()
@@ -89,6 +94,16 @@ class MainActivity : AppCompatActivity() {
 		setContentView(binding.root)
 		
 		setSupportActionBar(binding.appBarMain.toolbar)
+		
+		application.currentUser.observe(this) {
+			updateNav()
+		}
+		
+		application.currentAvatar.observe(this) {
+			navViewHeaderBinding.headerImageAvatar.setImageBitmap(
+				it ?: BitmapFactory.decodeResource(resources, R.drawable.default_avatar)
+			)
+		}
 		
 		val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
 		navController = navHostFragment.navController
@@ -121,25 +136,12 @@ class MainActivity : AppCompatActivity() {
 				setMessage("Are you sure to sign out?")
 				setNegativeButton("No", null)
 				setPositiveButton("Yes") { _, _ ->
-					User.current = null
-					User.avatar.value = null
-					updateNav()
+					application.clearCurrent()
+					binding.navView.menu.findItem(R.id.subnav_home).isChecked = true
 //					binding.drawerLayout.closeDrawers()
 				}
 				show()
 			}
-		}
-		
-		updateNav()
-		
-		User.avatar.observe(this) {
-			navViewHeaderBinding.headerImageAvatar.setImageBitmap(
-				if (User.avatar.value == null) {
-					BitmapFactory.decodeResource(resources, R.drawable.default_avatar)
-				} else {
-					User.avatar.value
-				}
-			)
 		}
 		
 	}
@@ -159,11 +161,14 @@ class MainActivity : AppCompatActivity() {
 			R.id.nav_collection,
 			R.id.nav_profile,
 		).forEach {
-			binding.navView.menu.findItem(it).isEnabled = User.isLoggedIn()
+			binding.navView.menu.findItem(it).apply {
+				isEnabled = application.hasLoggedIn()
+				isChecked = false
+			}
 		}
-		navViewHeaderBinding.headerTextTitle.text = if (User.isLoggedIn()) User.current!!.username else "Welcome"
-		navViewHeaderBinding.headerButtonLogin.visibility = if (User.isLoggedIn()) View.GONE else View.VISIBLE
-		navViewHeaderBinding.headerButtonSignOut.visibility = if (User.isLoggedIn()) View.VISIBLE else View.GONE
-		//update avatar
+		val loggedIn = application.hasLoggedIn()
+		navViewHeaderBinding.headerTextTitle.text = if (loggedIn) application.currentUser.value!!.username else "Welcome"
+		navViewHeaderBinding.headerButtonLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
+		navViewHeaderBinding.headerButtonSignOut.visibility = if (loggedIn) View.VISIBLE else View.GONE
 	}
 }
