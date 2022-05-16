@@ -5,5 +5,5 @@
 		android:id="@+id/item_download"
 		android:icon="@drawable/ic_baseline_arrow_downward_24"
 		android:title="Download"
-		app:showAsAction="ifRoom"/>
+		app:showAsAction="always"/>
 </menu>

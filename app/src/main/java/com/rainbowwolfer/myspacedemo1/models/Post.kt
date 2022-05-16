@@ -27,12 +27,14 @@ data class Post(
 	@SerializedName("Downvotes") val downvotes: Int,
 	@SerializedName("Repost") val repost: Int,
 	@SerializedName("Comment") val comment: Int,
-	@SerializedName("Visibility") val visibility: PostVisibility,
-	@SerializedName("Reply") val replyLimit: PostVisibility,
+	@SerializedName("Visibility") val visibility: PostVisibility = PostVisibility.All,
+	@SerializedName("Reply") val replyLimit: PostVisibility = PostVisibility.All,
 	@SerializedName("IsRepost") val isRepost: Boolean,
 	@SerializedName("OriginPostID") val originID: String,
 	@SerializedName("ReposterID") val reposterID: String,
 ) : Parcelable, DatabaseID {
+	fun getScore(): Int = upvotes - downvotes
+	
 	companion object : GenerateDefault<Post> {
 		@JvmStatic
 		override fun generateDefault(): Post {

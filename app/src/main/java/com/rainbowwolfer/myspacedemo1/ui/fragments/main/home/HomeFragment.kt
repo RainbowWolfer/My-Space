@@ -37,7 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
-	private val myAdapter by lazy { MainListRecyclerViewAdapter(requireContext()) }
+	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext()) }
 	
 	private var triedCount = 0
 	
@@ -45,11 +45,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
 	}
-
+	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.mainRecyvlerViewList.layoutManager = LinearLayoutManager(requireContext())
-		binding.mainRecyvlerViewList.adapter = myAdapter
+		binding.mainRecyvlerViewList.adapter = listAdapter
 		
 		application.currentUser.observe(viewLifecycleOwner) {
 			updateList()
@@ -65,7 +65,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				binding.mainLayoutNothing.visibility = View.GONE
 				binding.mainRecyvlerViewList.visibility = View.VISIBLE
 			}
-			myAdapter.setData(it)
+			listAdapter.setData(it)
 		}
 		
 		viewModel.postsLimit.observe(viewLifecycleOwner) {
@@ -102,9 +102,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					super.onScrolled(recyclerView, dx, dy)
 					val up = binding.mainRecyvlerViewList.canScrollVertically(-1)
 					binding.mainSwipeRefreshLayout.isEnabled = !up || binding.mainSwipeRefreshLayout.isRefreshing
+					
+					val lastPosition = (binding.mainRecyvlerViewList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+					println("$lastPosition - ${listAdapter.itemCount - 2}")
+					if (lastPosition >= listAdapter.itemCount - 2) {
+						//update
+					}
 				}
 			}
 		)
+		
 		
 		binding.mainButtonPostsLimit.setOnClickListener {
 			val dismissDelay = 50L
@@ -162,31 +169,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
 				binding.mainSwipeRefreshLayout.isRefreshing = true
+				delay(200)//wait fot animation to pop up
 				val response: Response<List<Post>>
+				val list: List<Post>?
 				withContext(Dispatchers.IO) {
 					response = RetrofitInstance.api.getPosts(
 						application.currentUser.value!!.email,
 						application.currentUser.value!!.password,
 						viewModel.postsLimit.value!!,
+						"",
 					)
+					if (response.isSuccessful) {
+						list = response.body()
+					} else {
+						throw Exception()
+					}
 				}
-				if (response.isSuccessful) {
-					val list = response.body()
-					println(list)
-					viewModel.posts.value = list
-				} else {
-					throw Exception()
-				}
+				viewModel.posts.value = list
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is HttpException) {
 					val go = ex.response()!!.getHttpResponse()
 					println(go)
 				} else if (ex is EOFException) {
-					
 					println("http json is wrong")
 				}
 			} finally {
+				binding.mainRecyvlerViewList.scrollToPosition(0)
 				binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
 				delay(100)
 				binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
@@ -330,11 +339,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			R.id.item_refresh -> {
-				//scroll to top
 				updateList()
 			}
 			R.id.item_top -> {
-				//scroll to top
+				binding.mainRecyvlerViewList.scrollToPosition(0)
 			}
 			android.R.id.home -> {
 				MainActivity.Instance?.drawerLayout?.openDrawer(GravityCompat.START)

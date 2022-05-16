@@ -51,7 +51,7 @@ class EasyFunctions {
 			val minute = calendar.get(Calendar.MINUTE).toDuoNumber()
 			val second = calendar.get(Calendar.SECOND).toDuoNumber()
 			
-			return "$year/$month/$day $hour:$minute:$second"
+			return "$year-$month-$day $hour:$minute:$second"
 		}
 		
 		@JvmStatic
@@ -100,5 +100,7 @@ class EasyFunctions {
 			}
 			return byteBuffer.toByteArray()
 		}
+		
+		
 	}
 }

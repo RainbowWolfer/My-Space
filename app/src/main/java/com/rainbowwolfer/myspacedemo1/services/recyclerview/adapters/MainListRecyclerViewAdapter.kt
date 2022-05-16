@@ -11,13 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.marginBottom
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
+import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutEndBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
@@ -34,7 +34,6 @@ import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,74 +44,105 @@ import retrofit2.HttpException
 class MainListRecyclerViewAdapter(
 	private val context: Context,
 ) : RecyclerView.Adapter<MainListRecyclerViewAdapter.ViewHolder>() {
-	class ViewHolder(val binding: MainRowLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+	companion object {
+		const val ITEM_TYPE_NORMAL = 1
+		const val ITEM_TYPE_END = 2
+	}
+	
+	abstract class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+	
+	class RowViewHolder(val binding: MainRowLayoutBinding) : ViewHolder(binding.root)
+	class EndViewHolder(val binding: MainRowLayoutEndBinding) : ViewHolder(binding.root)
 	
 	var enableAvatarClicking: Boolean = true
 	
 	private var postsList = emptyList<Post>()
 	private val application = MySpaceApplication.instance
 	
+	private var endTextIndex = 0
+	
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-		return ViewHolder(MainRowLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+		return when (viewType) {
+			ITEM_TYPE_NORMAL -> RowViewHolder(MainRowLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+			ITEM_TYPE_END -> EndViewHolder(MainRowLayoutEndBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+			else -> throw Exception("$viewType is not found")
+		}
 	}
 	
+	override fun getItemViewType(position: Int): Int {
+		return when (position) {
+			postsList.size -> ITEM_TYPE_END
+			else -> ITEM_TYPE_NORMAL
+		}
+	}
+	
+	override fun getItemCount(): Int = postsList.size + 1
+	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		if (position == postsList.size - 1) {
-//			holder.itemView.marginBottom = context.resources.getDimension(R.dimen.bottom_margin).toInt()
-		}
-		val data = postsList[position]
-		application.postImagesPool.addPost(data)
-		holder.binding.rowTextPublisherName.text = "..."
-		holder.binding.rowTextPublishDateTime.text = data.publishDateTime
-		holder.binding.rowTextContent.text = data.textContent
-		
-		holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
-		
-		holder.binding.setRepostView(data.isRepost)
-		holder.binding.setTags(data.tags)
-		holder.binding.setMetas(data.repost, data.comment, data.downvotes, data.upvotes)
-		holder.binding.loadUser(data.publisherID)
-		holder.binding.loadImages(data)
-		
-		holder.binding.root.setOnClickListener {
-			val navController = Navigation.findNavController(holder.itemView)
-			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
-		}
-		
-		holder.binding.mainLayoutRepost.setOnClickListener {
-			val navController = Navigation.findNavController(holder.itemView)
-			navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
-		}
-		
-		holder.binding.rowButtonMore.setOnClickListener {
-			val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
-			popupMenu.setOnMenuItemClickListener {
-				when (it.itemId) {
-					R.id.item_share -> {
-						val sharedIntent = Intent().apply {
-							this.action = Intent.ACTION_SEND
-							this.putExtra(Intent.EXTRA_TEXT, "This is a test")
-							this.type = "text/plain"
-						}
-						context.startActivity(sharedIntent)
-					}
-					R.id.item_flag -> Toast.makeText(context, "Flag", Toast.LENGTH_SHORT).show()
-					R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
-				}
-				true
-			}
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-				popupMenu.setForceShowIcon(true)
-			}
-			popupMenu.inflate(R.menu.more_button_menu)
-			popupMenu.show()
-		}
-		if (enableAvatarClicking) {
-			holder.binding.rowImagePublisherAvatar.setOnClickListener {
+		if (holder is RowViewHolder) {
+			val data = postsList[position]
+			application.postImagesPool.addPost(data)
+			holder.binding.rowTextPublisherName.text = "..."
+			holder.binding.rowTextPublishDateTime.text = data.publishDateTime
+			holder.binding.rowTextContent.text = data.textContent
+			
+			holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
+			holder.binding.rowGridviewImages.isEnabled = false
+			
+			holder.binding.setRepostView(data.isRepost)
+			holder.binding.setTags(data.tags)
+			holder.binding.setMetas(data.repost, data.comment, data.downvotes, data.upvotes)
+			holder.binding.loadUser(data.publisherID)
+			holder.binding.loadImages(data)
+			
+			holder.binding.root.setOnClickListener {
 				val navController = Navigation.findNavController(holder.itemView)
-				navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
-				val action = HomeFragmentDirections.actionItemHomeToUserFragment3(User.getTestLogUser())
-				navController.navigate(action)
+				navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+			}
+			
+			holder.binding.mainLayoutRepost.setOnClickListener {
+				val navController = Navigation.findNavController(holder.itemView)
+				navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+			}
+			
+			holder.binding.rowButtonMore.setOnClickListener {
+				val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
+				popupMenu.setOnMenuItemClickListener {
+					when (it.itemId) {
+						R.id.item_share -> {
+							val sharedIntent = Intent().apply {
+								this.action = Intent.ACTION_SEND
+								this.putExtra(Intent.EXTRA_TEXT, "This is a test")
+								this.type = "text/plain"
+							}
+							context.startActivity(sharedIntent)
+						}
+						R.id.item_flag -> Toast.makeText(context, "Flag", Toast.LENGTH_SHORT).show()
+						R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
+					}
+					true
+				}
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+					popupMenu.setForceShowIcon(true)
+				}
+				popupMenu.inflate(R.menu.more_button_menu)
+				popupMenu.show()
+			}
+			if (enableAvatarClicking) {
+				holder.binding.rowImagePublisherAvatar.setOnClickListener {
+					val navController = Navigation.findNavController(holder.itemView)
+					navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
+					val action = HomeFragmentDirections.actionItemHomeToUserFragment3(User.getTestLogUser())
+					navController.navigate(action)
+				}
+			}
+		} else if (holder is EndViewHolder) {
+			holder.binding.rowEndTextCenter.setOnClickListener {
+				val array = context.resources.getStringArray(R.array.end_row_texts)
+				holder.binding.rowEndTextCenter.text = array[endTextIndex]
+				if (++endTextIndex >= array.size) {
+					endTextIndex = 0
+				}
 			}
 		}
 	}
@@ -231,12 +261,11 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	override fun getItemCount(): Int = postsList.size
-	
 	fun setData(newPersonList: List<Post>) {
 		val diffUtil = DatabaseIdDiffUtil(postsList, newPersonList)
 		val diffResult = DiffUtil.calculateDiff(diffUtil)
 		postsList = newPersonList
 		diffResult.dispatchUpdatesTo(this)
+		endTextIndex = 0
 	}
 }

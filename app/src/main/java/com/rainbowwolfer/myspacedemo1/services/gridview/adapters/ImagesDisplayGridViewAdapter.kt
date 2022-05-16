@@ -37,13 +37,10 @@ class ImagesDisplayGridViewAdapter(
 		}
 		holder.binding.gridViewItemImageDisplay.setImageBitmap(list[position])
 		holder.binding.gridViewItemImageDisplay.setOnClickListener {
-			println("HELLO")
-			val intent = Intent(context, ImagesDisplayActivity::class.java).apply {
-				putExtra(ImagesDisplayActivity.ARG_POST_ID, post.id)
-				putExtra(ImagesDisplayActivity.ARG_SIZE, post.imagesCount)
+			context.startActivity(Intent(context, ImagesDisplayActivity::class.java).apply {
+				putExtra(ImagesDisplayActivity.ARG_POST, post)
 				putExtra(ImagesDisplayActivity.ARG_CURRENT, position)
-			}
-			context.startActivity(intent)
+			})
 		}
 		return view
 	}

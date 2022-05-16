@@ -79,6 +79,7 @@ interface MyApi {
 		@Query("email") email: String,
 		@Query("password") password: String,
 		@Query("posts_type") postsLimit: PostsLimit,
+		@Query("start_datetime") start_datetime: String,
 	): Response<List<Post>>
 	
 	@GET("post/images")

@@ -21,4 +21,13 @@
 		<item>Friends can reply</item>
 		<item>No one can reply</item>
 	</string-array>
+	
+	<string-array name="end_row_texts">
+		<item>You have reached the end</item>
+		<item>Look up!</item>
+		<item>This is over but life isn\'t</item>
+		<item>You really need something</item>
+		<item>But not here</item>
+		<item>Do a stretsch-up will you?</item>
+	</string-array>
 </resources>

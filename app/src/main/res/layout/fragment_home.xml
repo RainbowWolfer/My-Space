@@ -111,22 +111,20 @@
 					</androidx.appcompat.widget.Toolbar>
 				</com.google.android.material.appbar.AppBarLayout>
 				
-				<androidx.constraintlayout.widget.ConstraintLayout
+				<androidx.appcompat.widget.LinearLayoutCompat
 					android:id="@+id/main_layout_nothing"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:gravity="center"
+					android:orientation="vertical"
+					android:paddingBottom="100dp"
 					app:layout_behavior="@string/appbar_scrolling_view_behavior">
 					
 					<ImageView
 						android:id="@+id/imageView3"
 						android:layout_width="100dp"
 						android:layout_height="100dp"
-						android:src="@drawable/ic_baseline_public_24"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintEnd_toEndOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent"
-						app:layout_constraintVertical_bias="0.35"/>
+						android:src="@drawable/ic_baseline_public_24"/>
 					
 					<TextView
 						android:id="@+id/textView7"
@@ -135,10 +133,7 @@
 						android:layout_marginTop="16dp"
 						android:text="Be the first"
 						android:textSize="24sp"
-						android:textStyle="bold"
-						app:layout_constraintEnd_toEndOf="@+id/imageView3"
-						app:layout_constraintStart_toStartOf="@+id/imageView3"
-						app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
+						android:textStyle="bold"/>
 					
 					<TextView
 						android:id="@+id/textView8"
@@ -146,16 +141,14 @@
 						android:layout_height="wrap_content"
 						android:text="Tell the rest"
 						android:textSize="24sp"
-						android:textStyle="bold"
-						app:layout_constraintEnd_toEndOf="@+id/textView7"
-						app:layout_constraintStart_toStartOf="@+id/textView7"
-						app:layout_constraintTop_toBottomOf="@+id/textView7"/>
-				</androidx.constraintlayout.widget.ConstraintLayout>
+						android:textStyle="bold"/>
+				</androidx.appcompat.widget.LinearLayoutCompat>
 				
 				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/main_recyvlerView_list"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:scrollbars="vertical"
 					android:visibility="gone"
 					app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 			
