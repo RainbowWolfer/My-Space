@@ -8,7 +8,6 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -19,6 +18,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.LayoutBottomModalPostLimitBind
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
@@ -30,20 +30,46 @@ import kotlinx.coroutines.*
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.EOFException
+import java.net.SocketTimeoutException
+import kotlin.random.Random
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
+	companion object {
+		const val RELOAD_THREASHOLD = 3
+		var upadteScrollPosition: Boolean = false
+	}
+	
 	private val binding: FragmentHomeBinding by viewBinding()
-	private val viewModel: HomeFragmentViewModel by viewModels()
-	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+	private val viewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
 	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext()) }
 	
-	private var triedCount = 0
+	private var isLoading = false
+
+//	private var bewareEmpty = false
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
+		println("ONCREATED ${viewModel.posts.value!!.size}")
+	}
+	
+	override fun onDetach() {
+		super.onDetach()
+		println("detach")
+		upadteScrollPosition = true
+	}
+	
+	override fun onDestroy() {
+		super.onDestroy()
+		println("destroy")
+		upadteScrollPosition = false
+	}
+	
+	override fun onDestroyView() {
+		super.onDestroyView()
+		println("destroy view")
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,36 +78,40 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding.mainRecyvlerViewList.adapter = listAdapter
 		
 		application.currentUser.observe(viewLifecycleOwner) {
-			updateList()
+			println(viewModel.posts.value!!.size)
+			if (viewModel.posts.value?.size == 0) {
+				println("user changed refresh ${it == null}")
+				updateList(true)
+			}
 			MainActivity.Instance?.drawerLayout?.closeDrawers()
 		}
 		
 		viewModel.posts.observe(viewLifecycleOwner) {
+			println("posts changed ${it.size}")
 			if (it.isEmpty()) {
+				updateList(false)
 				binding.mainLayoutNothing.visibility = View.VISIBLE
 				binding.mainRecyvlerViewList.visibility = View.GONE
-				updateList()
 			} else {
 				binding.mainLayoutNothing.visibility = View.GONE
 				binding.mainRecyvlerViewList.visibility = View.VISIBLE
+				listAdapter.setData(it)
 			}
-			listAdapter.setData(it)
+			
+			println("last position:  " + viewModel.lastViewPosiiton.value)
+			if (viewModel.lastViewPosiiton.value != -1 && upadteScrollPosition) {
+				binding.mainRecyvlerViewList.scrollToPosition(viewModel.lastViewPosiiton.value!!)
+			}
 		}
 		
 		viewModel.postsLimit.observe(viewLifecycleOwner) {
 			updateMainButtonPostsLimit(it)
-			when (it) {
-				PostsLimit.All -> {}
-				PostsLimit.Hot -> {}
-				PostsLimit.Random -> {}
-				PostsLimit.Following -> {}
-				else -> {}
-			}
 		}
 		
 		//only works for manually pull down
 		binding.mainSwipeRefreshLayout.setOnRefreshListener {
-			updateList()
+			println("swipe refresh")
+			updateList(true)
 		}
 		
 		binding.fabAdd.setOnClickListener {
@@ -104,9 +134,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					binding.mainSwipeRefreshLayout.isEnabled = !up || binding.mainSwipeRefreshLayout.isRefreshing
 					
 					val lastPosition = (binding.mainRecyvlerViewList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-					println("$lastPosition - ${listAdapter.itemCount - 2}")
+					val firstPosition = (binding.mainRecyvlerViewList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+					viewModel.lastViewPosiiton.value = firstPosition
+//					println("$lastPosition - ${listAdapter.itemCount - 2}")
 					if (lastPosition >= listAdapter.itemCount - 2) {
 						//update
+						updateList(false, scrollToTop = false, showSwipeRefreshing = false)
 					}
 				}
 			}
@@ -114,7 +147,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		
 		
 		binding.mainButtonPostsLimit.setOnClickListener {
-			val dismissDelay = 50L
 			BottomSheetDialog(requireContext(), R.style.CustomizedBottomDialogStyle2).apply {
 				setCanceledOnTouchOutside(true)
 				show()
@@ -124,81 +156,118 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				modalBinding.modalPostsLimitLayoutAll.setOnClickListener {
 					modalBinding.checkAll()
 					viewModel.postsLimit.value = PostsLimit.All
-					CoroutineScope(Dispatchers.Main).launch {
-						delay(dismissDelay)
-						dismiss()
-						hide()
-					}
+					delayToHideAndUpdate()
+					
 				}
 				modalBinding.modalPostsLimitLayoutHot.setOnClickListener {
 					modalBinding.checkHot()
 					viewModel.postsLimit.value = PostsLimit.Hot
-					CoroutineScope(Dispatchers.Main).launch {
-						delay(dismissDelay)
-						dismiss()
-						hide()
-					}
+					delayToHideAndUpdate()
 				}
 				modalBinding.modalPostsLimitLayoutRandom.setOnClickListener {
 					modalBinding.checkRandom()
 					viewModel.postsLimit.value = PostsLimit.Random
-					CoroutineScope(Dispatchers.Main).launch {
-						delay(dismissDelay)
-						dismiss()
-						hide()
-					}
+					delayToHideAndUpdate()
 				}
 				modalBinding.modalPostsLimitLayoutFollowing.setOnClickListener {
 					modalBinding.checkFollowing()
 					viewModel.postsLimit.value = PostsLimit.Following
-					CoroutineScope(Dispatchers.Main).launch {
-						delay(dismissDelay)
-						dismiss()
-						hide()
-					}
+					delayToHideAndUpdate()
 				}
 			}
 		}
 	}
 	
-	private fun updateList() {
-		if (!application.hasLoggedIn()) {
-			binding.mainSwipeRefreshLayout.isRefreshing = false
+	private fun BottomSheetDialog.delayToHideAndUpdate() {
+		val dismissDelay = 50L
+		CoroutineScope(Dispatchers.Main).launch {
+			delay(dismissDelay)
+			dismiss()
+			hide()
+			updateList(true)
+		}
+	}
+	
+	private fun updateList(refresh: Boolean, scrollToTop: Boolean = true, showSwipeRefreshing: Boolean = true) {
+		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
+		if (isLoading) {
 			return
 		}
+		isLoading = true
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
-				binding.mainSwipeRefreshLayout.isRefreshing = true
+				if (showSwipeRefreshing) {
+					binding.mainSwipeRefreshLayout.isRefreshing = true
+				}
 				delay(200)//wait fot animation to pop up
-				val response: Response<List<Post>>
-				val list: List<Post>?
-				withContext(Dispatchers.IO) {
-					response = RetrofitInstance.api.getPosts(
-						application.currentUser.value!!.email,
-						application.currentUser.value!!.password,
-						viewModel.postsLimit.value!!,
-						"",
-					)
-					if (response.isSuccessful) {
-						list = response.body()
-					} else {
-						throw Exception()
+				if (refresh) {
+					viewModel.listOffset.value = 0
+					viewModel.lastViewPosiiton.value = 0
+					viewModel.randomSeed.value = Random.nextInt()
+				}
+				
+				var list: List<Post> = if (refresh) emptyList() else viewModel.posts.value!!
+				
+				var triedCount = 0
+				do {
+					println("tried $triedCount")
+					val newList: List<Post>
+					val response: Response<List<Post>>
+					withContext(Dispatchers.IO) {
+						response = RetrofitInstance.api.getPosts(
+							application.currentUser.value?.email ?: "",
+							application.currentUser.value?.password ?: "",
+							viewModel.listOffset.value!!,
+							viewModel.postsLimit.value!!,
+							viewModel.randomSeed.value!!,
+						)
+						if (response.isSuccessful) {
+							newList = response.body()!!
+						} else {
+							throw ResponseException(response.getHttpResponse())
+						}
+					}
+					var count = 0
+					if (newList.isNotEmpty()) {
+						for (item in newList) {
+							if (list.any { it.id == item.id }) {
+								continue
+							}
+							list = list.plus(item)
+							count++
+						}
+						viewModel.listOffset.value = viewModel.listOffset.value!!.plus(count)
+					}
+					viewModel.posts.value = list
+				} while (newList.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
+			} catch (ex: Exception) {
+				Snackbar.make(binding.root, "Something went wrong", Snackbar.LENGTH_LONG).setAction("Dismiss") {}.show()
+				ex.printStackTrace()
+				when (ex) {
+					is HttpException -> {
+						val go = ex.response()!!.getHttpResponse()
+						println(go)
+					}
+					is ResponseException -> {
+						println(ex.response)
+					}
+					is EOFException -> {
+						println("http json is wrong")
+					}
+					is SocketTimeoutException -> {
+						println("Time out")
 					}
 				}
-				viewModel.posts.value = list
-			} catch (ex: Exception) {
-				ex.printStackTrace()
-				if (ex is HttpException) {
-					val go = ex.response()!!.getHttpResponse()
-					println(go)
-				} else if (ex is EOFException) {
-					println("http json is wrong")
-				}
 			} finally {
-				binding.mainRecyvlerViewList.scrollToPosition(0)
-				binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
+				if (scrollToTop) {
+					binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+				}
+				if (showSwipeRefreshing) {
+					binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
+				}
 				delay(100)
 				binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
+				isLoading = false
 			}
 		}
 	}
@@ -339,10 +408,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			R.id.item_refresh -> {
-				updateList()
+				println("button refresh")
+				updateList(true)
 			}
 			R.id.item_top -> {
-				binding.mainRecyvlerViewList.scrollToPosition(0)
+				binding.mainRecyvlerViewList.smoothScrollToPosition(0)
 			}
 			android.R.id.home -> {
 				MainActivity.Instance?.drawerLayout?.openDrawer(GravityCompat.START)

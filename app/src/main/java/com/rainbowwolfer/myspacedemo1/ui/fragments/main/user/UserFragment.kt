@@ -1,6 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user
 
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
@@ -9,7 +10,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.UserViewPagerAdapter
-import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 
@@ -32,22 +32,22 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		val user: User?
+		val userID: String
 		if (arguments != null) {
-			user = UserFragmentArgs.fromBundle(requireArguments()).user
+			userID = UserFragmentArgs.fromBundle(requireArguments()).userId
 			isSelf = false
 		} else {
-			user = application.currentUser.value
+			userID = application.currentUser.value!!.id
 			isSelf = true
 		}
 		
-		if (user == null) {
+		if (TextUtils.isEmpty(userID)) {
 			binding.userLayoutMain.visibility = View.GONE
 			binding.userIncludeNotLoggedIn.rootNotLoggedIn.visibility = View.VISIBLE
 			return
 		}
 		
-		val adapter = UserViewPagerAdapter(this, user)
+		val adapter = UserViewPagerAdapter(this, userID)
 		binding.userViewPager2.adapter = adapter
 		
 		TabLayoutMediator(binding.userTabLayout, binding.userViewPager2) { tab, position ->

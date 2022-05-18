@@ -117,7 +117,7 @@ class MainListRecyclerViewAdapter(
 							}
 							context.startActivity(sharedIntent)
 						}
-						R.id.item_flag -> Toast.makeText(context, "Flag", Toast.LENGTH_SHORT).show()
+						R.id.item_flag -> Toast.makeText(context, "Flag $data", Toast.LENGTH_SHORT).show()
 						R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
 					}
 					true
@@ -132,7 +132,7 @@ class MainListRecyclerViewAdapter(
 				holder.binding.rowImagePublisherAvatar.setOnClickListener {
 					val navController = Navigation.findNavController(holder.itemView)
 					navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
-					val action = HomeFragmentDirections.actionItemHomeToUserFragment3(User.getTestLogUser())
+					val action = HomeFragmentDirections.actionItemHomeToUserFragment(data.publisherID)
 					navController.navigate(action)
 				}
 			}
@@ -187,38 +187,11 @@ class MainListRecyclerViewAdapter(
 			return
 		}
 		CoroutineScope(Dispatchers.Main).launch {
-			try {
-				var user = application.usersPool.findUser(userID)
-				if (user == null) {
-					withContext(Dispatchers.IO) {
-						val response = RetrofitInstance.api.getUser(userID)
-						if (response.isSuccessful) {
-							user = response.body()!!
-						} else {
-							val go = response.getHttpResponse()
-							throw ResponseException(go)
-						}
-					}
-					application.usersPool.addUser(user!!)
-				}
-				this@loadUser.rowTextPublisherName.text = user!!.username
-				
-				var avatarBitmap = application.usersPool.findAvatar(userID)
-				if (avatarBitmap == null) {
-					withContext(Dispatchers.IO) {
-						try {
-							val response = RetrofitInstance.api.getAvatar(user!!.id)
-							avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
-						} catch (ex: HttpException) {
-							throw ResponseException(ex.response()!!.getHttpResponse())
-						}
-					}
-					application.usersPool.updateAvatar(user!!.id, avatarBitmap)
-				}
-				this@loadUser.rowImagePublisherAvatar.setImageBitmap(avatarBitmap)
-			} catch (ex: Exception) {
-				ex.printStackTrace()
-			}
+			application.findOrGet(userID, {
+				this@loadUser.rowTextPublisherName.text = it.username
+			}, {
+				this@loadUser.rowImagePublisherAvatar.setImageBitmap(it)
+			})
 		}
 	}
 	

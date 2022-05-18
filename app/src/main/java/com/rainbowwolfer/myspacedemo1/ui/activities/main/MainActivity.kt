@@ -113,13 +113,13 @@ class MainActivity : AppCompatActivity() {
 				R.id.nav_settings,
 				R.id.nav_about,
 				R.id.nav_collection,
-				R.id.nav_profile
+				R.id.nav_profile,
 			), binding.drawerLayout
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		binding.navView.setupWithNavController(navController)
 		
-		binding.navView.setCheckedItem(R.id.subnav_home)
+		binding.navView.setCheckedItem(R.id.item_home)
 		
 		val viewGroup: ViewGroup = binding.navView.getHeaderView(0) as ViewGroup
 		navViewHeaderBinding = NavHeaderMainBinding.bind(viewGroup)
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 				setNegativeButton("No", null)
 				setPositiveButton("Yes") { _, _ ->
 					application.clearCurrent()
-					binding.navView.menu.findItem(R.id.subnav_home).isChecked = true
+					binding.navView.menu.findItem(R.id.item_home).isChecked = true
 //					binding.drawerLayout.closeDrawers()
 				}
 				show()
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
 	
 	private fun updateNav() {
 		arrayListOf(
-			R.id.subnav_message,
+			R.id.nav_message,
 			R.id.nav_collection,
 			R.id.nav_profile,
 		).forEach {

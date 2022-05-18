@@ -6,12 +6,12 @@
 		<item android:title="My Space">
 			<menu>
 				<item
-					android:id="@+id/subnav_home"
+					android:id="@+id/item_home"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_home_24"
 					android:title="Home"/>
 				<item
-					android:id="@+id/subnav_message"
+					android:id="@+id/nav_message"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_message_24"
 					android:title="Message"/>

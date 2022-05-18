@@ -3,49 +3,45 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/mobile_navigation"
-	app:startDestination="@+id/subnav_home">
+	app:startDestination="@+id/item_home">
 	
-	<navigation
-		android:id="@+id/subnav_home"
-		app:startDestination="@id/item_home">
-		<fragment
-			android:id="@+id/item_home"
-			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment"
-			android:label="Home"
-			tools:layout="@layout/fragment_home">
-			<action
-				android:id="@+id/action_item_home_to_userFragment3"
-				app:destination="@id/userFragment"
-				app:enterAnim="@anim/from_right"
-				app:exitAnim="@anim/to_left"
-				app:popEnterAnim="@anim/from_left"
-				app:popExitAnim="@anim/to_right"/>
-			<action
-				android:id="@+id/action_item_home_to_postDetailFragment"
-				app:destination="@id/postDetailFragment"
-				app:enterAnim="@anim/from_right"
-				app:exitAnim="@anim/to_left"
-				app:popEnterAnim="@anim/from_left"
-				app:popExitAnim="@anim/to_right"/>
-		</fragment>
-		<fragment
-			android:id="@+id/userFragment"
-			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
-			android:label="User">
-			<argument
-				android:name="user"
-				app:argType="com.rainbowwolfer.myspacedemo1.models.User"/>
-		</fragment>
-		<fragment
-			android:id="@+id/postDetailFragment"
-			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment"
-			android:label="Post"
-			tools:layout="@layout/fragment_post_detail">
-			<argument
-				android:name="post"
-				app:argType="com.rainbowwolfer.myspacedemo1.models.Post"/>
-		</fragment>
-	</navigation>
+	<fragment
+		android:id="@+id/item_home"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment"
+		android:label="Home"
+		tools:layout="@layout/fragment_home">
+		<action
+			android:id="@+id/action_item_home_to_userFragment"
+			app:destination="@id/userFragment"
+			app:enterAnim="@anim/from_right"
+			app:exitAnim="@anim/to_left"
+			app:popEnterAnim="@anim/from_left"
+			app:popExitAnim="@anim/to_right"/>
+		<action
+			android:id="@+id/action_item_home_to_postDetailFragment"
+			app:destination="@id/postDetailFragment"
+			app:enterAnim="@anim/from_right"
+			app:exitAnim="@anim/to_left"
+			app:popEnterAnim="@anim/from_left"
+			app:popExitAnim="@anim/to_right"/>
+	</fragment>
+	<fragment
+		android:id="@+id/userFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
+		android:label="User">
+		<argument
+			android:name="user_id"
+			app:argType="string"/>
+	</fragment>
+	<fragment
+		android:id="@+id/postDetailFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment"
+		android:label="Post"
+		tools:layout="@layout/fragment_post_detail">
+		<argument
+			android:name="post"
+			app:argType="com.rainbowwolfer.myspacedemo1.models.Post"/>
+	</fragment>
 	<fragment
 		android:id="@+id/nav_settings"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.settings.SettingsFragment"
@@ -60,28 +56,26 @@
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.CollectionFragment"
 		android:label="Collection"
 		tools:layout="@layout/fragment_collection"/>
-	<navigation
-		android:id="@+id/subnav_message"
-		app:startDestination="@id/nav_message">
-		<fragment
-			android:id="@+id/nav_detailMessage"
-			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageDetailFragment"
-			android:label="fragment_message_detail"
-			tools:layout="@layout/fragment_message_detail"/>
-		<fragment
-			android:id="@+id/nav_message"
-			android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageFragment"
-			android:label="fragment_message"
-			tools:layout="@layout/fragment_message">
-			<action
-				android:id="@+id/action_nav_message_to_nav_detailMessage"
-				app:destination="@id/nav_detailMessage"
-				app:enterAnim="@anim/from_right"
-				app:exitAnim="@anim/to_left"
-				app:popEnterAnim="@anim/from_left"
-				app:popExitAnim="@anim/to_right"/>
-		</fragment>
-	</navigation>
+	
+	<fragment
+		android:id="@+id/nav_detailMessage"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageDetailFragment"
+		android:label="fragment_message_detail"
+		tools:layout="@layout/fragment_message_detail"/>
+	<fragment
+		android:id="@+id/nav_message"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageFragment"
+		android:label="fragment_message"
+		tools:layout="@layout/fragment_message">
+		<action
+			android:id="@+id/action_nav_message_to_nav_detailMessage"
+			app:destination="@id/nav_detailMessage"
+			app:enterAnim="@anim/from_right"
+			app:exitAnim="@anim/to_left"
+			app:popEnterAnim="@anim/from_left"
+			app:popExitAnim="@anim/to_right"/>
+	</fragment>
+	
 	<fragment
 		android:id="@+id/nav_profile"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"

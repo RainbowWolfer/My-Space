@@ -78,8 +78,10 @@ interface MyApi {
 	suspend fun getPosts(
 		@Query("email") email: String,
 		@Query("password") password: String,
+		@Query("offset") offset: Int,
 		@Query("posts_type") postsLimit: PostsLimit,
-		@Query("start_datetime") start_datetime: String,
+		@Query("seed") seed: Int,
+		@Query("limit") limit: Int = 10,
 	): Response<List<Post>>
 	
 	@GET("post/images")
