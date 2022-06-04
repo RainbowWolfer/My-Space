@@ -25,6 +25,11 @@
 					android:icon="@drawable/ic_baseline_flag_24"
 					android:title="Collection"/>
 				<item
+					android:id="@+id/nav_drafts"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_drafts_24"
+					android:title="Drafts"/>
+				<item
 					android:id="@+id/nav_profile"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_person_24"

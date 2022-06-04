@@ -2,12 +2,17 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.main
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.activity.viewBinding
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.textfield.TextInputLayout
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
@@ -25,6 +31,7 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,21 +64,13 @@ class MainActivity : AppCompatActivity() {
 		}
 		val user = result.data?.getParcelableExtra<User>("user")
 		application.currentUser.value = user
-		CoroutineScope(Dispatchers.IO).launch {
-			try {
-				if (user == null) {
-					return@launch
-				}
-				val response = RetrofitInstance.api.getAvatar(user.id)
-				
-				withContext(Dispatchers.Main) {
-					application.currentAvatar.value = BitmapFactory.decodeStream(response.byteStream())
-				}
-			} catch (ex: Exception) {
-				ex.printStackTrace()
-			}
+		if (user == null) {
+			return@registerForActivityResult
 		}
-		
+		application.updateAvatar()
+		CoroutineScope(Dispatchers.Main).launch {
+			application.userPreferencesRepository.updateUser(user.email, user.password)
+		}
 	}
 	
 	val postIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -94,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 		setSupportActionBar(binding.appBarMain.toolbar)
 		
 		application.currentUser.observe(this) {
+			application.updateAvatar()
 			updateNav()
 		}
 		
@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 				R.id.nav_about,
 				R.id.nav_collection,
 				R.id.nav_profile,
+				R.id.nav_drafts,
 			), binding.drawerLayout
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
@@ -136,7 +137,9 @@ class MainActivity : AppCompatActivity() {
 				setPositiveButton("Yes") { _, _ ->
 					application.clearCurrent()
 					binding.navView.menu.findItem(R.id.item_home).isChecked = true
-//					binding.drawerLayout.closeDrawers()
+					CoroutineScope(Dispatchers.Main).launch {
+						application.userPreferencesRepository.clearUser()
+					}
 				}
 				show()
 			}
@@ -158,6 +161,7 @@ class MainActivity : AppCompatActivity() {
 			R.id.nav_message,
 			R.id.nav_collection,
 			R.id.nav_profile,
+			R.id.nav_drafts,
 		).forEach {
 			binding.navView.menu.findItem(it).apply {
 				isEnabled = application.hasLoggedIn()
@@ -168,5 +172,10 @@ class MainActivity : AppCompatActivity() {
 		navViewHeaderBinding.headerTextTitle.text = if (loggedIn) application.currentUser.value!!.username else "Welcome"
 		navViewHeaderBinding.headerButtonLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
 		navViewHeaderBinding.headerButtonSignOut.visibility = if (loggedIn) View.VISIBLE else View.GONE
+	}
+	
+	override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+		this.setAutoClearEditTextFocus(event)
+		return super.dispatchTouchEvent(event)
 	}
 }

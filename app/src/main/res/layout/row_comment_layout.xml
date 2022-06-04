@@ -9,7 +9,7 @@
 	android:paddingBottom="10dp">
 	
 	<de.hdodenhof.circleimageview.CircleImageView
-		android:id="@+id/circleImageView2"
+		android:id="@+id/commentRow_image_avatar"
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_marginStart="16dp"
@@ -22,7 +22,7 @@
 		app:layout_constraintTop_toTopOf="parent"/>
 	
 	<TextView
-		android:id="@+id/textView13"
+		android:id="@+id/commentRow_text_username"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
@@ -32,21 +32,21 @@
 		android:text="RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
-		app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton4"
-		app:layout_constraintStart_toEndOf="@+id/circleImageView2"
-		app:layout_constraintTop_toTopOf="@+id/circleImageView2"/>
+		app:layout_constraintEnd_toStartOf="@+id/commentRow_button_more"
+		app:layout_constraintStart_toEndOf="@+id/commentRow_image_avatar"
+		app:layout_constraintTop_toTopOf="@+id/commentRow_image_avatar"/>
 	
 	<TextView
-		android:id="@+id/textView21"
+		android:id="@+id/commentRow_text_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
 		android:text="2022/11/11 11:11:11"
-		app:layout_constraintBottom_toBottomOf="@+id/circleImageView2"
-		app:layout_constraintStart_toEndOf="@+id/circleImageView2"/>
+		app:layout_constraintBottom_toBottomOf="@+id/commentRow_image_avatar"
+		app:layout_constraintStart_toEndOf="@+id/commentRow_image_avatar"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
-		android:id="@+id/appCompatImageButton4"
+		android:id="@+id/commentRow_button_more"
 		android:layout_width="48dp"
 		android:layout_height="48dp"
 		android:layout_marginEnd="16dp"
@@ -55,10 +55,10 @@
 		android:foreground="@drawable/ripple_small_corners"
 		android:src="@drawable/ic_baseline_more_vert_24"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/circleImageView2"/>
+		app:layout_constraintTop_toTopOf="@+id/commentRow_image_avatar"/>
 	
 	<TextView
-		android:id="@+id/textView22"
+		android:id="@+id/commentRow_text_content"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="24dp"
@@ -67,10 +67,10 @@
 		android:text="@string/welcome2_text"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/circleImageView2"/>
+		app:layout_constraintTop_toBottomOf="@+id/commentRow_image_avatar"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
-		android:id="@+id/appCompatImageButton5"
+		android:id="@+id/commentRow_button_upvote"
 		android:layout_width="48dp"
 		android:layout_height="32dp"
 		android:layout_marginTop="8dp"
@@ -79,30 +79,30 @@
 		android:foreground="@drawable/ripple_small_corners"
 		android:src="@drawable/ic_outline_thumb_up_24"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/textView22"/>
+		app:layout_constraintTop_toBottomOf="@+id/commentRow_text_content"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
-		android:id="@+id/appCompatImageButton6"
+		android:id="@+id/commentRow_button_downvote"
 		android:layout_width="48dp"
 		android:layout_height="32dp"
 		android:layout_marginEnd="8dp"
 		android:background="@color/transparent"
 		android:foreground="@drawable/ripple_small_corners"
 		android:src="@drawable/ic_outline_thumb_down_24"
-		app:layout_constraintBottom_toBottomOf="@+id/appCompatImageButton5"
-		app:layout_constraintEnd_toStartOf="@+id/textView23"
-		app:layout_constraintTop_toTopOf="@+id/appCompatImageButton5"/>
+		app:layout_constraintBottom_toBottomOf="@+id/commentRow_button_upvote"
+		app:layout_constraintEnd_toStartOf="@+id/commentRow_text_score"
+		app:layout_constraintTop_toTopOf="@+id/commentRow_button_upvote"/>
 	
 	<TextView
-		android:id="@+id/textView23"
+		android:id="@+id/commentRow_text_score"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="8dp"
 		android:text="21"
 		android:textSize="18sp"
-		app:layout_constraintBottom_toBottomOf="@+id/appCompatImageButton5"
-		app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton5"
-		app:layout_constraintTop_toTopOf="@+id/appCompatImageButton5"/>
+		app:layout_constraintBottom_toBottomOf="@+id/commentRow_button_upvote"
+		app:layout_constraintEnd_toStartOf="@+id/commentRow_button_upvote"
+		app:layout_constraintTop_toTopOf="@+id/commentRow_button_upvote"/>
 	
 	<View
 		android:layout_width="0dp"
@@ -114,5 +114,5 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appCompatImageButton5"/>
+		app:layout_constraintTop_toBottomOf="@id/commentRow_button_upvote"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

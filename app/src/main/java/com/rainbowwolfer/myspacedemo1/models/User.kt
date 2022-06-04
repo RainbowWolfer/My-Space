@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
 data class User(
 	@SerializedName("ID") override var id: String,
 	@SerializedName("Username") var username: String,
-	@SerializedName("Password") var password: String,
+	@SerializedName("Password") var password: String = "",
 	@SerializedName("Email") var email: String,
 	@SerializedName("ProfileDescription") val profileDescription: String
 ) : Parcelable, DatabaseID {

@@ -35,8 +35,24 @@ import kotlin.random.Random
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	companion object {
+		lateinit var instance: HomeFragment
 		const val RELOAD_THREASHOLD = 3
 		var upadteScrollPosition: Boolean = false
+		
+		@JvmStatic
+		fun popupNotLoggedInHint() {
+			try {
+				Snackbar.make(instance.requireView(), "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
+					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(instance.requireContext(), LoginActivity::class.java))
+				}.show()
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+			}
+		}
+	}
+	
+	init {
+		instance = this
 	}
 	
 	private val binding: FragmentHomeBinding by viewBinding()
@@ -65,11 +81,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		super.onDestroy()
 		println("destroy")
 		upadteScrollPosition = false
-	}
-	
-	override fun onDestroyView() {
-		super.onDestroyView()
-		println("destroy view")
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,9 +131,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					Intent(requireContext(), PostActivity::class.java)
 				)
 			} else {
-				Snackbar.make(view, "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
-					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(requireContext(), LoginActivity::class.java))
-				}.show()
+				popupNotLoggedInHint()
 			}
 		}
 		

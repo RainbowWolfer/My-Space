@@ -4,59 +4,105 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
-import com.rainbowwolfer.myspacedemo1.models.interfaces.GenerateDefault
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.toFormatDateTime
 import kotlinx.parcelize.Parcelize
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 @Parcelize
 data class Post(
+	//essential
 	@SerializedName("ID") override val id: String,
 	@SerializedName("PublisherID") val publisherID: String,
 	@SerializedName("PublishDate") val publishDateTime: String,
 	@SerializedName("EditDate") val editDateTime: String,
-	@SerializedName("EditTimes") val editTiems: Int,
+	@SerializedName("EditTimes") val editTimes: Int,
 	@SerializedName("TextContent") val textContent: String,
 	@SerializedName("Deleted") val deleted: Boolean,
 	@SerializedName("ImagesCount") val imagesCount: Int,
 	@SerializedName("Tags") val tags: String,
-	@SerializedName("Upvotes") val upvotes: Int,
-	@SerializedName("Downvotes") val downvotes: Int,
-	@SerializedName("Repost") val repost: Int,
-	@SerializedName("Comment") val comment: Int,
 	@SerializedName("Visibility") val visibility: PostVisibility = PostVisibility.All,
 	@SerializedName("Reply") val replyLimit: PostVisibility = PostVisibility.All,
 	@SerializedName("IsRepost") val isRepost: Boolean,
-	@SerializedName("OriginPostID") val originID: String,
-	@SerializedName("ReposterID") val reposterID: String,
+	@SerializedName("OriginPostID") val originPostID: String,
+	@SerializedName("Upvotes") val upvotes: Int,
+	@SerializedName("Downvotes") val downvotes: Int,
+	@SerializedName("Comments") val comments: Int,
+	@SerializedName("Reposts") val reposts: Int,
+	@SerializedName("PublisherUsername") val publisherUsername: String,
+	@SerializedName("PublisherEmail") val publisherEmail: String,
+	@SerializedName("PublisherProfile") val publisherProfile: String,
+	//-----------
+	//if repost
+	@SerializedName("OriginUserID") val originUserID: String? = null,
+	@SerializedName("OriginUserUsername") val originUserUsername: String? = null,
+	@SerializedName("OriginUserEmail") val originUserEmail: String? = null,
+	@SerializedName("OriginUserProfile") val originUserProfile: String? = null,
+	@SerializedName("OriginPublishDate") val originPublishDate: String? = null,
+	@SerializedName("OriginEditDate") val originEditDate: String? = null,
+	@SerializedName("OriginEditTimes") val originEditTimes: Int? = null,
+	@SerializedName("OriginTextContent") val originTextContent: String? = null,
+	@SerializedName("OriginDeleted") val originDeleted: Boolean? = null,
+	@SerializedName("OriginImagesCount") val originImagesCount: Int? = null,
+	@SerializedName("OriginTags") val originTags: String? = null,
+	@SerializedName("OriginVisibility") val originVisibility: PostVisibility? = null,
+	@SerializedName("OriginReply") val originReply: PostVisibility? = null,
+	@SerializedName("OriginIsRepost") val originIsRepost: Boolean? = null,
+	@SerializedName("OriginOriginPostID") val originOriginPostID: String? = null,
+	@SerializedName("OriginUpvotes") val originUpvotes: Int? = null,
+	@SerializedName("OriginDownvotes") val originDownvotes: Int? = null,
+	@SerializedName("OriginComments") val originComments: Int? = null,
+	@SerializedName("OriginReposts") val originReposts: Int? = null,
+	//------------
+	@SerializedName("Score") val score: Int,//upvotes - downvotes
+	@SerializedName("Voted") val voted: Int,//whether user had voted (depends on query)
 ) : Parcelable, DatabaseID {
-	fun getScore(): Int = upvotes - downvotes
+	fun getPublisher(): User {
+		return User(
+			id = publisherID,
+			username = publisherUsername,
+			email = publisherEmail,
+			profileDescription = publisherProfile,
+		)
+	}
 	
-	companion object : GenerateDefault<Post> {
-		@JvmStatic
-		override fun generateDefault(): Post {
-			return Post(
-				EasyFunctions.generateRandomString(20),
-				EasyFunctions.generateRandomString(20),
-				Calendar.getInstance().toFormatDateTime(),
-				Calendar.getInstance().toFormatDateTime(),
-				Random.nextInt(),
-				EasyFunctions.generateRandomString(Random.nextInt(100, 500)),
-				Random.nextBoolean(),
-				Random.nextInt(9),
-				EasyFunctions.generateRandomString(20),
-				Random.nextInt(),
-				Random.nextInt(),
-				Random.nextInt(),
-				Random.nextInt(),
-				PostVisibility.All,
-				PostVisibility.All,
-				false,
-				"",
-				"",
+	fun getOriginUser(): User? {
+		return if (!isRepost) {
+			null
+		} else {
+			User(
+				id = originUserID!!,
+				username = originUserUsername!!,
+				email = originUserEmail!!,
+				profileDescription = originUserProfile!!,
+			)
+		}
+	}
+	
+	fun getOriginPost(): Post? {
+		return if (!isRepost) {
+			null
+		} else {
+			Post(
+				id = originPostID,
+				publisherID = originUserID!!,
+				publishDateTime = originPublishDate!!,
+				editDateTime = originEditDate!!,
+				editTimes = originEditTimes!!,
+				textContent = originTextContent!!,
+				deleted = originDeleted!!,
+				imagesCount = originImagesCount!!,
+				tags = originTags!!,
+				visibility = originVisibility!!,
+				replyLimit = originReply!!,
+				isRepost = originIsRepost!!,
+				originPostID = originOriginPostID!!,
+				upvotes = originUpvotes!!,
+				downvotes = originDownvotes!!,
+				comments = originComments!!,
+				reposts = originReposts!!,
+				publisherUsername = originUserUsername!!,
+				publisherEmail = originUserEmail!!,
+				publisherProfile = originUserProfile!!,
+				score = score,
+				voted = voted,
 			)
 		}
 	}

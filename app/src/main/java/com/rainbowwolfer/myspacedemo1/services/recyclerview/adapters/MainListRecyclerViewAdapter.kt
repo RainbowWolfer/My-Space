@@ -1,45 +1,45 @@
 package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.rainbowwolfer.myspacedemo1.R
+import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetCommentInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutEndBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.updateImage
-import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findAvatar
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
+import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
+import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.loadImages
+import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
+import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 
 class MainListRecyclerViewAdapter(
 	private val context: Context,
@@ -80,29 +80,28 @@ class MainListRecyclerViewAdapter(
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
-			val data = postsList[position]
-			application.postImagesPool.addPost(data)
-			holder.binding.rowTextPublisherName.text = "..."
-			holder.binding.rowTextPublishDateTime.text = data.publishDateTime
-			holder.binding.rowTextContent.text = data.textContent
+			val post = postsList[position]
+			application.postImagesPool.addPost(post)
 			
 			holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
 			holder.binding.rowGridviewImages.isEnabled = false
 			
-			holder.binding.setRepostView(data.isRepost)
-			holder.binding.setTags(data.tags)
-			holder.binding.setMetas(data.repost, data.comment, data.downvotes, data.upvotes)
-			holder.binding.loadUser(data.publisherID)
-			holder.binding.loadImages(data)
+			holder.binding.setPostView(post)
 			
 			holder.binding.root.setOnClickListener {
 				val navController = Navigation.findNavController(holder.itemView)
-				navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+				navController.navigate(
+					HomeFragmentDirections.actionItemHomeToPostDetailFragment(
+						if (post.isRepost) post.getOriginPost()!! else post
+					)
+				)
 			}
 			
 			holder.binding.mainLayoutRepost.setOnClickListener {
-				val navController = Navigation.findNavController(holder.itemView)
-				navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(Post.generateDefault()))
+				if (post.isRepost) {
+					val navController = Navigation.findNavController(holder.itemView)
+					navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(post))
+				}
 			}
 			
 			holder.binding.rowButtonMore.setOnClickListener {
@@ -117,7 +116,7 @@ class MainListRecyclerViewAdapter(
 							}
 							context.startActivity(sharedIntent)
 						}
-						R.id.item_flag -> Toast.makeText(context, "Flag $data", Toast.LENGTH_SHORT).show()
+						R.id.item_flag -> Toast.makeText(context, "Flag $post", Toast.LENGTH_SHORT).show()
 						R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
 					}
 					true
@@ -130,10 +129,16 @@ class MainListRecyclerViewAdapter(
 			}
 			if (enableAvatarClicking) {
 				holder.binding.rowImagePublisherAvatar.setOnClickListener {
-					val navController = Navigation.findNavController(holder.itemView)
-					navController.graph.findNode(R.id.userFragment)?.label = "User ${data.publisherID}"
-					val action = HomeFragmentDirections.actionItemHomeToUserFragment(data.publisherID)
-					navController.navigate(action)
+					if (post.isRepost) {
+						navigateToUserProfile(holder.itemView, post.getOriginUser()!!.id)
+					} else {
+						navigateToUserProfile(holder.itemView, post.publisherID)
+					}
+				}
+				holder.binding.rowLayoutRepostInfo.setOnClickListener {
+					if (post.isRepost) {
+						navigateToUserProfile(holder.itemView, post.publisherID)
+					}
 				}
 			}
 		} else if (holder is EndViewHolder) {
@@ -147,7 +152,111 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	private fun MainRowLayoutBinding.setRepostView(enable: Boolean) {
+	private fun navigateToUserProfile(view: View, id: String) {
+		val navController = Navigation.findNavController(view)
+		navController.graph.findNode(R.id.userFragment)?.label = "User $id"
+		val action = HomeFragmentDirections.actionItemHomeToUserFragment(id)
+		navController.navigate(action)
+	}
+	
+	private fun MainRowLayoutBinding.setButtons(post: Post) {
+		this.rowLayoutRepost.buttonAction {
+		
+		}
+		
+		this.rowLayoutComment.buttonAction {
+			this.showCommentDialog(post)
+		}
+		
+		this.rowButtonDownvote.buttonAction {
+		
+		}
+		
+		this.rowButtonUpvote.buttonAction {
+			
+		}
+	}
+	
+	private fun MainRowLayoutBinding.showCommentDialog(post: Post) {
+		BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
+			setOnShowListener {
+				Handler(Looper.getMainLooper()).post {
+					val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetCommentDialog_root) as? FrameLayout?
+					bottomSheet?.let {
+						BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+					}
+				}
+			}
+			
+			setCanceledOnTouchOutside(true)
+			show()
+			
+			val commentInputBinding = BottomSheetCommentInputBinding.inflate(LayoutInflater.from(context))
+			setContentView(commentInputBinding.root)
+			
+			commentInputBinding.bottomSheetCommentDialogInput.requestFocus()
+			
+			commentInputBinding.bottomSheetCommentDialogButtonSend.isEnabled = false
+			commentInputBinding.bottomSheetCommentDialogButtonBack.setOnClickListener {
+				this.dismiss()
+				this.hide()
+			}
+			commentInputBinding.bottomSheetCommentDialogEditText.doAfterTextChanged {
+				commentInputBinding.bottomSheetCommentDialogButtonSend.isEnabled = !it.isNullOrEmpty() && it.length <= 200
+			}
+			commentInputBinding.bottomSheetCommentDialogButtonSend.setOnClickListener {
+				CoroutineScope(Dispatchers.Main).launch {
+					val dialog = LoadingDialog(context).apply {
+						showDialog("Uploading Comment")
+					}
+					try {
+						this@showCommentDialog.rowLayoutComment.isEnabled = false
+						withContext(Dispatchers.IO) {
+							RetrofitInstance.api.postComment(
+								NewComment(
+									application.currentUser.value?.email ?: "",
+									application.currentUser.value?.password ?: "",
+									post.id,
+									commentInputBinding.bottomSheetCommentDialogEditText.text?.toString() ?: ""
+								)
+							)
+						}
+						
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					} finally {
+						this@showCommentDialog.rowLayoutComment.isEnabled = true
+						dialog.hideDialog()
+						this@apply.dismiss()
+						this@apply.hide()
+					}
+				}
+			}
+		}
+	}
+	
+	private fun View.buttonAction(onClick: () -> Unit) {
+		this.setOnClickListener {
+			if (application.hasLoggedIn()) {
+				onClick.invoke()
+			} else {
+				HomeFragment.popupNotLoggedInHint()
+			}
+		}
+	}
+	
+	private fun MainRowLayoutBinding.setPostView(post: Post) {
+		setRepostView(post.isRepost)
+		this.setContent(post)
+		val result = if (post.isRepost) post.getOriginPost()!! else post
+		this.setTags(result.tags)
+		this.setMetas(result.reposts, result.comments, result.downvotes, result.upvotes)
+		this.setPublisher(result)
+		this.setButtons(result)
+		this.loadImages(result)
+	}
+	
+	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {
 		arrayListOf(
 			this.mainLayoutRepost,
 			this.mainTextRepost,
@@ -155,9 +264,27 @@ class MainListRecyclerViewAdapter(
 			this.rowTextRepostInfo,
 			this.rowImageRepostIcon,
 		).forEach {
-			(if (enable) View.VISIBLE else View.GONE).apply {
+			(if (isRepost) View.VISIBLE else View.GONE).apply {
 				it.visibility = this
 			}
+		}
+	}
+	
+	@SuppressLint("SetTextI18n")
+	private fun MainRowLayoutBinding.setContent(post: Post) {
+		if (post.isRepost) {
+			val origin = post.getOriginPost()!!
+			this.rowTextPublishDateTime.text = origin.publishDateTime
+			this.rowTextContent.text = origin.textContent
+			this.mainTextRepost.text = post.textContent
+			this.rowTextRepostInfo.text = "Repost From @${post.publisherUsername}"
+			//avatar
+			application.findOrGetAvatar(post.getPublisher().id) {
+				this.mainImageRepostAvatar.setImageBitmap(it)
+			}
+		} else {
+			this.rowTextPublishDateTime.text = post.publishDateTime
+			this.rowTextContent.text = post.textContent
 		}
 	}
 	
@@ -178,60 +305,22 @@ class MainListRecyclerViewAdapter(
 		this.rowTextScore.text = "${up - down}"
 	}
 	
-	private fun MainRowLayoutBinding.loadUser(userID: String) {
+	private fun MainRowLayoutBinding.setPublisher(post: Post) {
 		this.rowImagePublisherAvatar.setImageDrawable(null)
-		val found = application.usersPool.findUserInfo(userID)
-		if (found != null) {
-			this.rowTextPublisherName.text = found.user.username
-			this.rowImagePublisherAvatar.setImageBitmap(found.avatar)
-			return
-		}
-		CoroutineScope(Dispatchers.Main).launch {
-			application.findOrGet(userID, {
-				this@loadUser.rowTextPublisherName.text = it.username
-			}, {
-				this@loadUser.rowImagePublisherAvatar.setImageBitmap(it)
-			})
+		this.rowTextPublisherName.text = post.getPublisher().username
+		application.findOrGetAvatar(post.publisherID) {
+			this.rowImagePublisherAvatar.setImageBitmap(it)
 		}
 	}
 	
 	private fun MainRowLayoutBinding.loadImages(post: Post) {
-		CoroutineScope(Dispatchers.Main).launch {
-			try {
-				val list = arrayListOf<Bitmap>()
-				for (index in 0 until post.imagesCount) {
-					var image = application.postImagesPool.getImage(post.id, index)
-					if (image == null) {
-						withContext(Dispatchers.IO) {
-							val response = RetrofitInstance.api.getPostImage(post.id, index)
-							val bitmap = BitmapFactory.decodeStream(response.byteStream())
-							application.postImagesPool.updateImage(post.id, bitmap, index)
-						}
-						image = application.postImagesPool.getImage(post.id, index) ?: continue
-					}
-					list.add(image)
-				}
-				this@loadImages.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
-					it.list = list
-				}
-			} catch (ex: Exception) {
-				ex.printStackTrace()
-				if (ex is HttpException) {
-				
-				} else if (ex is ResponseException) {
-				
-				}
-			} finally {
-				this@loadImages.rowGridviewImages.layoutParams.height = context.resources.getDimension(
-					when (post.imagesCount) {
-						in 1..3 -> R.dimen.image_preview_row_1
-						in 4..6 -> R.dimen.image_preview_row_2
-						in 7..9 -> R.dimen.image_preview_row_3
-						else -> R.dimen.none
-					}
-				).toInt()
-			}
+		this.rowGridviewImages.presetGridViewHeight(post.imagesCount)
+		val colors = ImagesDisplayGridViewAdapter.getShuffledColorLists(context, post.imagesCount)
+		
+		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
+			it.list = colors
 		}
+		loadImages(this.rowGridviewImages, post)
 	}
 	
 	fun setData(newPersonList: List<Post>) {

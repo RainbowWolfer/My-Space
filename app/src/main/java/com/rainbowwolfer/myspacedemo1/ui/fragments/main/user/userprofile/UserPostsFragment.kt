@@ -11,7 +11,7 @@ import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 
-class UserPostsFragment: Fragment(R.layout.fragment_user_posts) {
+class UserPostsFragment : Fragment(R.layout.fragment_user_posts) {
 	private val binding: FragmentUserPostsBinding by viewBinding()
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,10 +25,7 @@ class UserPostsFragment: Fragment(R.layout.fragment_user_posts) {
 		binding.userRecyclerViewPosts.adapter = adapter
 		adapter.setData(
 			listOf(
-				Post.generateDefault(),
-				Post.generateDefault(),
-				Post.generateDefault(),
-				Post.generateDefault(),
+			
 			)
 		)
 	}

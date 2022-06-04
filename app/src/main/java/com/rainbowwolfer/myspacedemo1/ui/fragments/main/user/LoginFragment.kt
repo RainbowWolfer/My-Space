@@ -2,6 +2,7 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -45,9 +46,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 							println(response)
 							if (response!!.isSuccessful) {
 								user = response!!.body()
-								val editor = activity?.getSharedPreferences("", Context.MODE_PRIVATE)?.edit()
-								//TODO:
-								editor?.apply()
 								println(user)
 								if (user != null) {
 									dialog.hideDialog()

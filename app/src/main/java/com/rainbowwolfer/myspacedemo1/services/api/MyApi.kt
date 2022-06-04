@@ -1,9 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
+import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
+import com.rainbowwolfer.myspacedemo1.models.api.NewVote
 import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
@@ -81,12 +84,28 @@ interface MyApi {
 		@Query("offset") offset: Int,
 		@Query("posts_type") postsLimit: PostsLimit,
 		@Query("seed") seed: Int,
-		@Query("limit") limit: Int = 10,
+		@Query("limit") limit: Int = 5,
 	): Response<List<Post>>
 	
 	@GET("post/images")
 	suspend fun getPostImage(
 		@Query("id") id: String,
 		@Query("index") index: Int,
+	): ResponseBody
+	
+	@Headers("Content-Type: application/json")
+	@POST("post/comment")
+	suspend fun postComment(
+		@Body comment: NewComment
+	): ResponseBody
+	
+	@GET("post/comments")
+	suspend fun getPostComments(
+		@Query("post_id") postID: String
+	): Response<List<Comment>>
+	
+	@POST("post/vote")
+	suspend fun postVote(
+		@Body comment: NewVote
 	): ResponseBody
 }

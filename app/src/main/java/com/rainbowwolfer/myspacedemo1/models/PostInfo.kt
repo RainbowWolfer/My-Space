@@ -1,14 +1,13 @@
 package com.rainbowwolfer.myspacedemo1.models
 
 import android.graphics.Bitmap
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImages
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.updateImage
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 
 class PostInfo(
 	val id: String,
 	var post: Post,
-	val images: Array<Bitmap?> = arrayOfNulls(MySpaceApplication.IMAGES_COUNT_PER_POST)
+	val images: Array<Bitmap?> = arrayOfNulls(MySpaceApplication.IMAGES_COUNT_PER_POST),
+	var originPosts: Post? = null,
 ) {
 	override fun toString(): String {
 		return "PostInfo(id: $id, images_count: ${images.filterNotNull().size}, post:$post)"

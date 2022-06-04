@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.viewbinding.library.activity.viewBinding
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityImagesDisplayBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.imagesdisplay.adapters.ImagesPoolViewPagerAdapter
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
 
 class ImagesDisplayActivity : AppCompatActivity() {
 	companion object {
@@ -31,14 +33,16 @@ class ImagesDisplayActivity : AppCompatActivity() {
 		post = intent.getParcelableExtra(ARG_POST)
 		current = intent.getIntExtra(ARG_CURRENT, -1)
 		
-		binding.imagesDisplayButtonRepost.text = "${post?.repost ?: 0}"
-		binding.imagesDisplayButtonComment.text = "${post?.comment ?: 0}"
-		binding.imagesDisplayTextViewScore.text = "${post?.getScore() ?: 0}"
+		binding.imagesDisplayButtonRepost.text = "${post?.reposts ?: 0}"
+		binding.imagesDisplayButtonComment.text = "${post?.comments ?: 0}"
+		binding.imagesDisplayTextViewScore.text = "${post?.score ?: 0}"
 		
 		val adapter = ImagesPoolViewPagerAdapter(supportFragmentManager, lifecycle, post!!.id, post!!.imagesCount)
 		with(binding.imagesDisplayViewPager2) {
 			this.adapter = adapter
+			//both have to be here
 			this.currentItem = current
+			this.setCurrentItem(currentItem, false)
 		}
 		
 	}
@@ -64,5 +68,10 @@ class ImagesDisplayActivity : AppCompatActivity() {
 			}
 			else -> super.onOptionsItemSelected(item)
 		}
+	}
+	
+	override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+		this.setAutoClearEditTextFocus(event)
+		return super.dispatchTouchEvent(event)
 	}
 }

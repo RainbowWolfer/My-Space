@@ -8,7 +8,7 @@
 	
 	<ImageView
 		android:id="@+id/gridViewItem_image_display"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="@dimen/image_preview_row_1"
 		android:clickable="true"
 		android:focusable="true"

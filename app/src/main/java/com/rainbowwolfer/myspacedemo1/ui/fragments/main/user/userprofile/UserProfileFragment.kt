@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
@@ -27,6 +27,7 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.InputStream
+import kotlin.Exception
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {
@@ -125,13 +127,11 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			if (found != null) {
 				viewModel.userInfo.value = found
 			} else {
-				CoroutineScope(Dispatchers.Main).launch {
-					application.findOrGet(userID, {
-						viewModel.userInfo.value = application.usersPool.findUserInfo(userID)
-					}, {
-						viewModel.userInfo.value = application.usersPool.findUserInfo(userID)
-					})
-				}
+				application.findOrGetUserInfo(userID, {
+					viewModel.userInfo.value = application.usersPool.findUserInfo(userID)
+				}, {
+					viewModel.userInfo.value = application.usersPool.findUserInfo(userID)
+				})
 			}
 			
 			viewModel.userInfo.observe(viewLifecycleOwner) {
@@ -194,21 +194,20 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 										binding.userTextUsername.text = obj
 										user.username = obj
 									} else {
-										AlertDialog.Builder(requireContext()).apply {
-											setTitle("Update Username Failed")
-											setMessage("Maybe try again later")
-											setNegativeButton("Back", null)
-											show()
-										}
+										throw Exception()
 									}
 								}
 							} catch (ex: HttpException) {
 								ex.printStackTrace()
+								val errorMessage = when (ex.response()?.getHttpResponse()?.errorCode) {
+									1 -> "Username already exists"
+									else -> "Maybe try again later"
+								}
 								withContext(Dispatchers.Main) {
 									dialog!!.hideDialog()
 									AlertDialog.Builder(requireContext()).apply {
 										setTitle("Update Username Failed")
-										setMessage("Maybe try again later")
+										setMessage(errorMessage)
 										setNegativeButton("Back", null)
 										show()
 									}
@@ -234,6 +233,8 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		this.userFollowButton.isEnabled = true
 		this.userButtonEditAvatar.isEnabled = true
 		this.userButtonEditUsername.isEnabled = true
+		
+		(requireActivity() as AppCompatActivity).supportActionBar?.title = "User ${user.username}"
 	}
 	
 	private fun FragmentUserProfileBinding.initializeLoadingState() {

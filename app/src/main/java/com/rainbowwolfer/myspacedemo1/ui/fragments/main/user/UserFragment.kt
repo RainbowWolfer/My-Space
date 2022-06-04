@@ -15,7 +15,7 @@ import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 
 class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()
-	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+//	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
 	companion object {

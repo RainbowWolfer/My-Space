@@ -26,7 +26,8 @@
 		<activity
 			android:name=".ui.activities.welcome.WelcomeActivity"
 			android:exported="true"
-			android:theme="@style/Theme.MySpaceDemo1.NoActionBar">
+			android:theme="@style/Theme.MySpaceDemo1.NoActionBar"
+			android:windowSoftInputMode="adjustPan">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				

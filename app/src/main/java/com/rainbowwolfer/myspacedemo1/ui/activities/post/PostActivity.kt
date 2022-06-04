@@ -11,10 +11,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.viewbinding.library.activity.viewBinding
@@ -24,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doAfterTextChanged
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
@@ -41,6 +39,7 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,7 +65,6 @@ class PostActivity : AppCompatActivity() {
 		val uri = result.data?.data ?: return@registerForActivityResult
 		val fileName = uri.pathSegments.last()
 		val ext = fileName.substring(fileName.lastIndexOf("."))
-		println(ext)
 		val iStream: InputStream? = contentResolver.openInputStream(uri)
 		val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
 		val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -211,7 +209,7 @@ class PostActivity : AppCompatActivity() {
 		BottomSheetDialog(this, R.style.CustomizedBottomDialogStyle).apply {
 			setOnShowListener {
 				Handler(Looper.getMainLooper()).post {
-					val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetDialog_root) as? FrameLayout
+					val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetDialog_root) as? FrameLayout?
 					bottomSheet?.let {
 						BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
 					}
@@ -424,5 +422,10 @@ class PostActivity : AppCompatActivity() {
 			else -> super.onOptionsItemSelected(item)
 		}
 		
+	}
+	
+	override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+		this.setAutoClearEditTextFocus(event)
+		return super.dispatchTouchEvent(event)
 	}
 }

@@ -34,16 +34,23 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/welcome1_image"/>
 	
-	<androidx.appcompat.widget.AppCompatButton
+	<TextView
 		android:id="@+id/welcome1_button_next"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="24dp"
 		android:layout_marginBottom="24dp"
-		android:background="#00ffffff"
+		android:background="@color/transparent"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:paddingStart="10dp"
+		android:paddingTop="5dp"
+		android:paddingEnd="10dp"
+		android:paddingBottom="5dp"
 		android:text="Next"
 		android:textColor="@color/teal_200"
-		android:textSize="20sp"
+		android:textSize="24sp"
 		android:textStyle="bold"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"/>

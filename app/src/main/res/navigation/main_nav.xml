@@ -80,5 +80,10 @@
 		android:id="@+id/nav_profile"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
 		android:label="Profile"/>
+	<fragment
+		android:id="@+id/nav_drafts"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.drafts.DraftsFragment"
+		android:label="fragment_drafts"
+		tools:layout="@layout/fragment_drafts"/>
 
 </navigation>

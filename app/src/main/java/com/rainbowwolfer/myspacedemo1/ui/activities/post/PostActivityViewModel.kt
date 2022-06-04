@@ -3,11 +3,7 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.post
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
-
-//import com.rainbowwolfer.myspacedemo1.util.VarPair
-
 
 class PostActivityViewModel : ViewModel() {
 	val content: MutableLiveData<String> by lazy { MutableLiveData("") }

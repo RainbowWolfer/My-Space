@@ -13,6 +13,7 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.repositories.UserPreferencesRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,11 +33,15 @@ class MySpaceApplication : Application() {
 		instance = this
 	}
 	
+	val userPreferencesRepository = UserPreferencesRepository(this)
+	
 	val currentUser: MutableLiveData<User?> by lazy { MutableLiveData(null) }
 	val currentAvatar: MutableLiveData<Bitmap?> by lazy { MutableLiveData(null) }
 	
 	val usersPool: ArrayList<UserInfo> = arrayListOf()
 	val postImagesPool: ArrayList<PostInfo> = arrayListOf()
+	
+	val scoresPool: HashMap<String, Int> = hashMapOf()
 	
 	fun hasLoggedIn() = currentUser.value != null
 	
@@ -45,40 +50,95 @@ class MySpaceApplication : Application() {
 		currentAvatar.value = null
 	}
 	
+	fun updateVote(postID: String, score: Int) {
+		scoresPool[postID] = score
+	}
 	
-	suspend fun findOrGet(userID: String, onLoadUser: (User) -> Unit, onLoadAvatar: (Bitmap) -> Unit, onException: (Exception) -> Unit = { }) {
-		try {
-			var user = usersPool.findUser(userID)
-			if (user == null) {
-				withContext(Dispatchers.IO) {
-					val response = RetrofitInstance.api.getUser(userID)
-					if (response.isSuccessful) {
-						user = response.body()!!
-					} else {
-						val go = response.getHttpResponse()
-						throw ResponseException(go)
-					}
+	fun findVote(postID: String): Int {
+		return scoresPool[postID] ?: 0
+	}
+	
+	fun updateAvatar() {
+		if (currentUser.value == null) {
+			return
+		}
+		CoroutineScope(Dispatchers.IO).launch {
+			try {
+				val response = RetrofitInstance.api.getAvatar(currentUser.value!!.id)
+				withContext(Dispatchers.Main) {
+					currentAvatar.value = BitmapFactory.decodeStream(response.byteStream())
 				}
-				usersPool.addUser(user!!)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
 			}
-			onLoadUser.invoke(user!!)
-			
-			var avatarBitmap = usersPool.findAvatar(userID)
-			if (avatarBitmap == null) {
-				withContext(Dispatchers.IO) {
-					try {
-						val response = RetrofitInstance.api.getAvatar(user!!.id)
-						avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
-					} catch (ex: HttpException) {
-						throw ResponseException(ex.response()!!.getHttpResponse())
+		}
+	}
+	
+	fun findOrGetAvatar(
+		userID: String,
+		onLoadAvatar: (Bitmap) -> Unit,
+	) {
+		CoroutineScope(Dispatchers.Main).launch {
+			try {
+				var avatarBitmap = usersPool.findAvatar(userID)
+				if (avatarBitmap == null) {
+					withContext(Dispatchers.IO) {
+						try {
+							val response = RetrofitInstance.api.getAvatar(userID)
+							avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
+						} catch (ex: HttpException) {
+							throw ResponseException(ex.response()!!.getHttpResponse())
+						}
 					}
+					usersPool.updateAvatar(userID, avatarBitmap)
 				}
-				usersPool.updateAvatar(user!!.id, avatarBitmap)
+				onLoadAvatar.invoke(avatarBitmap!!)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+//				onException.invoke(ex)
 			}
-			onLoadAvatar.invoke(avatarBitmap!!)
-		} catch (ex: Exception) {
-			ex.printStackTrace()
-			onException.invoke(ex)
+		}
+	}
+	
+	fun findOrGetUserInfo(
+		userID: String,
+		onLoadUser: (User) -> Unit,
+		onLoadAvatar: (Bitmap) -> Unit,
+	) {
+		CoroutineScope(Dispatchers.Main).launch {
+			try {
+				var user = usersPool.findUser(userID)
+				if (user == null) {
+					withContext(Dispatchers.IO) {
+						val response = RetrofitInstance.api.getUser(userID)
+						if (response.isSuccessful) {
+							user = response.body()!!
+						} else {
+							val go = response.getHttpResponse()
+							throw ResponseException(go)
+						}
+					}
+					usersPool.addUser(user!!)
+				}
+				onLoadUser.invoke(user!!)
+				
+				var avatarBitmap = usersPool.findAvatar(userID)
+				if (avatarBitmap == null) {
+					withContext(Dispatchers.IO) {
+						try {
+							val response = RetrofitInstance.api.getAvatar(user!!.id)
+							avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
+						} catch (ex: HttpException) {
+							throw ResponseException(ex.response()!!.getHttpResponse())
+						}
+					}
+					usersPool.updateAvatar(user!!.id, avatarBitmap)
+				}
+				onLoadAvatar.invoke(avatarBitmap!!)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+//				onException.invoke(ex)
+			}
 		}
 	}
 }

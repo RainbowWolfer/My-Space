@@ -1,14 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	app:layoutDescription="@xml/fragment_post_detail_comments_scene"
 	tools:context=".ui.fragments.main.home.postDetail.PostDetailCommentsFragment">
+	
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/postDetail_layout_loading"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+		
+		<TextView
+			android:id="@+id/postDetail_text_loading"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:text="Uploading Comment"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+		
+		<ProgressBar
+			android:id="@+id/progressBar"
+			style="?android:attr/progressBarStyleHorizontal"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:indeterminate="true"
+			android:padding="10dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/postDetail_text_loading"
+			app:layout_constraintTop_toTopOf="parent"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/postDetailComments_recylverView"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@+id/postDetailComments_input_comment"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/postDetail_layout_loading">
+	
+	</androidx.recyclerview.widget.RecyclerView>
+	
+	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/postDetailComments_input_comment"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:counterEnabled="false"
+		app:counterMaxLength="200"
+		app:endIconMode="clear_text"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+		
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/postDetailComments_editText_comment"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Leave a nice comment"
+			android:imeOptions="actionDone"
+			android:inputType="text"
+			android:maxLines="1"/>
+	</com.google.android.material.textfield.TextInputLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

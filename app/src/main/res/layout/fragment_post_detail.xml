@@ -32,7 +32,7 @@
 				android:layout_height="match_parent">
 				
 				<de.hdodenhof.circleimageview.CircleImageView
-					android:id="@+id/circleImageView"
+					android:id="@+id/postDetail_image_avatar"
 					android:layout_width="60dp"
 					android:layout_height="60dp"
 					android:layout_marginStart="16dp"
@@ -45,7 +45,7 @@
 					app:layout_constraintTop_toTopOf="parent"/>
 				
 				<androidx.appcompat.widget.AppCompatImageButton
-					android:id="@+id/appCompatImageButton"
+					android:id="@+id/postDetail_button_more"
 					android:layout_width="48dp"
 					android:layout_height="48dp"
 					android:layout_marginEnd="16dp"
@@ -53,11 +53,12 @@
 					android:contentDescription="@string/app_name_space"
 					android:foreground="@drawable/ripple_small_corners"
 					android:src="@drawable/ic_baseline_more_vert_24"
+					android:visibility="gone"
 					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="@+id/textView5"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_username"/>
 				
 				<TextView
-					android:id="@+id/textView5"
+					android:id="@+id/postDetail_text_username"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -67,12 +68,12 @@
 					android:text="RainbowWolfer"
 					android:textSize="24sp"
 					android:textStyle="bold"
-					app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton"
-					app:layout_constraintStart_toEndOf="@+id/circleImageView"
-					app:layout_constraintTop_toTopOf="@+id/circleImageView"/>
+					app:layout_constraintEnd_toStartOf="@+id/postDetail_button_more"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_image_avatar"
+					app:layout_constraintTop_toTopOf="@+id/postDetail_image_avatar"/>
 				
 				<TextView
-					android:id="@+id/textView9"
+					android:id="@+id/postDetail_text_email"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -81,12 +82,12 @@
 					android:maxLines="1"
 					android:text="RainbowWolfer@Outlook.com"
 					android:textSize="16sp"
-					app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
-					app:layout_constraintEnd_toStartOf="@+id/appCompatImageButton"
-					app:layout_constraintStart_toEndOf="@+id/circleImageView"/>
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_image_avatar"
+					app:layout_constraintEnd_toStartOf="@+id/postDetail_button_more"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_image_avatar"/>
 				
 				<TextView
-					android:id="@+id/textView10"
+					android:id="@+id/postDetail_text_content"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -97,7 +98,21 @@
 					android:textSize="16sp"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@+id/circleImageView"/>
+					app:layout_constraintTop_toBottomOf="@+id/postDetail_image_avatar"/>
+				
+				<GridView
+					android:id="@+id/postDetail_gridview_images"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="8dp"
+					android:layout_marginEnd="16dp"
+					android:horizontalSpacing="2dp"
+					android:numColumns="3"
+					android:verticalSpacing="2dp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/postDetail_text_content"/>
 				
 				<View
 					android:id="@+id/view2"
@@ -121,7 +136,7 @@
 					android:background="@drawable/separator_background"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@+id/imageView5"/>
+					app:layout_constraintTop_toBottomOf="@+id/postDetail_image_edit"/>
 				
 				<View
 					android:id="@+id/view4"
@@ -133,10 +148,10 @@
 					android:background="@drawable/separator_background"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@+id/textView15"/>
+					app:layout_constraintTop_toBottomOf="@+id/postDetail_text_commentsCount"/>
 				
 				<TextView
-					android:id="@+id/textView11"
+					android:id="@+id/postDetail_text_publishDate"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
@@ -157,7 +172,7 @@
 					app:srcCompat="@drawable/ic_baseline_calendar_today_24"/>
 				
 				<ImageView
-					android:id="@+id/imageView5"
+					android:id="@+id/postDetail_image_edit"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -167,29 +182,29 @@
 					app:srcCompat="@drawable/ic_baseline_edit_24"/>
 				
 				<TextView
-					android:id="@+id/textView12"
+					android:id="@+id/postDetail_text_editTimes"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
 					android:text="(2)"
 					android:textSize="14sp"
-					app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-					app:layout_constraintStart_toEndOf="@+id/imageView5"
-					app:layout_constraintTop_toTopOf="@+id/imageView5"/>
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_image_edit"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_image_edit"
+					app:layout_constraintTop_toTopOf="@+id/postDetail_image_edit"/>
 				
 				<TextView
-					android:id="@+id/textView14"
+					android:id="@+id/postDetail_text_editDate"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
 					android:text="2022/05/11 23:06:21"
 					android:textSize="14sp"
-					app:layout_constraintBottom_toBottomOf="@+id/textView12"
-					app:layout_constraintStart_toEndOf="@+id/textView12"
-					app:layout_constraintTop_toTopOf="@+id/textView12"/>
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_editTimes"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_editTimes"
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_editTimes"/>
 				
 				<TextView
-					android:id="@+id/textView15"
+					android:id="@+id/postDetail_text_commentsCount"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -208,12 +223,12 @@
 					android:layout_marginStart="8dp"
 					android:text="Comments"
 					android:textSize="16sp"
-					app:layout_constraintBottom_toBottomOf="@+id/textView15"
-					app:layout_constraintStart_toEndOf="@+id/textView15"
-					app:layout_constraintTop_toTopOf="@+id/textView15"/>
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_commentsCount"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_commentsCount"
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_commentsCount"/>
 				
 				<TextView
-					android:id="@+id/textView17"
+					android:id="@+id/postDetail_text_repostsCount"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -233,7 +248,7 @@
 					android:text="Reposts"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/textView16"
-					app:layout_constraintStart_toEndOf="@+id/textView17"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_repostsCount"
 					app:layout_constraintTop_toTopOf="@+id/textView16"/>
 				
 				<TextView
@@ -244,11 +259,11 @@
 					android:text="Scores"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/textView18"
-					app:layout_constraintStart_toEndOf="@+id/textView19"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_scores"
 					app:layout_constraintTop_toTopOf="@+id/textView18"/>
 				
 				<TextView
-					android:id="@+id/textView19"
+					android:id="@+id/postDetail_text_scores"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -256,9 +271,9 @@
 					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 					android:textSize="18sp"
 					android:textStyle="bold"
-					app:layout_constraintBottom_toBottomOf="@+id/textView17"
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_repostsCount"
 					app:layout_constraintStart_toEndOf="@+id/textView18"
-					app:layout_constraintTop_toTopOf="@+id/textView17"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_repostsCount"/>
 				
 				<HorizontalScrollView
 					android:id="@+id/horizontalScrollView"
@@ -269,9 +284,10 @@
 					android:scrollbars="none"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@+id/textView10">
+					app:layout_constraintTop_toBottomOf="@+id/postDetail_gridview_images">
 					
 					<com.google.android.material.chip.ChipGroup
+						android:id="@+id/postDetail_chipGroup_tags"
 						android:layout_width="wrap_content"
 						android:layout_height="match_parent">
 						
@@ -337,6 +353,7 @@
 					app:layout_constraintTop_toBottomOf="@+id/view4">
 					
 					<androidx.appcompat.widget.AppCompatImageButton
+						android:id="@+id/postDetail_button_repost"
 						android:layout_width="48dp"
 						android:layout_height="48dp"
 						android:layout_weight="1"
@@ -346,6 +363,7 @@
 						android:src="@drawable/ic_baseline_reply_all_24"/>
 					
 					<androidx.appcompat.widget.AppCompatImageButton
+						android:id="@+id/postDetail_button_comment"
 						android:layout_width="48dp"
 						android:layout_height="48dp"
 						android:layout_weight="1"
@@ -355,7 +373,7 @@
 						android:src="@drawable/ic_baseline_comment_24"/>
 					
 					<androidx.appcompat.widget.AppCompatImageButton
-						android:id="@+id/appCompatImageButton2"
+						android:id="@+id/postDetail_button_downvote"
 						android:layout_width="48dp"
 						android:layout_height="48dp"
 						android:layout_weight="1"
@@ -365,7 +383,7 @@
 						android:src="@drawable/ic_outline_thumb_down_24"/>
 					
 					<androidx.appcompat.widget.AppCompatImageButton
-						android:id="@+id/appCompatImageButton3"
+						android:id="@+id/postDetail_button_upvote"
 						android:layout_width="48dp"
 						android:layout_height="48dp"
 						android:layout_weight="1"

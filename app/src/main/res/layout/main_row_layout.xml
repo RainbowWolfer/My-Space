@@ -22,6 +22,7 @@
 		android:layout_marginTop="8dp"
 		android:clickable="true"
 		android:contentDescription="@string/app_icon"
+		android:foreground="@drawable/round_ripple"
 		android:longClickable="true"
 		android:src="@drawable/ic_food"
 		app:civ_border_color="@color/black"
@@ -323,20 +324,6 @@
 			android:text="20"/>
 	</LinearLayout>
 	
-	<TextView
-		android:id="@+id/row_text_repostInfo"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="8dp"
-		android:layout_marginEnd="16dp"
-		android:ellipsize="end"
-		android:maxLines="1"
-		android:text="Repost From @RainbowWolfer"
-		app:layout_constraintBottom_toBottomOf="@+id/row_image_repostIcon"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@+id/main_image_repostAvatar"
-		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon"/>
-	
 	<ImageView
 		android:id="@+id/row_image_repostIcon"
 		android:layout_width="wrap_content"
@@ -347,16 +334,42 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
 	
-	<de.hdodenhof.circleimageview.CircleImageView
-		android:id="@+id/main_image_repostAvatar"
-		android:layout_width="25dp"
-		android:layout_height="25dp"
+	<LinearLayout
+		android:id="@+id/row_layout_repostInfo"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
 		android:layout_marginStart="8dp"
-		android:src="@drawable/ic_food"
-		app:civ_border_color="@color/black"
-		app:civ_border_overlay="true"
-		app:civ_border_width="0.5dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:gravity="start|center_vertical"
+		android:orientation="horizontal"
+		android:paddingStart="10dp"
+		android:paddingTop="3dp"
+		android:paddingEnd="10dp"
+		android:paddingBottom="3dp"
 		app:layout_constraintBottom_toBottomOf="@+id/row_image_repostIcon"
 		app:layout_constraintStart_toEndOf="@+id/row_image_repostIcon"
-		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon"/>
+		app:layout_constraintTop_toTopOf="@+id/row_image_repostIcon">
+		
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/main_image_repostAvatar"
+			android:layout_width="25dp"
+			android:layout_height="25dp"
+			android:src="@drawable/ic_food"
+			app:civ_border_color="@color/black"
+			app:civ_border_overlay="true"/>
+		
+		<TextView
+			android:id="@+id/row_text_repostInfo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:layout_marginEnd="0dp"
+			android:ellipsize="end"
+			android:maxLines="1"
+			android:text="Repost From @RainbowWolfer"/>
+	
+	</LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

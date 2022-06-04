@@ -1,5 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.util
 
+import android.content.Context
+import android.graphics.Rect
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
@@ -101,6 +108,20 @@ class EasyFunctions {
 			return byteBuffer.toByteArray()
 		}
 		
-		
+		@JvmStatic
+		fun AppCompatActivity.setAutoClearEditTextFocus(event: MotionEvent) {
+			if (event.action == MotionEvent.ACTION_DOWN) {
+				val v = currentFocus
+				if (v is EditText || v is TextInputLayout) {
+					val outRect = Rect()
+					v.getGlobalVisibleRect(outRect)
+					if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+						v.clearFocus()
+						val imm = getSystemService(InputMethodManager::class.java)
+						imm.hideSoftInputFromWindow(v.windowToken, 0)
+					}
+				}
+			}
+		}
 	}
 }

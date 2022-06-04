@@ -26,5 +26,13 @@
 	
 	<color name="contrast_fab">#fff</color>
 	
-	
+	<color name="color1">#123456</color>
+	<color name="color2">#7987E3</color>
+	<color name="color3">#5829A4</color>
+	<color name="color4">#95C248</color>
+	<color name="color5">#7DE118</color>
+	<color name="color6">#CC5867</color>
+	<color name="color7">#F7990C</color>
+	<color name="color8">#9D9F78</color>
+	<color name="color9">#2DE7B5</color>
 </resources>
