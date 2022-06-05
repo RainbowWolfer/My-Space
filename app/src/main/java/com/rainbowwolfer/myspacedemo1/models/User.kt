@@ -12,12 +12,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
-	@SerializedName("ID") override var id: String,
+	@SerializedName("ID") var id: String,
 	@SerializedName("Username") var username: String,
 	@SerializedName("Password") var password: String = "",
 	@SerializedName("Email") var email: String,
 	@SerializedName("ProfileDescription") val profileDescription: String
-) : Parcelable, DatabaseID {
+) : Parcelable, DatabaseID<String> {
 	companion object : GenerateDefault<User> {
 		@JvmStatic
 		override fun generateDefault(): User {
@@ -41,4 +41,6 @@ data class User(
 			)
 		}
 	}
+	
+	override fun getDatabaseID(): String = id
 }

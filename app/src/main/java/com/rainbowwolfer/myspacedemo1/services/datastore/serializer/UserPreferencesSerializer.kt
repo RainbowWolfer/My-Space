@@ -1,4 +1,4 @@
-package com.rainbowwolfer.myspacedemo1.services.serializer
+package com.rainbowwolfer.myspacedemo1.services.datastore.serializer
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer

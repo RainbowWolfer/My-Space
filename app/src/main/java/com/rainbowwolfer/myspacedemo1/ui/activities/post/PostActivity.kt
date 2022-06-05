@@ -3,8 +3,8 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.post
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doAfterTextChanged
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
@@ -32,6 +31,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityPostBinding
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetTagInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutPostImageViewBinding
+import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
@@ -47,28 +47,45 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.FileNotFoundException
 import java.io.InputStream
 
 
 class PostActivity : AppCompatActivity() {
 	companion object {
+		const val ARGS_DRAFT = "draft"
 		private const val MAX_LINES = 15
 		private const val MAX_CHARACTERS = 300
-		
 	}
 	
 	private val binding: ActivityPostBinding by viewBinding()
 	private val viewModel: PostActivityViewModel by viewModels()
 	private val application = MySpaceApplication.instance
 	
+	private var draft: Draft? = null
+	
 	private val imageSelectIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 		val uri = result.data?.data ?: return@registerForActivityResult
-		val fileName = uri.pathSegments.last()
-		val ext = fileName.substring(fileName.lastIndexOf("."))
-		val iStream: InputStream? = contentResolver.openInputStream(uri)
-		val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
-		val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-		viewModel.addImage(Triple(bitmap, bytes, ext))
+		val info = loadImageFromURI(uri)
+		viewModel.addImage(info)
+	}
+	
+	private fun loadImageFromURI(uri: Uri): PostActivityViewModel.ImageInfo? {
+		println("URI: $uri")
+		return try {
+			val fileName = uri.pathSegments.last()
+			val ext = fileName.substring(fileName.lastIndexOf("."))
+			val iStream: InputStream? = contentResolver.openInputStream(uri)
+			val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
+			val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+			PostActivityViewModel.ImageInfo(uri, bitmap, bytes, ext)
+		} catch (ex: FileNotFoundException) {
+			ex.printStackTrace()
+			null
+		} catch (ex: NoSuchElementException) {
+			ex.printStackTrace()
+			null
+		}
 	}
 	
 	@SuppressLint("SetTextI18n")
@@ -76,8 +93,14 @@ class PostActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(binding.root)
 		
+		draft = intent.getParcelableExtra(ARGS_DRAFT)
+		if (draft != null) {
+			binding.initializeWithDraft(draft!!)
+			println("Initialized with : $draft")
+		}
+		
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.title = "New Post"
+		supportActionBar?.title = if (draft == null) "New Post" else "Saved Draft"
 		
 		binding.postEditTextContent.hint = resources.getString(
 			arrayListOf(
@@ -129,6 +152,7 @@ class PostActivity : AppCompatActivity() {
 			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 			
 			override fun afterTextChanged(s: Editable?) {
+				binding.postEditTextContent.error = null
 				val editText = binding.postEditTextContent
 				editText.removeTextChangedListener(this)
 				if (editText.lineCount > MAX_LINES) {
@@ -205,6 +229,38 @@ class PostActivity : AppCompatActivity() {
 		binding.postAutoTextReply.setAdapter(ArrayAdapter(this, R.layout.dropdown_text_item, resources.getStringArray(R.array.reply_visiblities)))
 	}
 	
+	private fun ActivityPostBinding.initializeWithDraft(draft: Draft) {
+		with(viewModel) {
+			content.value = draft.textContent
+			tags.value = ArrayList(draft.getTagsList())
+			postVisibility.value = draft.postVisibility
+			replyVisiblity.value = draft.replyLimit
+		}
+		
+		postEditTextContent.setText(draft.textContent)
+		
+		postAutoTextVisibility.setText(
+			resources.getStringArray(R.array.post_visiblities)[when (draft.postVisibility) {
+				PostVisibility.All -> 0
+				PostVisibility.Follower -> 1
+				PostVisibility.None -> 2
+			}]
+		)
+		
+		postAutoTextReply.setText(
+			resources.getStringArray(R.array.reply_visiblities)[when (draft.replyLimit) {
+				PostVisibility.All -> 0
+				PostVisibility.Follower -> 1
+				PostVisibility.None -> 2
+			}]
+		)
+		
+		for (uri in draft.getImagesUri()) {
+			val info = loadImageFromURI(uri)
+			viewModel.addImage(info)
+		}
+	}
+	
 	private fun showDialog() {
 		BottomSheetDialog(this, R.style.CustomizedBottomDialogStyle).apply {
 			setOnShowListener {
@@ -255,7 +311,7 @@ class PostActivity : AppCompatActivity() {
 		}
 	}
 	
-	private fun updateTags(tags: ArrayList<String>) {
+	private fun updateTags(tags: List<String>) {
 		binding.postChipsTags.removeAllViews()
 		
 		for (tag in tags) {
@@ -291,7 +347,7 @@ class PostActivity : AppCompatActivity() {
 	}
 	
 	@SuppressLint("SetTextI18n")
-	private fun updateImages(array: Array<Triple<Bitmap, ByteArray, String>?>) {
+	private fun updateImages(array: Array<PostActivityViewModel.ImageInfo?>) {
 		if (array.size < 9) {
 			throw Exception("how could this be possible?")
 		}
@@ -321,7 +377,7 @@ class PostActivity : AppCompatActivity() {
 		binding.post33.update(array, 8)
 	}
 	
-	private fun LayoutPostImageViewBinding.update(array: Array<Triple<Bitmap, ByteArray, String>?>, index: Int) {
+	private fun LayoutPostImageViewBinding.update(array: Array<PostActivityViewModel.ImageInfo?>, index: Int) {
 		if (index !in array.indices) {
 			System.err.println("Index is out of bound")
 			return
@@ -339,60 +395,109 @@ class PostActivity : AppCompatActivity() {
 		} else {
 			this.postImageViewButtonAdd.visibility = View.GONE
 			this.postImageViewLayoutImageRoot.visibility = View.VISIBLE
-			this.postImageViewImage.setImageBitmap(array[index]!!.first)
+			this.postImageViewImage.setImageBitmap(array[index]!!.bitmap)
 			this.postImageViewImage.tag = index
 		}
 	}
 	
-	
 	private fun complete(send: Boolean) {
-		CoroutineScope(Dispatchers.Main).launch {
-			val dialog = LoadingDialog(this@PostActivity).apply {
-				showDialog("Posting...")
-			}
-			withContext(Dispatchers.IO) {
-				try {
-					val post = PostResult(
-						application.currentUser.value!!.id,
-						viewModel.getContent(),
-						viewModel.getByteArrays(),
-						viewModel.getExtensions(),
-						viewModel.postVisibility.value!!,
-						viewModel.replyVisiblity.value!!,
-						viewModel.tags.value!!
-					)
-					val multipartTypedOutput = arrayListOf<MultipartBody.Part>()
-					
-					for (index in post.images.indices) {
-						if (post.images[index] == null) {
-							continue
+		//check content valid
+		if (viewModel.getContent().length < 5) {
+			binding.postEditTextContent.error = "Least 5 characters are needed"
+			binding.postEditTextContent.requestFocus()
+			return
+		}
+		
+		AlertDialog.Builder(this).apply {
+			setTitle(if (send) "Send" else "Save as Draft")
+			setMessage("Are you sure to ${if (send) "send this post" else "save current post as a draft"}?")
+			setNegativeButton("No", null)
+			setPositiveButton("Yes") { _, _ ->
+				if (send) {
+					CoroutineScope(Dispatchers.Main).launch {
+						val dialog = LoadingDialog(this@PostActivity).apply {
+							showDialog("Posting...")
 						}
-						val image = post.images[index]!!.toRequestBody("multipart/form-data".toMediaType())
-						multipartTypedOutput.add(MultipartBody.Part.createFormData("post_images", "$index${post.extensions[index]}", image))
+						withContext(Dispatchers.IO) {
+							try {
+								val post = PostResult(
+									application.currentUser.value!!.id,
+									viewModel.getContent(),
+									viewModel.getByteArrays(),
+									viewModel.getExtensions(),
+									viewModel.postVisibility.value!!,
+									viewModel.replyVisiblity.value!!,
+									viewModel.tags.value!!
+								)
+								val multipartTypedOutput = arrayListOf<MultipartBody.Part>()
+								
+								for (index in post.images.indices) {
+									if (post.images[index] == null) {
+										continue
+									}
+									val image = post.images[index]!!.toRequestBody("multipart/form-data".toMediaType())
+									multipartTypedOutput.add(MultipartBody.Part.createFormData("post_images", "$index${post.extensions[index]}", image))
+								}
+								
+								val contentBody = post.content.toRequestBody("text/plain".toMediaType())
+								val publisherIDBody = post.publisherID.toRequestBody("text/plain".toMediaType())
+								val postVisibility = post.visibility.ordinal.toString().toRequestBody("text/plain".toMediaType())
+								val replyVisibility = post.replyLimit.ordinal.toString().toRequestBody("text/plain".toMediaType())
+								val tags = post.tags.joinToString("&#10;").toRequestBody("text/plain".toMediaType())
+								
+								val response = RetrofitInstance.api_postMultipart.post(
+									publisherIDBody, contentBody, postVisibility, replyVisibility, tags, multipartTypedOutput
+								)
+								kotlin.runCatching {
+									println(response.string())
+								}
+								
+							} catch (ex: Exception) {
+								ex.printStackTrace()
+							}
+						}
+						dialog.hideDialog()
 					}
-					
-					val contentBody = post.content.toRequestBody("text/plain".toMediaType())
-					val publisherIDBody = post.publisherID.toRequestBody("text/plain".toMediaType())
-					val postVisibility = post.visibility.ordinal.toString().toRequestBody("text/plain".toMediaType())
-					val replyVisibility = post.replyLimit.ordinal.toString().toRequestBody("text/plain".toMediaType())
-					val tags = post.tags.joinToString("&#10;").toRequestBody("text/plain".toMediaType())
-					
-					val response = RetrofitInstance.api_postMultipart.post(
-						publisherIDBody, contentBody, postVisibility, replyVisibility, tags, multipartTypedOutput
-					)
-					kotlin.runCatching {
-						println(response.string())
+				} else {//save to draft
+					if (draft == null) {
+						val new = Draft(
+							0,
+							application.currentUser.value!!.id,
+							"2022/06/06 11:11:11",
+							viewModel.getContent(),
+							viewModel.postVisibility.value!!,
+							viewModel.replyVisiblity.value!!,
+							Draft.convertTags(viewModel.tags.value!!),
+							Draft.convertImagesURI(viewModel.getNotNullURIs())
+						)
+						CoroutineScope(Dispatchers.IO).launch {
+							application.roomRepository.insert(new)
+						}
+					} else {
+						val new = Draft(
+							draft!!.id,
+							application.currentUser.value!!.id,
+							"2022/06/06 11:11:11",
+							viewModel.getContent(),
+							viewModel.postVisibility.value!!,
+							viewModel.replyVisiblity.value!!,
+							Draft.convertTags(viewModel.tags.value!!),
+							Draft.convertImagesURI(viewModel.getNotNullURIs())
+						)
+						CoroutineScope(Dispatchers.IO).launch {
+							application.roomRepository.update(new)
+						}
 					}
-					
-				} catch (ex: Exception) {
-					ex.printStackTrace()
+				}
+				
+				SuccessBackDialog(this@PostActivity).showDialog {
+					finish()
 				}
 			}
-			dialog.hideDialog()
+			create()
+			show()
 		}
-		SuccessBackDialog(this).showDialog {
-			finish()
-		}
+		
 	}
 	
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {

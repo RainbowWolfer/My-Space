@@ -10,11 +10,11 @@ import kotlin.random.Random
 
 @Parcelize
 data class MessageItem(
-	override val id: String,
+	val id: String,
 	val content: String,
 	val datetime: Calendar,
 	val isSelf: Boolean,
-) : Parcelable, DatabaseID {
+) : Parcelable, DatabaseID<String> {
 	companion object : GenerateDefault<MessageItem> {
 		override fun generateDefault(): MessageItem {
 			return MessageItem(
@@ -26,4 +26,5 @@ data class MessageItem(
 		}
 	}
 	
+	override fun getDatabaseID(): String = id
 }

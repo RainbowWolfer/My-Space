@@ -83,7 +83,7 @@
 	<fragment
 		android:id="@+id/nav_drafts"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.drafts.DraftsFragment"
-		android:label="fragment_drafts"
+		android:label="Drafts"
 		tools:layout="@layout/fragment_drafts"/>
 
 </navigation>

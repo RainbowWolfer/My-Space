@@ -1,13 +1,21 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.post
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 
 class PostActivityViewModel : ViewModel() {
+	class ImageInfo(
+		val uri: Uri,
+		val bitmap: Bitmap,
+		val bytes: ByteArray,
+		val extension: String,
+	)
+	
 	val content: MutableLiveData<String> by lazy { MutableLiveData("") }
-	val images: MutableLiveData<Array<Triple<Bitmap, ByteArray, String>?>> by lazy { MutableLiveData(arrayOfNulls(9)) }
+	val images: MutableLiveData<Array<ImageInfo?>> by lazy { MutableLiveData(arrayOfNulls(9)) }
 	
 	val postVisibility: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
 	val replyVisiblity: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
@@ -43,25 +51,35 @@ class PostActivityViewModel : ViewModel() {
 	fun getImages() = images.value!!
 	fun getContent() = content.value!!
 	
+	fun getURIs(): List<Uri?> {
+		return images.value!!.map {
+			it?.uri
+		}
+	}
+	
+	fun getNotNullURIs(): List<Uri> {
+		return getURIs().filterNotNull()
+	}
+	
 	fun getBitmaps(): List<Bitmap?> {
 		return images.value!!.map {
-			it?.first
+			it?.bitmap
 		}
 	}
 	
 	fun getByteArrays(): List<ByteArray?> {
 		return images.value!!.map {
-			it?.second
+			it?.bytes
 		}
 	}
 	
 	fun getExtensions(): List<String?> {
 		return images.value!!.map {
-			it?.third
+			it?.extension
 		}
 	}
 	
-	private fun setImages(array: Array<Triple<Bitmap, ByteArray, String>?>) {
+	private fun setImages(array: Array<ImageInfo?>) {
 		images.value = array
 	}
 	
@@ -79,13 +97,16 @@ class PostActivityViewModel : ViewModel() {
 //		setImages(clone)
 //	}
 	
-	private fun Array<Triple<Bitmap, ByteArray, String>?>.sortImages() {
+	private fun Array<ImageInfo?>.sortImages() {
 		this.sortWith(compareBy(nullsFirst()) {
 			it == null
 		})
 	}
 	
-	fun addImage(image: Triple<Bitmap, ByteArray, String>) {
+	fun addImage(image: ImageInfo?) {
+		if (image == null) {
+			return
+		}
 		val index = getImages().indexOfFirst {
 			it == null
 		}

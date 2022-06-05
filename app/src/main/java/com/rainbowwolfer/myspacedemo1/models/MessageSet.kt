@@ -9,10 +9,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MessageSet(
-	override val id: String,
+	val id: String,
 	val sender: User,
 	val messages: ArrayList<MessageItem>,
-) : Parcelable, DatabaseID {
+) : Parcelable, DatabaseID<String> {
 	companion object : GenerateDefault<MessageSet> {
 		override fun generateDefault(): MessageSet {
 			return MessageSet(
@@ -29,4 +29,5 @@ data class MessageSet(
 		}
 	}
 	
+	override fun getDatabaseID(): String = id
 }

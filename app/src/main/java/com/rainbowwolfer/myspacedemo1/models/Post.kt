@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Post(
 	//essential
-	@SerializedName("ID") override val id: String,
+	@SerializedName("ID") val id: String,
 	@SerializedName("PublisherID") val publisherID: String,
 	@SerializedName("PublishDate") val publishDateTime: String,
 	@SerializedName("EditDate") val editDateTime: String,
@@ -53,7 +53,9 @@ data class Post(
 	//------------
 	@SerializedName("Score") val score: Int,//upvotes - downvotes
 	@SerializedName("Voted") val voted: Int,//whether user had voted (depends on query)
-) : Parcelable, DatabaseID {
+) : Parcelable, DatabaseID<String> {
+	override fun getDatabaseID(): String = id
+	
 	fun getPublisher(): User {
 		return User(
 			id = publisherID,

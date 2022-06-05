@@ -1,11 +1,11 @@
-package com.rainbowwolfer.myspacedemo1.services.repositories
+package com.rainbowwolfer.myspacedemo1.services.datastore.repositories
 
 import android.content.Context
 import android.text.TextUtils
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.rainbowwolfer.myspacedemo1.UserPreferences
-import com.rainbowwolfer.myspacedemo1.services.serializer.UserPreferencesSerializer
+import com.rainbowwolfer.myspacedemo1.services.datastore.serializer.UserPreferencesSerializer
 import kotlinx.coroutines.flow.Flow
 
 class UserPreferencesRepository(

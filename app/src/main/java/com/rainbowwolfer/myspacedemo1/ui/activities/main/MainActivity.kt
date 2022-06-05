@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -135,8 +136,10 @@ class MainActivity : AppCompatActivity() {
 				setMessage("Are you sure to sign out?")
 				setNegativeButton("No", null)
 				setPositiveButton("Yes") { _, _ ->
-					application.clearCurrent()
 					binding.navView.menu.findItem(R.id.item_home).isChecked = true
+					navController.popBackStack(R.id.item_home, true)
+					navController.navigate(R.id.item_home)
+					application.clearCurrent()
 					CoroutineScope(Dispatchers.Main).launch {
 						application.userPreferencesRepository.clearUser()
 					}

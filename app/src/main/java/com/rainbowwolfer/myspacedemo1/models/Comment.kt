@@ -5,20 +5,19 @@ import com.google.gson.annotations.SerializedName
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import kotlinx.parcelize.Parcelize
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 @Parcelize
 data class Comment(
-	@SerializedName("ID") override val id: String,
+	@SerializedName("ID") val id: String,
 	@SerializedName("UserID") val userID: String,
 	@SerializedName("PostID") val postID: String,
 	@SerializedName("TextContent") val textContent: String,
 	@SerializedName("DateTime") val datetime: String,
 	@SerializedName("Upvotes") val upvotes: Int,
 	@SerializedName("Downvotes") val downvotes: Int,
-) : Parcelable, DatabaseID {
+) : Parcelable, DatabaseID<String> {
 	companion object {
 		@JvmStatic
 		fun getTestList(count: Int = 0): ArrayList<Comment> {
@@ -39,4 +38,6 @@ data class Comment(
 			return list
 		}
 	}
+	
+	override fun getDatabaseID(): String = id
 }

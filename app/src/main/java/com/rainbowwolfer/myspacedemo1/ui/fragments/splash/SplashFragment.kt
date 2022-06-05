@@ -1,6 +1,5 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.splash
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +12,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentSplashBinding
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.services.repositories.UserPreferencesRepository.Companion.hasValue
+import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasValue
 import kotlinx.coroutines.*
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {

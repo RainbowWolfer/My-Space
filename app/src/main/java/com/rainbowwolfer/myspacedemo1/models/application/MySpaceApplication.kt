@@ -13,12 +13,11 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.services.repositories.UserPreferencesRepository
+import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
+import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
+import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 
 class MySpaceApplication : Application() {
@@ -32,6 +31,11 @@ class MySpaceApplication : Application() {
 	init {
 		instance = this
 	}
+	
+	val applicationScope = CoroutineScope(SupervisorJob())
+	
+	private val room by lazy { AppDatabase.getDatabase(this) }
+	val roomRepository by lazy { AppRoomRepository(room.draftsDao()) }
 	
 	val userPreferencesRepository = UserPreferencesRepository(this)
 	
