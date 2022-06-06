@@ -18,4 +18,10 @@ class DraftsFragmentViewModel : ViewModel() {
 	fun insert(word: Draft) = viewModelScope.launch {
 		repository.insert(word)
 	}
+	
+	fun getSearched(content: String): List<Draft> {
+		return allDrafts.value?.filter {
+			it.textContent.contains(content, true)
+		} ?: emptyList()
+	}
 }

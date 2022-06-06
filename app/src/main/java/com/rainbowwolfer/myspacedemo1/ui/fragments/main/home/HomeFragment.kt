@@ -59,7 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private val viewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
-	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext()) }
+	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner) }
 	
 	private var isLoading = false
 

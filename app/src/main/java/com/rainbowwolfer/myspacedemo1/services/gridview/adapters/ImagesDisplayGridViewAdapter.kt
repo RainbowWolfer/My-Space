@@ -10,18 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.GridView
+import androidx.lifecycle.LifecycleOwner
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutImageDisplayGridviewItemBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.updateImage
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImages
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.imagesdisplay.ImagesDisplayActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 class ImagesDisplayGridViewAdapter(
@@ -68,29 +66,29 @@ class ImagesDisplayGridViewAdapter(
 		}
 		
 		@JvmStatic
-		fun loadImages(gridView: GridView, post: Post) {
+		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner) {
 			val application = MySpaceApplication.instance
 			CoroutineScope(Dispatchers.Main).launch {
 				val adapter = gridView.adapter as ImagesDisplayGridViewAdapter
 				try {
-					val list = adapter.list.toMutableList()
 					for (index in 0 until post.imagesCount) {
-						var image = application.postImagesPool.getImage(post.id, index)
-						if (image == null) {
-							withContext(Dispatchers.IO) {
-								val response = RetrofitInstance.api.getPostImage(post.id, index)
-								val bitmap = BitmapFactory.decodeStream(response.byteStream())
-								application.postImagesPool.updateImage(post.id, bitmap, index)
+						val list = adapter.list.toMutableList()
+						val image = application.postImagesPool.getImage(post.id, index) ?: continue
+						if (image.hasValue()) {
+							list[index] = Pair(image.bitmap.value, null)
+							adapter.setData(list)
+						} else {
+							image.load()
+							image.bitmap.observe(lifecycleOwner) {
+								list[index] = Pair(it, null)
+								adapter.setData(list)
 							}
-							image = application.postImagesPool.getImage(post.id, index) ?: continue
 						}
-						list[index] = Pair(image, null)
-						adapter.setData(list)
 					}
 				} catch (ex: Exception) {
 					ex.printStackTrace()
 				}
-			}
+			}.ensureActive()
 		}
 	}
 	
@@ -116,7 +114,7 @@ class ImagesDisplayGridViewAdapter(
 		} else if (list[position].second != null) {
 			val color = ColorDrawable(list[position].second!!)
 			holder.binding.gridViewItemImageDisplay.setImageDrawable(color)
-			println("$position : ${color.alpha}")
+//			println("$position : ${color.alpha}")
 			if (color.alpha < 200) {
 				holder.binding.gridViewItemImageDisplay.visibility = View.INVISIBLE
 			}

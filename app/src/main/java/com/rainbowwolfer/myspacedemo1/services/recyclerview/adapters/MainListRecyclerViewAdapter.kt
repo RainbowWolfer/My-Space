@@ -14,6 +14,7 @@ import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,7 @@ import kotlinx.coroutines.withContext
 
 class MainListRecyclerViewAdapter(
 	private val context: Context,
+	private val lifecycleOwner: LifecycleOwner,
 ) : RecyclerView.Adapter<MainListRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
@@ -275,7 +277,7 @@ class MainListRecyclerViewAdapter(
 		if (post.isRepost) {
 			val origin = post.getOriginPost()!!
 			this.rowTextPublishDateTime.text = origin.publishDateTime
-			this.rowTextContent.text = origin.textContent
+			this.rowTextContent.text = "${post.id}_${post.originPostID}" + origin.textContent
 			this.mainTextRepost.text = post.textContent
 			this.rowTextRepostInfo.text = "Repost From @${post.publisherUsername}"
 			//avatar
@@ -284,7 +286,7 @@ class MainListRecyclerViewAdapter(
 			}
 		} else {
 			this.rowTextPublishDateTime.text = post.publishDateTime
-			this.rowTextContent.text = post.textContent
+			this.rowTextContent.text = "${post.id}_${post.originPostID}" + post.textContent
 		}
 	}
 	
@@ -320,7 +322,8 @@ class MainListRecyclerViewAdapter(
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		loadImages(this.rowGridviewImages, post)
+		println("loading post of " + post.id)
+		loadImages(this.rowGridviewImages, post, lifecycleOwner)
 	}
 	
 	fun setData(newPersonList: List<Post>) {

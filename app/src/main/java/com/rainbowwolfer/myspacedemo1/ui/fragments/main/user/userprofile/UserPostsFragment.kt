@@ -17,7 +17,7 @@ class UserPostsFragment : Fragment(R.layout.fragment_user_posts) {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		val adapter = MainListRecyclerViewAdapter(requireContext()).also {
+		val adapter = MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner).also {
 			it.enableAvatarClicking = false
 		}
 		

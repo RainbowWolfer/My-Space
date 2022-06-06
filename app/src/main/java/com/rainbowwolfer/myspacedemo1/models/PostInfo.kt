@@ -1,16 +1,24 @@
 package com.rainbowwolfer.myspacedemo1.models
 
 import android.graphics.Bitmap
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 
 class PostInfo(
 	val id: String,
 	var post: Post,
-	val images: Array<Bitmap?> = arrayOfNulls(MySpaceApplication.IMAGES_COUNT_PER_POST),
-	var originPosts: Post? = null,
 ) {
+	var originPost: Post? = null
+	val images: Array<BitmapLoader>
+	
+	init {
+		val list = arrayListOf<BitmapLoader>()
+		for (index in 0 until post.imagesCount) {
+			list.add(BitmapLoader(post.id, index))
+		}
+		images = list.toTypedArray()
+	}
+	
 	override fun toString(): String {
-		return "PostInfo(id: $id, images_count: ${images.filterNotNull().size}, post:$post)"
+		return "PostInfo(id: $id, images_count: ${images.size}, post:$post)"
 	}
 	
 	companion object {
@@ -28,18 +36,18 @@ class PostInfo(
 				this.add(PostInfo(post.id, post))
 			}
 		}
+
+//		@JvmStatic
+//		fun ArrayList<PostInfo>.updateImage(id: String, bitmap: Bitmap?, index: Int) {
+//			val found = this.findPostInfo(id) ?: return
+//			if (index !in found.images.indices) {
+//				return
+//			}
+//			found.images[index]?. = bitmap
+//		}
 		
 		@JvmStatic
-		fun ArrayList<PostInfo>.updateImage(id: String, bitmap: Bitmap?, index: Int) {
-			val found = this.findPostInfo(id) ?: return
-			if (index !in found.images.indices) {
-				return
-			}
-			found.images[index] = bitmap
-		}
-		
-		@JvmStatic
-		fun ArrayList<PostInfo>.getImage(id: String, index: Int): Bitmap? {
+		fun ArrayList<PostInfo>.getImage(id: String, index: Int): BitmapLoader? {
 			val found = this.findPostInfo(id) ?: return null
 			if (index !in found.images.indices) {
 				return null
@@ -50,7 +58,9 @@ class PostInfo(
 		@JvmStatic
 		fun ArrayList<PostInfo>.getImages(id: String): List<Bitmap> {
 			val found = this.findPostInfo(id) ?: return emptyList()
-			return found.images.filterNotNull()
+			return found.images.mapNotNull {
+				it.bitmap.value
+			}
 		}
 	}
 }
