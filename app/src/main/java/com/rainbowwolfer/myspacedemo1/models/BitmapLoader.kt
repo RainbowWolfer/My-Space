@@ -7,6 +7,7 @@ import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 
 class BitmapLoader(
 	private val postID: String,
@@ -21,21 +22,22 @@ class BitmapLoader(
 	private var isLoading = false
 	val bitmap: MutableLiveData<Bitmap?> by lazy { MutableLiveData(null) }
 	
-	
+	private var response: ResponseBody? = null
 	suspend fun load() {
-		if (isLoading) {
+		if (isLoading && response == null) {
 			return
 		}
 		isLoading = true
 		var decodeBitmap: Bitmap
 		withContext(Dispatchers.IO) {
-			val response = RetrofitInstance.api.getPostImage(postID, index)
-			decodeBitmap = BitmapFactory.decodeStream(response.byteStream())
+			response = RetrofitInstance.api.getPostImage(postID, index)
+			decodeBitmap = BitmapFactory.decodeStream(response!!.byteStream())
+			isLoading = false
+			response = null
 		}
 		withContext(Dispatchers.Main) {
 			bitmap.value = decodeBitmap
 		}
-		isLoading = false
 	}
 	
 	fun hasValue(): Boolean = bitmap.value != null && !isLoading

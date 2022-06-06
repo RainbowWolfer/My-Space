@@ -224,11 +224,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					val response: Response<List<Post>>
 					withContext(Dispatchers.IO) {
 						response = RetrofitInstance.api.getPosts(
-							application.currentUser.value?.email ?: "",
-							application.currentUser.value?.password ?: "",
-							viewModel.listOffset.value!!,
-							viewModel.postsLimit.value!!,
-							viewModel.randomSeed.value!!,
+							email = application.currentUser.value?.email ?: "",
+							password = application.currentUser.value?.password ?: "",
+							offset = viewModel.listOffset.value!!,
+							postsLimit = viewModel.postsLimit.value!!,
+							seed = viewModel.randomSeed.value!!,
 						)
 						if (response.isSuccessful) {
 							newList = response.body()!!

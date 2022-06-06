@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutImageDisplayGridviewItemBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImages
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication

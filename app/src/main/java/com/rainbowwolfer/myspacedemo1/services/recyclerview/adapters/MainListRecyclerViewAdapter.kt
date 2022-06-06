@@ -84,6 +84,9 @@ class MainListRecyclerViewAdapter(
 		if (holder is RowViewHolder) {
 			val post = postsList[position]
 			application.postImagesPool.addPost(post)
+			if (post.isRepost) {
+				application.postImagesPool.addPost(post.getOriginPost()!!)
+			}
 			
 			holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
 			holder.binding.rowGridviewImages.isEnabled = false
@@ -317,12 +320,14 @@ class MainListRecyclerViewAdapter(
 	
 	private fun MainRowLayoutBinding.loadImages(post: Post) {
 		this.rowGridviewImages.presetGridViewHeight(post.imagesCount)
+		if (post.imagesCount == 0) {
+			return
+		}
 		val colors = ImagesDisplayGridViewAdapter.getShuffledColorLists(context, post.imagesCount)
 		
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		println("loading post of " + post.id)
 		loadImages(this.rowGridviewImages, post, lifecycleOwner)
 	}
 	
