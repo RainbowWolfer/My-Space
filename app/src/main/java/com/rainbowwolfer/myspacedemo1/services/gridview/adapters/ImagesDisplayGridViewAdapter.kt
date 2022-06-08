@@ -3,7 +3,6 @@ package com.rainbowwolfer.myspacedemo1.services.gridview.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -14,14 +13,10 @@ import androidx.lifecycle.LifecycleOwner
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutImageDisplayGridviewItemBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
-import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImages
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.imagesdisplay.ImagesDisplayActivity
 import kotlinx.coroutines.*
-import kotlin.time.Duration.Companion.seconds
 
 class ImagesDisplayGridViewAdapter(
 	context: Context,
@@ -74,7 +69,7 @@ class ImagesDisplayGridViewAdapter(
 				try {
 					for (index in 0 until post.imagesCount) {
 						val list = adapter.list.toMutableList()
-						val image = application.postImagesPool.getImage(post.id, index) ?: continue
+						val image = application.postsPool.getImage(post.id, index) ?: continue
 						if (image.hasValue()) {
 							list[index] = Pair(image.bitmap.value, null)
 							adapter.setData(list)

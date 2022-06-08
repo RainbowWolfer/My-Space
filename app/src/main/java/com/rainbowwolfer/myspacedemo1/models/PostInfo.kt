@@ -9,6 +9,11 @@ class PostInfo(
 	var originPost: Post? = null
 	val images: Array<BitmapLoader>
 	
+	//true  ->  voted up
+	//false ->  voted down
+	//null  ->  nothing
+	var vote: Boolean? = null
+	
 	init {
 		val list = arrayListOf<BitmapLoader>()
 		for (index in 0 until post.imagesCount) {

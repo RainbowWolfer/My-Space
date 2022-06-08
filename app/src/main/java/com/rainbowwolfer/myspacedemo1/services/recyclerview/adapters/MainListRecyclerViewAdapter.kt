@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -23,19 +24,25 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetCommentInputBinding
+import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetRepostInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutEndBinding
+import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
+import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.loadImages
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +56,82 @@ class MainListRecyclerViewAdapter(
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
 		const val ITEM_TYPE_END = 2
+		
+		@JvmStatic
+		fun showRepostDialog(context: Context, post: Post) {
+			val application = MySpaceApplication.instance
+			if (!application.hasLoggedIn()) {
+				return
+			}
+			BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
+				setOnShowListener {
+					Handler(Looper.getMainLooper()).post {
+						val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetCommentDialog_root) as? FrameLayout?
+						bottomSheet?.let {
+							with(BottomSheetBehavior.from(it)) {
+								skipCollapsed = true
+								state = BottomSheetBehavior.STATE_EXPANDED
+							}
+						}
+					}
+				}
+				setCanceledOnTouchOutside(true)
+				show()
+				
+				val binding = BottomSheetRepostInputBinding.inflate(LayoutInflater.from(context))
+				setContentView(binding.root)
+				
+				val imm = context.getSystemService(InputMethodManager::class.java)
+				imm?.showSoftInput(binding.bottomSheetRepostDialogInput, InputMethodManager.SHOW_FORCED)
+				binding.bottomSheetRepostDialogInput.requestFocus()
+				
+				binding.bottomSheetRepostDialogButtonSend.isEnabled = false
+				binding.bottomSheetRepostDialogButtonBack.setOnClickListener {
+					this.dismiss()
+					this.hide()
+				}
+				binding.bottomSheetRepostDialogEditText.doAfterTextChanged {
+					binding.bottomSheetRepostDialogButtonSend.isEnabled = !it.isNullOrEmpty() && it.length <= 200
+				}
+				
+				binding.bottomSheetRepostDialogButtonSend.setOnClickListener {
+					CoroutineScope(Dispatchers.Main).launch {
+						val dialog = LoadingDialog(context).apply {
+							showDialog("Reposting")
+						}
+						try {
+							withContext(Dispatchers.IO) {
+								RetrofitInstance.api.repost(
+									NewRepost(
+										originPostID = post.id,
+										publisherID = application.currentUser.value!!.id,
+										textContent = binding.bottomSheetRepostDialogEditText.text?.toString() ?: "",
+										postVisibility = PostVisibility.All,
+										replyLimit = PostVisibility.All,
+										tags = listOf("tag1", "tag2", "tag3"),
+										email = application.currentUser.value!!.email,
+										password = application.currentUser.value!!.password,
+									)
+								)
+							}
+							
+							val found = application.postsPool.findPostInfo(post.id)?.post
+							if (found != null) {
+								found.reposts += 1
+//								setMetas(found)
+							}
+						} catch (ex: Exception) {
+							ex.printStackTrace()
+						} finally {
+							dialog.hideDialog()
+							this@apply.dismiss()
+							this@apply.hide()
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	abstract class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -83,9 +166,9 @@ class MainListRecyclerViewAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
 			val post = postsList[position]
-			application.postImagesPool.addPost(post)
+			application.postsPool.addPost(post)
 			if (post.isRepost) {
-				application.postImagesPool.addPost(post.getOriginPost()!!)
+				application.postsPool.addPost(post.getOriginPost()!!)
 			}
 			
 			holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
@@ -116,7 +199,10 @@ class MainListRecyclerViewAdapter(
 						R.id.item_share -> {
 							val sharedIntent = Intent().apply {
 								this.action = Intent.ACTION_SEND
-								this.putExtra(Intent.EXTRA_TEXT, "This is a test")
+								this.putExtra(
+									Intent.EXTRA_TEXT,
+									"Publisher: ${post.publisherUsername}\nDate: ${post.publishDateTime}\n${post.textContent}"
+								)
 								this.type = "text/plain"
 							}
 							context.startActivity(sharedIntent)
@@ -166,29 +252,61 @@ class MainListRecyclerViewAdapter(
 	
 	private fun MainRowLayoutBinding.setButtons(post: Post) {
 		this.rowLayoutRepost.buttonAction {
-		
+			showRepostDialog(context, post)
 		}
 		
 		this.rowLayoutComment.buttonAction {
 			this.showCommentDialog(post)
 		}
 		
-		this.rowButtonDownvote.buttonAction {
-		
+		this.rowButtonUpvote.buttonAction {
+			if (post.isVoted() != true) {
+				application.vote(post.id, true)
+				if (post.voted == Post.VOTE_DOWN) {
+					post.downvotes -= 1
+				}
+				post.voted = Post.VOTE_UP
+				post.upvotes += 1
+			} else {
+				application.vote(post.id, null)
+				post.voted = Post.VOTE_NONE
+				post.upvotes -= 1
+			}
+			
+			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
+			setMetas(post)
 		}
 		
-		this.rowButtonUpvote.buttonAction {
+		this.rowButtonDownvote.buttonAction {
+			if (post.isVoted() != false) {
+				application.vote(post.id, false)
+				if (post.voted == Post.VOTE_UP) {
+					post.upvotes -= 1
+				}
+				post.voted = Post.VOTE_DOWN
+				post.downvotes += 1
+			} else {
+				application.vote(post.id, null)
+				post.voted = Post.VOTE_NONE
+				post.downvotes -= 1
+			}
 			
+			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
+			setMetas(post)
 		}
 	}
 	
 	private fun MainRowLayoutBinding.showCommentDialog(post: Post) {
 		BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
+//			window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 			setOnShowListener {
 				Handler(Looper.getMainLooper()).post {
 					val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetCommentDialog_root) as? FrameLayout?
 					bottomSheet?.let {
-						BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+						with(BottomSheetBehavior.from(it)) {
+							skipCollapsed = true
+							state = BottomSheetBehavior.STATE_EXPANDED
+						}
 					}
 				}
 			}
@@ -200,6 +318,8 @@ class MainListRecyclerViewAdapter(
 			setContentView(commentInputBinding.root)
 			
 			commentInputBinding.bottomSheetCommentDialogInput.requestFocus()
+			val imm = context.getSystemService(InputMethodManager::class.java)
+			imm?.showSoftInput(commentInputBinding.bottomSheetCommentDialogInput, InputMethodManager.SHOW_IMPLICIT)
 			
 			commentInputBinding.bottomSheetCommentDialogButtonSend.isEnabled = false
 			commentInputBinding.bottomSheetCommentDialogButtonBack.setOnClickListener {
@@ -216,8 +336,8 @@ class MainListRecyclerViewAdapter(
 					}
 					try {
 						this@showCommentDialog.rowLayoutComment.isEnabled = false
-						withContext(Dispatchers.IO) {
-							RetrofitInstance.api.postComment(
+						val comment: Comment = withContext(Dispatchers.IO) {
+							val response = RetrofitInstance.api.postComment(
 								NewComment(
 									application.currentUser.value?.email ?: "",
 									application.currentUser.value?.password ?: "",
@@ -225,8 +345,18 @@ class MainListRecyclerViewAdapter(
 									commentInputBinding.bottomSheetCommentDialogEditText.text?.toString() ?: ""
 								)
 							)
+							if (response.isSuccessful) {
+								return@withContext response.body()!!
+							} else {
+								throw Exception()
+							}
 						}
 						
+						val found = application.postsPool.findPostInfo(post.id)?.post
+						if (found != null) {
+							found.comments += 1
+							setMetas(found)
+						}
 					} catch (ex: Exception) {
 						ex.printStackTrace()
 					} finally {
@@ -255,10 +385,12 @@ class MainListRecyclerViewAdapter(
 		this.setContent(post)
 		val result = if (post.isRepost) post.getOriginPost()!! else post
 		this.setTags(result.tags)
-		this.setMetas(result.reposts, result.comments, result.downvotes, result.upvotes)
+		this.setMetas(result)
 		this.setPublisher(result)
 		this.setButtons(result)
 		this.loadImages(result)
+		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, result.isVoted())
+		println(result)
 	}
 	
 	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {
@@ -304,10 +436,16 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	private fun MainRowLayoutBinding.setMetas(repost: Int, comment: Int, down: Int, up: Int) {
-		this.rowRepostCount.text = "$repost"
-		this.rowCommentCount.text = "$comment"
-		this.rowTextScore.text = "${up - down}"
+	private fun MainRowLayoutBinding.setMetas(post: Post) {
+		this.rowRepostCount.text = "${post.reposts}"
+		this.rowCommentCount.text = "${post.comments}"
+//		val score = post.score + when (post.voted) {
+//			Post.VOTE_NONE -> 0
+//			Post.VOTE_DOWN -> -1
+//			Post.VOTE_UP -> +1
+//			else -> 0
+//		}
+		this.rowTextScore.text = "${post.upvotes - post.downvotes}"
 	}
 	
 	private fun MainRowLayoutBinding.setPublisher(post: Post) {

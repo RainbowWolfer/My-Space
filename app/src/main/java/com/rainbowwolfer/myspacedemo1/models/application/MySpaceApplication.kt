@@ -11,6 +11,7 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findAvatar
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
+import com.rainbowwolfer.myspacedemo1.models.api.NewVote
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
@@ -43,7 +44,7 @@ class MySpaceApplication : Application() {
 	val currentAvatar: MutableLiveData<Bitmap?> by lazy { MutableLiveData(null) }
 	
 	val usersPool: ArrayList<UserInfo> = arrayListOf()
-	val postImagesPool: ArrayList<PostInfo> = arrayListOf()
+	val postsPool: ArrayList<PostInfo> = arrayListOf()
 	
 	val scoresPool: HashMap<String, Int> = hashMapOf()
 	
@@ -142,6 +143,36 @@ class MySpaceApplication : Application() {
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 //				onException.invoke(ex)
+			}
+		}
+	}
+	
+	
+	fun vote(postID: String, vote: Boolean?) {
+		if (!hasLoggedIn()) {
+			return
+		}
+		CoroutineScope(Dispatchers.Main).launch {
+			try {
+				val result = withContext(Dispatchers.IO) {
+					val respose = RetrofitInstance.api.postVote(
+						NewVote(
+							postID = postID,
+							userID = currentUser.value!!.id,
+							cancel = vote == null,
+							score = if (vote == true) 1 else 0,
+							email = currentUser.value!!.email,
+							password = currentUser.value!!.password,
+						)
+					)
+					return@withContext kotlin.runCatching {
+						respose.string()
+					}.getOrNull()
+				}
+				
+				println(result)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
 			}
 		}
 	}

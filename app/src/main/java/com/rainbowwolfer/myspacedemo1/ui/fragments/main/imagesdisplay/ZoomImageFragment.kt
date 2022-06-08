@@ -26,7 +26,7 @@ class ZoomImageFragment : Fragment(R.layout.fragment_zoom_image) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		val bitmap = MySpaceApplication.instance.postImagesPool.getImage(postID!!, position)
+		val bitmap = MySpaceApplication.instance.postsPool.getImage(postID!!, position)
 		if (bitmap != null) {
 			binding.zoomImageImageView.setImage(ImageSource.bitmap(bitmap.bitmap.value!!))
 		}

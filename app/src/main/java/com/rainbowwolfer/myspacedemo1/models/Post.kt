@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -22,10 +23,10 @@ data class Post(
 	@SerializedName("Reply") val replyLimit: PostVisibility = PostVisibility.All,
 	@SerializedName("IsRepost") val isRepost: Boolean,
 	@SerializedName("OriginPostID") val originPostID: String,
-	@SerializedName("Upvotes") val upvotes: Int,
-	@SerializedName("Downvotes") val downvotes: Int,
-	@SerializedName("Comments") val comments: Int,
-	@SerializedName("Reposts") val reposts: Int,
+	@SerializedName("Upvotes") var upvotes: Int,
+	@SerializedName("Downvotes") var downvotes: Int,
+	@SerializedName("Comments") var comments: Int,
+	@SerializedName("Reposts") var reposts: Int,
 	@SerializedName("PublisherUsername") val publisherUsername: String,
 	@SerializedName("PublisherEmail") val publisherEmail: String,
 	@SerializedName("PublisherProfile") val publisherProfile: String,
@@ -51,10 +52,33 @@ data class Post(
 	@SerializedName("OriginComments") val originComments: Int? = null,
 	@SerializedName("OriginReposts") val originReposts: Int? = null,
 	//------------
+	//Post Properties
 	@SerializedName("Score") val score: Int,//upvotes - downvotes
-	@SerializedName("Voted") val voted: Int,//whether user had voted (depends on query)
+	//-1 -> none
+	//0  -> down
+	//1  -> up
+	@SerializedName("Voted") var voted: Int,//whether user had voted (depends on query)
+	//------------
+	//if respost (Origin Post Properties)
+	@SerializedName("OriginScore") val originScore: Int? = null,
+	@SerializedName("OriginVoted") val originVoted: Int? = null,
 ) : Parcelable, DatabaseID<String> {
+	companion object {
+		const val VOTE_UP = 1
+		const val VOTE_DOWN = 0
+		const val VOTE_NONE = -1
+	}
+	
 	override fun getDatabaseID(): String = id
+	
+	fun isVoted(): Boolean? {
+		return when (voted) {
+			-1 -> null
+			0 -> false
+			1 -> true
+			else -> null
+		}
+	}
 	
 	fun getPublisher(): User {
 		return User(
@@ -103,8 +127,8 @@ data class Post(
 				publisherUsername = originUserUsername!!,
 				publisherEmail = originUserEmail!!,
 				publisherProfile = originUserProfile!!,
-				score = score,
-				voted = voted,
+				score = originScore!!,
+				voted = originVoted!!,
 			)
 		}
 	}

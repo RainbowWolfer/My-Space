@@ -4,10 +4,7 @@ import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.api.NewComment
-import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
-import com.rainbowwolfer.myspacedemo1.models.api.NewVote
-import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
+import com.rainbowwolfer.myspacedemo1.models.api.*
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import okhttp3.MultipartBody
@@ -97,7 +94,7 @@ interface MyApi {
 	@POST("post/comment")
 	suspend fun postComment(
 		@Body comment: NewComment
-	): ResponseBody
+	): Response<Comment>
 	
 	@GET("post/comments")
 	suspend fun getPostComments(
@@ -108,4 +105,11 @@ interface MyApi {
 	suspend fun postVote(
 		@Body comment: NewVote
 	): ResponseBody
+	
+	@POST("post/repost")
+	suspend fun repost(
+		@Body repost: NewRepost
+	): ResponseBody
+	
+	
 }

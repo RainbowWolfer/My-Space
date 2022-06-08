@@ -7,4 +7,6 @@ data class NewVote(
 	@SerializedName("user_id") val userID: String,
 	@SerializedName("cancel") val cancel: Boolean,
 	@SerializedName("score") val score: Int,
+	@SerializedName("email") val email: String,
+	@SerializedName("password") val password: String,
 )

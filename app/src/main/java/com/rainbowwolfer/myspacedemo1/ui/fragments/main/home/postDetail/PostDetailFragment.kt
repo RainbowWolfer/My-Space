@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
@@ -35,6 +37,30 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 				putParcelable(ARG_Post, post)
 			}
 		}
+		
+		@JvmStatic
+		fun updateVoteButtons(upButton: AppCompatImageButton, downButton: AppCompatImageButton, vote: Boolean?) {
+			val application = MySpaceApplication.instance
+			val upIcon: Int
+			val downIcon: Int
+			when (vote) {
+				true -> {
+					upIcon = R.drawable.ic_baseline_thumb_up_24
+					downIcon = R.drawable.ic_outline_thumb_down_24
+				}
+				false -> {
+					upIcon = R.drawable.ic_outline_thumb_up_24
+					downIcon = R.drawable.ic_baseline_thumb_down_24
+				}
+				null -> {
+					upIcon = R.drawable.ic_outline_thumb_up_24
+					downIcon = R.drawable.ic_outline_thumb_down_24
+				}
+			}
+			upButton.setImageDrawable(ResourcesCompat.getDrawable(application.resources, upIcon, application.theme))
+			downButton.setImageDrawable(ResourcesCompat.getDrawable(application.resources, downIcon, application.theme))
+		}
+		
 	}
 	
 	init {
@@ -69,7 +95,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			_post = PostDetailFragmentArgs.fromBundle(requireArguments()).post
 		}
 		
-		binding.updatePost(post)
+		updatePost(post)
 		binding.updateUser(post.getPublisher())
 		val id = post.publisherID
 		
@@ -154,31 +180,31 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		this.postDetailImageAvatar.setImageBitmap(bitmap)
 	}
 	
-	private fun FragmentPostDetailBinding.updatePost(post: Post) {
-		this.postDetailTextContent.text = post.textContent
-		this.postDetailChipGroupTags.removeAllViews()
+	fun updatePost(post: Post) {
+		binding.postDetailTextContent.text = post.textContent
+		binding.postDetailChipGroupTags.removeAllViews()
 		post.tags.split(',').forEach {
 			if (!TextUtils.isEmpty(it)) {
-				this.postDetailChipGroupTags.addView(Chip(context).apply {
+				binding.postDetailChipGroupTags.addView(Chip(context).apply {
 					text = it
 				})
 			}
 		}
 		
-		this.postDetailTextPublishDate.text = post.publishDateTime
-		this.postDetailTextEditTimes.text = "${post.editTimes}"
-		this.postDetailTextEditDate.text = post.editDateTime
+		binding.postDetailTextPublishDate.text = post.publishDateTime
+		binding.postDetailTextEditTimes.text = "${post.editTimes}"
+		binding.postDetailTextEditDate.text = post.editDateTime
 		with(if (post.editTimes == 0) View.GONE else View.VISIBLE) {
-			postDetailImageEdit.visibility = this
-			postDetailTextEditDate.visibility = this
-			postDetailTextEditTimes.visibility = this
+			binding.postDetailImageEdit.visibility = this
+			binding.postDetailTextEditDate.visibility = this
+			binding.postDetailTextEditTimes.visibility = this
 		}
 		
-		this.postDetailTextRepostsCount.text = "${post.reposts}"
-		this.postDetailTextCommentsCount.text = "${post.comments}"
-		this.postDetailTextScores.text = "${post.score}"
+		binding.postDetailTextRepostsCount.text = "${post.reposts}"
+		binding.postDetailTextCommentsCount.text = "${post.comments}"
+		binding.postDetailTextScores.text = "${post.score}"
 		
-		this.postDetailButtonRepost.visibility = if (post.isRepost) View.GONE else View.VISIBLE
+		binding.postDetailButtonRepost.visibility = if (post.isRepost) View.GONE else View.VISIBLE
 	}
 	
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -7,16 +7,17 @@ import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailCommentsBinding
 import com.rainbowwolfer.myspacedemo1.models.Comment
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.PostCommentsRecylverViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_comments) {
+class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_comments), FragmentCustomBackPressed {
 	companion object {
 		lateinit var Instance: PostDetailCommentsFragment
 		private const val ARG_POST_ID = "post_id"
@@ -50,6 +51,8 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	)
 	private val application = MySpaceApplication.instance
 	
+	private val adapter by lazy { PostCommentsRecylverViewAdapter(requireContext(), viewLifecycleOwner) }
+	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		arguments?.let {
@@ -59,11 +62,9 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		val adapter = PostCommentsRecylverViewAdapter(requireContext(), viewLifecycleOwner)
 		binding.postDetailCommentsRecylverView.isNestedScrollingEnabled = true
 		binding.postDetailCommentsRecylverView.layoutManager = LinearLayoutManager(requireContext())
 		binding.postDetailCommentsRecylverView.adapter = adapter
-		
 		
 		loadComment(postID)
 		
@@ -138,8 +139,9 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 			try {
 				binding.postDetailCommentsInputComment.isEnabled = false
 				showLoading("Uploading Comment")
+				val comment: Comment
 				withContext(Dispatchers.IO) {
-					RetrofitInstance.api.postComment(
+					val response = RetrofitInstance.api.postComment(
 						NewComment(
 							application.currentUser.value?.email ?: "",
 							application.currentUser.value?.password ?: "",
@@ -147,7 +149,20 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 							content
 						)
 					)
+					if (response.isSuccessful) {
+						comment = response.body()!!
+					} else {
+						throw Exception()
+					}
 				}
+				
+				val post = application.postsPool.findPostInfo(postID)?.post
+				if (post != null) {
+					post.comments += 1
+					PostDetailFragment.Instance.updatePost(post)
+				}
+				
+				viewModel.comments.value = viewModel.comments.value?.plus(comment)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			} finally {
@@ -162,5 +177,17 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 		val imm = requireActivity().getSystemService(InputMethodManager::class.java)
 		imm?.showSoftInput(binding.postDetailCommentsEditTextComment, InputMethodManager.SHOW_IMPLICIT)
 	}
+	
+	override fun onBackPressed(): Boolean {
+		return if (binding.postDetailCommentsEditTextComment.hasFocus()) {
+			val imm = requireActivity().getSystemService(InputMethodManager::class.java)
+			imm?.showSoftInput(binding.postDetailCommentsEditTextComment, InputMethodManager.HIDE_NOT_ALWAYS)
+			binding.postDetailCommentsEditTextComment.clearFocus()
+			true
+		} else {
+			false
+		}
+	}
+	
 	
 }

@@ -32,6 +32,7 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
+import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -155,8 +156,18 @@ class MainActivity : AppCompatActivity() {
 	}
 	
 	override fun onBackPressed() {
-		super.onBackPressed()
 		binding.drawerLayout.closeDrawers()
+		val fragment = this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as? NavHostFragment
+		val currentFragment = fragment?.childFragmentManager?.fragments?.get(0) as? FragmentCustomBackPressed
+		if (currentFragment != null) {
+			currentFragment.onBackPressed().takeIf {
+				!it
+			}?.let {
+				super.onBackPressed()
+			}
+		} else {
+			super.onBackPressed()
+		}
 	}
 	
 	private fun updateNav() {
