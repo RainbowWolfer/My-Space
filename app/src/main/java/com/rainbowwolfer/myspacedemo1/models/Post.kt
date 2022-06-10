@@ -54,6 +54,7 @@ data class Post(
 	//------------
 	//Post Properties
 	@SerializedName("Score") val score: Int,//upvotes - downvotes
+	@SerializedName("HasReposted") val hasReposted: Boolean,
 	//-1 -> none
 	//0  -> down
 	//1  -> up
@@ -62,6 +63,7 @@ data class Post(
 	//if respost (Origin Post Properties)
 	@SerializedName("OriginScore") val originScore: Int? = null,
 	@SerializedName("OriginVoted") val originVoted: Int? = null,
+//	@SerializedName("OriginHasReposted") val originHasReposted: Boolean? = null,
 ) : Parcelable, DatabaseID<String> {
 	companion object {
 		const val VOTE_UP = 1
@@ -129,6 +131,7 @@ data class Post(
 				publisherProfile = originUserProfile!!,
 				score = originScore!!,
 				voted = originVoted!!,
+				hasReposted = hasReposted,
 			)
 		}
 	}

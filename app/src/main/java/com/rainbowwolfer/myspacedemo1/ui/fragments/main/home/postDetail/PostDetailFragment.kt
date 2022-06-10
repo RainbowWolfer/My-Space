@@ -7,10 +7,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
@@ -21,14 +24,18 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
+import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter.Companion.showRepostDialog
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	companion object {
-		lateinit var Instance: PostDetailFragment
+		lateinit var instance: PostDetailFragment
 		const val ARG_Post = "post"
 		
 		@JvmStatic
@@ -61,14 +68,27 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			downButton.setImageDrawable(ResourcesCompat.getDrawable(application.resources, downIcon, application.theme))
 		}
 		
+		@JvmStatic
+		fun updateRepostButton(button: AppCompatImageButton, hasReposted: Boolean) {
+			val application = MySpaceApplication.instance
+			button.imageTintList = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
+		}
+		
+		@JvmStatic
+		fun updateRepostButton(image: ImageView, hasReposted: Boolean) {
+			val application = MySpaceApplication.instance
+			image.imageTintList = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
+		}
+		
+		@JvmStatic
+		private fun getHighlightedColorID(boolean: Boolean): Int {
+			return if (boolean) R.color.purple_200 else R.color.colorControlNomal
+		}
 	}
 	
 	init {
-		Instance = this
+		instance = this
 	}
-	
-	private var _post: Post? = null
-	private val post: Post get() = _post!!
 	
 	private val binding: FragmentPostDetailBinding by viewBinding()
 	private val application: MySpaceApplication = MySpaceApplication.instance
@@ -78,7 +98,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
 		arguments?.let {
-			_post = it.getParcelable(ARG_Post)
+			viewModel.post.value = it.getParcelable(ARG_Post)
 		}
 	}
 	
@@ -89,16 +109,16 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		application.currentUser.observe(viewLifecycleOwner) {
 			binding.enableUserFunctions()
 		}
-		binding.loadImages()
 		
-		if (_post == null) {
-			_post = PostDetailFragmentArgs.fromBundle(requireArguments()).post
+		viewModel.post.observe(viewLifecycleOwner) { post ->
+			binding.loadImages(post)
+			updatePost(post)
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updateRepostButton(binding.postDetailButtonRepost, post.hasReposted)
+			binding.updateUser(post.getPublisher())
 		}
 		
-		updatePost(post)
-		binding.updateUser(post.getPublisher())
-		val id = post.publisherID
-		
+		val id = viewModel.post.value!!.publisherID
 		if (application.currentUser.value?.id == id) {
 			application.currentAvatar.observe(viewLifecycleOwner) {
 				binding.updateAvatar(it)
@@ -117,7 +137,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}
 		
 		
-		val adapter = PostDetailViewPagerAdapter(this, post)
+		val adapter = PostDetailViewPagerAdapter(this, viewModel.post.value!!)
 		binding.postDetailViewPager2.adapter = adapter
 		
 		binding.postDetailViewPager2.offscreenPageLimit = 3
@@ -130,12 +150,69 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			}
 		}.attach()
 		
-		binding.postDetailButtonComment.setOnClickListener {
-			PostDetailCommentsFragment.Instance.focusCommentInput()
+		binding.postDetailButtonComment.buttonAction {
+			PostDetailCommentsFragment.instance?.focusCommentInput()
+		}
+		
+		binding.postDetailButtonRepost.buttonAction {
+			showRepostDialog(requireContext(), viewModel.post.value!!) {
+				viewModel.post.value = it
+			}
+		}
+		
+		binding.postDetailButtonUpvote.buttonAction {
+			val post = viewModel.post.value!!
+			if (post.isVoted() != true) {
+				application.vote(post.id, true)
+				if (post.voted == Post.VOTE_DOWN) {
+					post.downvotes -= 1
+				}
+				post.voted = Post.VOTE_UP
+				post.upvotes += 1
+			} else {
+				application.vote(post.id, null)
+				post.voted = Post.VOTE_NONE
+				post.upvotes -= 1
+			}
+			
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updatePost(post)
+		}
+		
+		binding.postDetailButtonDownvote.buttonAction {
+			val post = viewModel.post.value!!
+			if (post.isVoted() != false) {
+				application.vote(post.id, false)
+				if (post.voted == Post.VOTE_UP) {
+					post.upvotes -= 1
+				}
+				post.voted = Post.VOTE_DOWN
+				post.downvotes += 1
+			} else {
+				application.vote(post.id, null)
+				post.voted = Post.VOTE_NONE
+				post.downvotes -= 1
+			}
+			
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updatePost(post)
 		}
 	}
 	
-	private fun FragmentPostDetailBinding.loadImages() {
+	private fun View.buttonAction(onClick: () -> Unit) {
+		this.setOnClickListener {
+			if (application.hasLoggedIn()) {
+				lifecycleScope.launch {
+					delay(50)//wait ripple animation
+					onClick.invoke()
+				}
+			} else {
+				HomeFragment.popupNotLoggedInHint()
+			}
+		}
+	}
+	
+	private fun FragmentPostDetailBinding.loadImages(post: Post) {
 		this.postDetailGridviewImages.presetGridViewHeight(post.imagesCount)
 		val colors = ImagesDisplayGridViewAdapter.getShuffledColorLists(requireContext(), post.imagesCount)
 		
@@ -143,7 +220,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			it.list = colors
 		}
 		
-		ImagesDisplayGridViewAdapter.loadImages(this.postDetailGridviewImages, post, viewLifecycleOwner)
+		ImagesDisplayGridViewAdapter.loadImages(this.postDetailGridviewImages, post, viewLifecycleOwner, lifecycleScope)
 	}
 	
 	private fun FragmentPostDetailBinding.enableUserFunctions() {
@@ -202,10 +279,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		
 		binding.postDetailTextRepostsCount.text = "${post.reposts}"
 		binding.postDetailTextCommentsCount.text = "${post.comments}"
-		binding.postDetailTextScores.text = "${post.score}"
+		binding.postDetailTextScores.text = "${post.upvotes - post.downvotes}"
 		
 		binding.postDetailButtonRepost.visibility = if (post.isRepost) View.GONE else View.VISIBLE
 	}
+
+//	fun setMeta(post: Post) {
+//
+//	}
 	
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 		inflater.inflate(R.menu.post_detail_menu, menu)

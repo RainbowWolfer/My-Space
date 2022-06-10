@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 
 class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_comments), FragmentCustomBackPressed {
 	companion object {
-		lateinit var Instance: PostDetailCommentsFragment
+		var instance: PostDetailCommentsFragment? = null
 		private const val ARG_POST_ID = "post_id"
 		
 		@JvmStatic
@@ -40,7 +40,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	}
 	
 	init {
-		Instance = this
+		instance = this
 	}
 	
 	private lateinit var postID: String
@@ -159,15 +159,16 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 				val post = application.postsPool.findPostInfo(postID)?.post
 				if (post != null) {
 					post.comments += 1
-					PostDetailFragment.Instance.updatePost(post)
+					PostDetailFragment.instance.updatePost(post)
 				}
 				
 				viewModel.comments.value = viewModel.comments.value?.plus(comment)
+				viewModel.post.value = post
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			} finally {
-				hideLoading()
 				binding.postDetailCommentsInputComment.isEnabled = true
+				hideLoading()
 			}
 		}
 	}

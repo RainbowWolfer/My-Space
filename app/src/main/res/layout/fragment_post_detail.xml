@@ -204,7 +204,7 @@
 					app:layout_constraintTop_toTopOf="@+id/postDetail_text_editTimes"/>
 				
 				<TextView
-					android:id="@+id/postDetail_text_commentsCount"
+					android:id="@+id/postDetail_text_repostsCount"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -221,14 +221,14 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="Comments"
+					android:text="Reposts"
 					android:textSize="16sp"
-					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_commentsCount"
-					app:layout_constraintStart_toEndOf="@+id/postDetail_text_commentsCount"
-					app:layout_constraintTop_toTopOf="@+id/postDetail_text_commentsCount"/>
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_repostsCount"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_repostsCount"
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_repostsCount"/>
 				
 				<TextView
-					android:id="@+id/postDetail_text_repostsCount"
+					android:id="@+id/postDetail_text_commentsCount"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -245,10 +245,10 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="Reposts"
+					android:text="Comments"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/textView16"
-					app:layout_constraintStart_toEndOf="@+id/postDetail_text_repostsCount"
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_commentsCount"
 					app:layout_constraintTop_toTopOf="@+id/textView16"/>
 				
 				<TextView
@@ -360,7 +360,8 @@
 						android:background="@color/transparent"
 						android:contentDescription="@string/app_name"
 						android:foreground="@drawable/ripple_small_corners"
-						android:src="@drawable/ic_baseline_reply_all_24"/>
+						android:src="@drawable/ic_baseline_reply_all_24"
+						app:tint="?attr/colorControlNormal"/>
 					
 					<androidx.appcompat.widget.AppCompatImageButton
 						android:id="@+id/postDetail_button_comment"
@@ -380,7 +381,8 @@
 						android:background="@color/transparent"
 						android:contentDescription="@string/app_name"
 						android:foreground="@drawable/ripple_small_corners"
-						android:src="@drawable/ic_outline_thumb_down_24"/>
+						android:src="@drawable/ic_outline_thumb_down_24"
+						android:tint="@color/red"/>
 					
 					<androidx.appcompat.widget.AppCompatImageButton
 						android:id="@+id/postDetail_button_upvote"
@@ -390,7 +392,8 @@
 						android:background="@color/transparent"
 						android:contentDescription="@string/app_name"
 						android:foreground="@drawable/ripple_small_corners"
-						android:src="@drawable/ic_outline_thumb_up_24"/>
+						android:src="@drawable/ic_outline_thumb_up_24"
+						android:tint="@color/green"/>
 				
 				</LinearLayout>
 			

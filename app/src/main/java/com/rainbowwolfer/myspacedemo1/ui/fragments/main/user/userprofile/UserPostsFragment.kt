@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserPostsBinding
@@ -17,7 +18,7 @@ class UserPostsFragment : Fragment(R.layout.fragment_user_posts) {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		val adapter = MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner).also {
+		val adapter = MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope).also {
 			it.enableAvatarClicking = false
 		}
 		

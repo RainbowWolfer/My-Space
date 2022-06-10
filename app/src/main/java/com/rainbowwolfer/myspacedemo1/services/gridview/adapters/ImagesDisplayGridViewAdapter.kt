@@ -62,9 +62,10 @@ class ImagesDisplayGridViewAdapter(
 		}
 		
 		@JvmStatic
-		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner) {
+		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, scope: CoroutineScope) {
 			val application = MySpaceApplication.instance
-			CoroutineScope(Dispatchers.Main).launch {
+			
+			scope.launch(Dispatchers.Main) {
 				val adapter = gridView.adapter as ImagesDisplayGridViewAdapter
 				try {
 					for (index in 0 until post.imagesCount) {

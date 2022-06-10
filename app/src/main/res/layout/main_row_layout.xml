@@ -311,10 +311,13 @@
 		app:layout_constraintTop_toTopOf="@+id/row_button_downvote">
 		
 		<ImageView
+			android:id="@+id/row_image_repostButtonIcon"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="5dp"
-			android:src="@drawable/ic_baseline_reply_all_24"/>
+			android:src="@drawable/ic_baseline_reply_all_24"
+			app:tint="?attr/colorControlNormal"
+			android:contentDescription=""/>
 		
 		<TextView
 			android:id="@+id/row_repost_count"
@@ -332,7 +335,8 @@
 		android:layout_marginTop="8dp"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"
+		android:contentDescription=""/>
 	
 	<LinearLayout
 		android:id="@+id/row_layout_repostInfo"

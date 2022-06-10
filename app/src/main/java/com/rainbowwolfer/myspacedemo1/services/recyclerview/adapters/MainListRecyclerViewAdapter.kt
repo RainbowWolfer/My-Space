@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
@@ -42,6 +43,7 @@ import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGr
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateRepostButton
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
@@ -52,13 +54,14 @@ import kotlinx.coroutines.withContext
 class MainListRecyclerViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
+	private val lifecycleScope: LifecycleCoroutineScope,
 ) : RecyclerView.Adapter<MainListRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
 		const val ITEM_TYPE_END = 2
 		
 		@JvmStatic
-		fun showRepostDialog(context: Context, post: Post) {
+		fun showRepostDialog(context: Context, post: Post, successAction: (Post) -> Unit) {
 			val application = MySpaceApplication.instance
 			if (!application.hasLoggedIn()) {
 				return
@@ -118,7 +121,7 @@ class MainListRecyclerViewAdapter(
 							val found = application.postsPool.findPostInfo(post.id)?.post
 							if (found != null) {
 								found.reposts += 1
-//								setMetas(found)
+								successAction(found)
 							}
 						} catch (ex: Exception) {
 							ex.printStackTrace()
@@ -252,7 +255,9 @@ class MainListRecyclerViewAdapter(
 	
 	private fun MainRowLayoutBinding.setButtons(post: Post) {
 		this.rowLayoutRepost.buttonAction {
-			showRepostDialog(context, post)
+			showRepostDialog(context, post) {
+				setMetas(post)
+			}
 		}
 		
 		this.rowLayoutComment.buttonAction {
@@ -381,7 +386,7 @@ class MainListRecyclerViewAdapter(
 	}
 	
 	private fun MainRowLayoutBinding.setPostView(post: Post) {
-		setRepostView(post.isRepost)
+		this.setRepostView(post.isRepost)
 		this.setContent(post)
 		val result = if (post.isRepost) post.getOriginPost()!! else post
 		this.setTags(result.tags)
@@ -390,7 +395,7 @@ class MainListRecyclerViewAdapter(
 		this.setButtons(result)
 		this.loadImages(result)
 		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, result.isVoted())
-		println(result)
+		updateRepostButton(this.rowImageRepostButtonIcon, post.hasReposted)
 	}
 	
 	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {
@@ -466,7 +471,7 @@ class MainListRecyclerViewAdapter(
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		loadImages(this.rowGridviewImages, post, lifecycleOwner)
+		loadImages(this.rowGridviewImages, post, lifecycleOwner, lifecycleScope)
 	}
 	
 	fun setData(newPersonList: List<Post>) {

@@ -148,7 +148,6 @@ class MainActivity : AppCompatActivity() {
 				show()
 			}
 		}
-		
 	}
 	
 	override fun onSupportNavigateUp(): Boolean {

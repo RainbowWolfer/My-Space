@@ -9,4 +9,6 @@
 	<color name="half_transparent_background">#88ffffff</color>
 	
 	<color name="contrast_fab">#000</color>
+	
+	<color name="colorControlNomal">#B2FFFFFF</color>
 </resources>

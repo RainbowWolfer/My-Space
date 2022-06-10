@@ -8,6 +8,7 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -35,18 +36,20 @@ import kotlin.random.Random
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	companion object {
-		lateinit var instance: HomeFragment
+		var instance: HomeFragment? = null
 		const val RELOAD_THREASHOLD = 3
 		var upadteScrollPosition: Boolean = false
 		
 		@JvmStatic
-		fun popupNotLoggedInHint() {
-			try {
-				Snackbar.make(instance.requireView(), "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
-					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(instance.requireContext(), LoginActivity::class.java))
+		fun popupNotLoggedInHint(view: View? = null) {
+			var v: View? = view
+			if (v == null) {
+				v = instance?.requireView()
+			}
+			if (v != null) {
+				Snackbar.make(instance!!.requireView(), "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
+					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(instance!!.requireContext(), LoginActivity::class.java))
 				}.show()
-			} catch (ex: Exception) {
-				ex.printStackTrace()
 			}
 		}
 	}
@@ -59,7 +62,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private val viewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
-	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner) }
+	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope) }
 	
 	private var isLoading = false
 
@@ -201,6 +204,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
 		if (isLoading) {
 			return
+			
 		}
 		isLoading = true
 		CoroutineScope(Dispatchers.Main).launch {

@@ -35,4 +35,6 @@
 	<color name="color7">#F7990C</color>
 	<color name="color8">#9D9F78</color>
 	<color name="color9">#2DE7B5</color>
+	
+	<color name="colorControlNomal">#89000000</color>
 </resources>
