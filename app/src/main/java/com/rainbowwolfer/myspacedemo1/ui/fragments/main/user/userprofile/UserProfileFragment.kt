@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
@@ -19,7 +20,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserProfileBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
@@ -72,7 +73,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			val uri = result.data!!.data!!
 			val iStream: InputStream? = requireActivity().contentResolver.openInputStream(uri)
 			val bytes: ByteArray = EasyFunctions.getBytes(iStream!!)
-			CoroutineScope(Dispatchers.Main).launch {
+			lifecycleScope.launch(Dispatchers.Main) {
 				lateinit var dialog: LoadingDialog
 				try {
 					dialog = LoadingDialog(requireContext()).apply {

@@ -17,7 +17,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentHomeBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutBottomModalPostLimitBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
@@ -192,7 +192,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	
 	private fun BottomSheetDialog.delayToHideAndUpdate() {
 		val dismissDelay = 50L
-		CoroutineScope(Dispatchers.Main).launch {
+		lifecycleScope.launch(Dispatchers.Main) {
 			delay(dismissDelay)
 			dismiss()
 			hide()
@@ -207,7 +207,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			
 		}
 		isLoading = true
-		CoroutineScope(Dispatchers.Main).launch {
+		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				if (showSwipeRefreshing) {
 					binding.mainSwipeRefreshLayout.isRefreshing = true

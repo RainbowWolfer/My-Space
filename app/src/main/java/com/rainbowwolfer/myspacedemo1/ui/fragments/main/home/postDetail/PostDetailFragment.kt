@@ -19,15 +19,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter.Companion.showRepostDialog
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,12 +36,13 @@ import kotlinx.coroutines.launch
 class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	companion object {
 		lateinit var instance: PostDetailFragment
-		const val ARG_Post = "post"
+		const val ARG_Post_ID = "post_id"
+		
 		
 		@JvmStatic
-		fun newInstance(post: Post) = PostDetailFragment().apply {
+		fun newInstance(postID: String) = PostDetailFragment().apply {
 			arguments = Bundle().apply {
-				putParcelable(ARG_Post, post)
+				putString(ARG_Post_ID, postID)
 			}
 		}
 		
@@ -93,12 +94,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	private val binding: FragmentPostDetailBinding by viewBinding()
 	private val application: MySpaceApplication = MySpaceApplication.instance
 	private val viewModel: PostDetailViewModel by viewModels()
+	private lateinit var postID: String
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
 		arguments?.let {
-			viewModel.post.value = it.getParcelable(ARG_Post)
+			postID = it.getString(ARG_Post_ID) ?: ""
+			viewModel.post.value = application.postsPool.findPostInfo(postID)?.post
 		}
 	}
 	
@@ -128,7 +131,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			if (found != null) {
 				binding.updateAvatar(found.avatar)
 			} else {
-				CoroutineScope(Dispatchers.Main).launch {
+				lifecycleScope.launch(Dispatchers.Main) {
 					application.findOrGetAvatar(id) {
 						binding.updateAvatar(it)
 					}
@@ -151,6 +154,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}.attach()
 		
 		binding.postDetailButtonComment.buttonAction {
+			binding.postDetailViewPager2.currentItem = 0//make fragment is on comment
 			PostDetailCommentsFragment.instance?.focusCommentInput()
 		}
 		
@@ -163,14 +167,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		binding.postDetailButtonUpvote.buttonAction {
 			val post = viewModel.post.value!!
 			if (post.isVoted() != true) {
-				application.vote(post.id, true)
+				application.votePost(post.id, true)
 				if (post.voted == Post.VOTE_DOWN) {
 					post.downvotes -= 1
 				}
 				post.voted = Post.VOTE_UP
 				post.upvotes += 1
 			} else {
-				application.vote(post.id, null)
+				application.votePost(post.id, null)
 				post.voted = Post.VOTE_NONE
 				post.upvotes -= 1
 			}
@@ -182,14 +186,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		binding.postDetailButtonDownvote.buttonAction {
 			val post = viewModel.post.value!!
 			if (post.isVoted() != false) {
-				application.vote(post.id, false)
+				application.votePost(post.id, false)
 				if (post.voted == Post.VOTE_UP) {
 					post.upvotes -= 1
 				}
 				post.voted = Post.VOTE_DOWN
 				post.downvotes += 1
 			} else {
-				application.vote(post.id, null)
+				application.votePost(post.id, null)
 				post.voted = Post.VOTE_NONE
 				post.downvotes -= 1
 			}

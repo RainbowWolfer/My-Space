@@ -37,7 +37,7 @@ class DraftsFragment : Fragment(R.layout.fragment_drafts) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		recyclerViewAdapter = DraftsRecyclerViewAdapter(requireContext())
+		recyclerViewAdapter = DraftsRecyclerViewAdapter(requireContext(), lifecycleScope)
 		binding.draftsRecyclerViewMain.layoutManager = LinearLayoutManager(requireContext())
 		binding.draftsRecyclerViewMain.adapter = recyclerViewAdapter
 		

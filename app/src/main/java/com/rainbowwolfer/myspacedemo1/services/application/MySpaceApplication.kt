@@ -1,9 +1,11 @@
-package com.rainbowwolfer.myspacedemo1.models.application
+package com.rainbowwolfer.myspacedemo1.services.application
 
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
+import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.PostInfo
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
@@ -11,7 +13,7 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findAvatar
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
-import com.rainbowwolfer.myspacedemo1.models.api.NewVote
+import com.rainbowwolfer.myspacedemo1.models.api.NewPostVote
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
@@ -67,6 +69,7 @@ class MySpaceApplication : Application() {
 		if (currentUser.value == null) {
 			return
 		}
+		
 		CoroutineScope(Dispatchers.IO).launch {
 			try {
 				val response = RetrofitInstance.api.getAvatar(currentUser.value!!.id)
@@ -81,9 +84,11 @@ class MySpaceApplication : Application() {
 	
 	fun findOrGetAvatar(
 		userID: String,
+		lifecycleCoroutineScope: LifecycleCoroutineScope? = null,
 		onLoadAvatar: (Bitmap) -> Unit,
 	) {
-		CoroutineScope(Dispatchers.Main).launch {
+		val scope = lifecycleCoroutineScope ?: CoroutineScope(Dispatchers.Main)
+		scope.launch(Dispatchers.Main) {
 			try {
 				var avatarBitmap = usersPool.findAvatar(userID)
 				if (avatarBitmap == null) {
@@ -109,8 +114,10 @@ class MySpaceApplication : Application() {
 		userID: String,
 		onLoadUser: (User) -> Unit,
 		onLoadAvatar: (Bitmap) -> Unit,
+		lifecycleCoroutineScope: LifecycleCoroutineScope? = null
 	) {
-		CoroutineScope(Dispatchers.Main).launch {
+		val scope = lifecycleCoroutineScope ?: CoroutineScope(Dispatchers.Main)
+		scope.launch(Dispatchers.Main) {
 			try {
 				var user = usersPool.findUser(userID)
 				if (user == null) {
@@ -148,7 +155,7 @@ class MySpaceApplication : Application() {
 	}
 	
 	
-	fun vote(postID: String, vote: Boolean?) {
+	fun votePost(postID: String, vote: Boolean?) {
 		if (!hasLoggedIn()) {
 			return
 		}
@@ -156,7 +163,7 @@ class MySpaceApplication : Application() {
 			try {
 				val result = withContext(Dispatchers.IO) {
 					val respose = RetrofitInstance.api.postVote(
-						NewVote(
+						NewPostVote(
 							postID = postID,
 							userID = currentUser.value!!.id,
 							cancel = vote == null,
@@ -171,6 +178,34 @@ class MySpaceApplication : Application() {
 				}
 				
 				println(result)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+			}
+		}
+	}
+	
+	
+	fun voteComment(comment_id: String, vote: Boolean?) {
+		if (!hasLoggedIn()) {
+			return
+		}
+		CoroutineScope(Dispatchers.Main).launch {
+			try {
+				withContext(Dispatchers.IO) {
+					val respose = RetrofitInstance.api.commentVote(
+						NewCommentVote(
+							commentID = comment_id,
+							userID = currentUser.value!!.id,
+							cancel = vote == null,
+							score = if (vote == true) 1 else 0,
+							email = currentUser.value!!.email,
+							password = currentUser.value!!.password,
+						)
+					)
+					return@withContext kotlin.runCatching {
+						respose.string()
+					}.getOrNull()
+				}
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			}

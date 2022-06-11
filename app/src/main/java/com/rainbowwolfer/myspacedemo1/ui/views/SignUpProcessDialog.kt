@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.DialogSignupProcessBinding
@@ -26,6 +27,7 @@ import java.net.SocketTimeoutException
 
 class SignUpProcessDialog(
 	override val context: Context,
+	val lifecycleCoroutineScope: LifecycleCoroutineScope,
 ) : ViewDialog {
 	override lateinit var dialog: Dialog
 	private lateinit var binding: DialogSignupProcessBinding
@@ -47,7 +49,7 @@ class SignUpProcessDialog(
 			hideDialog()
 		}
 		
-		CoroutineScope(Dispatchers.IO).launch {
+		lifecycleCoroutineScope.launch(Dispatchers.IO) {
 			try {
 				println(signUpInfo)
 				

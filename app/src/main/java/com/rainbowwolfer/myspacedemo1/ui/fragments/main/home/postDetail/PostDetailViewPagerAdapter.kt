@@ -13,8 +13,8 @@ class PostDetailViewPagerAdapter(
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {
 			0 -> PostDetailCommentsFragment.newInstance(post.id)
-			1 -> PostDetailRepostsFragment()
-			2 -> PostDetailScoresFragment()
+			1 -> PostDetailRepostsFragment.newInstance(post.id)
+			2 -> PostDetailScoresFragment.newInstance(post.id)
 			else -> throw Exception()
 		}
 	}

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.rainbowwolfer.myspacedemo1.R
@@ -131,7 +132,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				Snackbar.make(view, "You have error field(s) to fix", Snackbar.LENGTH_SHORT).show()
 				return@setOnClickListener
 			}
-			val dialog = SignUpProcessDialog(requireContext()).apply {
+			val dialog = SignUpProcessDialog(requireContext(), lifecycleScope).apply {
 				showDialog(
 					SignUpInfo(
 						binding.signupEditTextUsername.text.toString(),

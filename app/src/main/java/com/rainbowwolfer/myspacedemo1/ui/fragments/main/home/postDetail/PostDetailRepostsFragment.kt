@@ -1,60 +1,130 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
+import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailRepostsBinding
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerviews.PostRepostsRecordRecyclerViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PostDetailRepostsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PostDetailRepostsFragment : Fragment() {
-	// TODO: Rename and change types of parameters
-	private var param1: String? = null
-	private var param2: String? = null
+class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts) {
+	companion object {
+		const val ARG_POST_ID = "post_id"
+		const val RELOAD_THRESHOLD = 3
+		
+		@JvmStatic
+		fun newInstance(postID: String) = PostDetailRepostsFragment().apply {
+			arguments = Bundle().apply {
+				putString(ARG_POST_ID, postID)
+			}
+		}
+	}
+	
+	private lateinit var postID: String
+	private val binding: FragmentPostDetailRepostsBinding by viewBinding()
+	private val viewModel: PostDetailViewModel by viewModels(
+		ownerProducer = { requireParentFragment() }
+	)
+	private val application = MySpaceApplication.instance
+	private val adapter by lazy { PostRepostsRecordRecyclerViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope) }
+	
+	private var isLoading = false
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		arguments?.let {
-			param1 = it.getString(ARG_PARAM1)
-			param2 = it.getString(ARG_PARAM2)
+			postID = it.getString(ARG_POST_ID) ?: ""
 		}
 	}
 	
-	override fun onCreateView(
-		inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_post_detail_reposts, container, false)
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		println("Start Here $postID")
+		binding.postDetailRepostsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+		binding.postDetailRepostsRecyclerView.adapter = adapter
+		
+		loadRepostRecords(true)
+		
+		viewModel.repostRecords.observe(viewLifecycleOwner) {
+			println("SET ${it.size}")
+			adapter.setData(it)
+		}
+		
+		binding.postDetailRepostsRecyclerView.scrollToUpdate {
+			loadRepostRecords(false)
+		}
 	}
 	
-	companion object {
-		/**
-		 * Use this factory method to create a new instance of
-		 * this fragment using the provided parameters.
-		 *
-		 * @param param1 Parameter 1.
-		 * @param param2 Parameter 2.
-		 * @return A new instance of fragment PostDetailRepostsFragment.
-		 */
-		// TODO: Rename and change types and number of parameters
-		@JvmStatic
-		fun newInstance(param1: String, param2: String) =
-			PostDetailRepostsFragment().apply {
-				arguments = Bundle().apply {
-					putString(ARG_PARAM1, param1)
-					putString(ARG_PARAM2, param2)
+	private fun enableLoading(boolean: Boolean) {
+		binding.postDetailRepostsRecyclerView.visibility = if (boolean) View.GONE else View.VISIBLE
+		binding.postDetailRepostsLoadingBar.visibility = if (!boolean) View.GONE else View.VISIBLE
+	}
+	
+	private fun loadRepostRecords(refresh: Boolean) {
+		println("LOADING: refresh:$refresh loading:$isLoading")
+		if (isLoading) {
+			return
+		}
+		isLoading = true
+		if (refresh) {
+			enableLoading(true)
+		}
+		lifecycleScope.launch(Dispatchers.Main) {
+			try {
+				var triedCount = 0
+				var list: List<RepostRecord> = if (refresh) emptyList() else viewModel.repostRecords.value!!
+				do {
+					val newList: List<RepostRecord> = withContext(Dispatchers.IO) {
+						val response = RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
+						if (response.isSuccessful) {
+							response.body() ?: emptyList()
+						} else {
+							throw ResponseException(response.getHttpResponse())
+						}
+					}
+					
+					var count = 0
+					if (newList.isNotEmpty()) {
+						for (item in newList) {
+							if (list.any { it.postID == item.postID }) {
+								continue
+							}
+							list = list.plus(item)
+							count++
+						}
+						viewModel.repostRecordsOffset.value = viewModel.repostRecordsOffset.value!!.plus(count)
+					}
+					
+					viewModel.repostRecords.value = list
+				} while (newList.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+				if (ex is ResponseException) {
+					println(ex.response)
+				}
+			} finally {
+				try {
+					isLoading = false
+					enableLoading(false)
+				} catch (ex: Exception) {
+					ex.printStackTrace()
 				}
 			}
+		}
 	}
 }

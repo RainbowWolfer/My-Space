@@ -8,7 +8,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentZoomImageBinding
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 
 class ZoomImageFragment : Fragment(R.layout.fragment_zoom_image) {
 	private var position: Int = -1

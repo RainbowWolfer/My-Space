@@ -22,6 +22,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -33,7 +34,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetTagInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutPostImageViewBinding
 import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.models.PostResult
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
@@ -414,7 +415,7 @@ class PostActivity : AppCompatActivity() {
 			setNegativeButton("No", null)
 			setPositiveButton("Yes") { _, _ ->
 				if (send) {
-					CoroutineScope(Dispatchers.Main).launch {
+					lifecycleScope.launch(Dispatchers.Main) {
 						val dialog = LoadingDialog(this@PostActivity).apply {
 							showDialog("Posting...")
 						}
@@ -470,7 +471,7 @@ class PostActivity : AppCompatActivity() {
 							Draft.convertTags(viewModel.tags.value!!),
 							Draft.convertImagesURI(viewModel.getNotNullURIs())
 						)
-						CoroutineScope(Dispatchers.IO).launch {
+						lifecycleScope.launch(Dispatchers.IO) {
 							application.roomRepository.insert(new)
 						}
 					} else {
@@ -484,7 +485,7 @@ class PostActivity : AppCompatActivity() {
 							Draft.convertTags(viewModel.tags.value!!),
 							Draft.convertImagesURI(viewModel.getNotNullURIs())
 						)
-						CoroutineScope(Dispatchers.IO).launch {
+						lifecycleScope.launch(Dispatchers.IO) {
 							application.roomRepository.update(new)
 						}
 					}

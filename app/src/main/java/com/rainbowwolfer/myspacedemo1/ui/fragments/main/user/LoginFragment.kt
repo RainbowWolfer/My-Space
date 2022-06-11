@@ -9,6 +9,7 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentLoginBinding
 import com.rainbowwolfer.myspacedemo1.models.User
@@ -31,7 +32,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 			if (isLoading || !checkParametersValid()) {
 				return@setOnClickListener
 			}
-			CoroutineScope(Dispatchers.IO).launch {
+			lifecycleScope.launch(Dispatchers.IO) {
 				try {
 					isLoading = true
 					var response: Response<User>? = null

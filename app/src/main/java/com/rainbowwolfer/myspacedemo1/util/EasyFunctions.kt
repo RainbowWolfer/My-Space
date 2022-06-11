@@ -6,6 +6,8 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
@@ -122,6 +124,28 @@ class EasyFunctions {
 					}
 				}
 			}
+		}
+		
+		
+		@JvmStatic
+		fun RecyclerView.scrollToUpdate(threashold: Int = 2, updateAction: () -> Unit) {
+			if (adapter == null) {
+				return
+			}
+			this.addOnScrollListener(
+				object : RecyclerView.OnScrollListener() {
+					override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+						super.onScrolled(recyclerView, dx, dy)
+						
+						val lastPosition = (this@scrollToUpdate.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+//						val firstPosition = (this@scrollToUpdate.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+						
+						if (lastPosition >= adapter!!.itemCount - threashold) {
+							updateAction.invoke()
+						}
+					}
+				}
+			)
 		}
 	}
 }

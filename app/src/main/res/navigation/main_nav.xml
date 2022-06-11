@@ -39,8 +39,8 @@
 		android:label="Post"
 		tools:layout="@layout/fragment_post_detail">
 		<argument
-			android:name="post"
-			app:argType="com.rainbowwolfer.myspacedemo1.models.Post"/>
+			android:name="post_id"
+			app:argType="string"/>
 	</fragment>
 	<fragment
 		android:id="@+id/nav_settings"

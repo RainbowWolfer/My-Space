@@ -1,4 +1,4 @@
-package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
+package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerviews
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -20,12 +21,15 @@ import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 
 class PostCommentsRecylverViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
+	private val lifecycleCoroutineScope: LifecycleCoroutineScope,
 ) : RecyclerView.Adapter<PostCommentsRecylverViewAdapter.ViewHolder>() {
 	companion object {
 		const val ID_ROW = 1
@@ -66,6 +70,7 @@ class PostCommentsRecylverViewAdapter(
 			
 			holder.updateComment(data)
 			holder.setMoreButton()
+			updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
 			
 			if (application.currentUser.value?.id == data.userID) {
 				application.currentUser.observe(lifecycleOwner) {
@@ -85,7 +90,7 @@ class PostCommentsRecylverViewAdapter(
 						userInfo.value = application.usersPool.findUserInfo(data.userID)
 					}, {
 						userInfo.value = application.usersPool.findUserInfo(data.userID)
-					})
+					}, lifecycleCoroutineScope)
 				}
 				
 				userInfo.observe(lifecycleOwner) {
@@ -94,10 +99,54 @@ class PostCommentsRecylverViewAdapter(
 				}
 			}
 			
+			holder.binding.commentRowButtonUpvote.buttonAction {
+				if (data.isVoted() != true) {
+					application.voteComment(data.id, true)
+					if (data.voted == Comment.VOTE_DOWN) {
+						data.downvotes -= 1
+					}
+					data.voted = Comment.VOTE_UP
+					data.upvotes += 1
+				} else {
+					application.voteComment(data.id, null)
+					data.voted = Comment.VOTE_NONE
+					data.upvotes -= 1
+				}
+				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
+				holder.updateComment(data)
+			}
+			
+			holder.binding.commentRowButtonDownvote.buttonAction {
+				if (data.isVoted() != false) {
+					application.voteComment(data.id, false)
+					if (data.voted == Comment.VOTE_UP) {
+						data.upvotes -= 1
+					}
+					data.voted = Comment.VOTE_DOWN
+					data.downvotes += 1
+				} else {
+					application.voteComment(data.id, null)
+					data.voted = Comment.VOTE_NONE
+					data.downvotes -= 1
+				}
+				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
+				holder.updateComment(data)
+			}
+			
 		} else if (holder is EndViewHolder) {
 			lastRow = holder
 		}
 		
+	}
+	
+	private fun View.buttonAction(onClick: () -> Unit) {
+		this.setOnClickListener {
+			if (application.hasLoggedIn()) {
+				onClick.invoke()
+			} else {
+				HomeFragment.popupNotLoggedInHint()
+			}
+		}
 	}
 	
 	private fun RowViewHolder.setMoreButton() {

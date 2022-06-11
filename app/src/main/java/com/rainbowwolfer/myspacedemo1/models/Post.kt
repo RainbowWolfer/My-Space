@@ -75,9 +75,9 @@ data class Post(
 	
 	fun isVoted(): Boolean? {
 		return when (voted) {
-			-1 -> null
-			0 -> false
-			1 -> true
+			VOTE_NONE -> null
+			VOTE_DOWN -> false
+			VOTE_UP -> true
 			else -> null
 		}
 	}

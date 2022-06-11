@@ -15,29 +15,41 @@ data class Comment(
 	@SerializedName("PostID") val postID: String,
 	@SerializedName("TextContent") val textContent: String,
 	@SerializedName("DateTime") val datetime: String,
-	@SerializedName("Upvotes") val upvotes: Int,
-	@SerializedName("Downvotes") val downvotes: Int,
+	@SerializedName("Username") val username: String,
+	@SerializedName("Email") val email: String,
+	@SerializedName("Profile") val profile: String,
+	@SerializedName("Upvotes") var upvotes: Int,
+	@SerializedName("Downvotes") var downvotes: Int,
+	//-1 -> none
+	//0  -> down
+	//1  -> up
+	@SerializedName("Voted") var voted: Int,
 ) : Parcelable, DatabaseID<String> {
 	companion object {
-		@JvmStatic
-		fun getTestList(count: Int = 0): ArrayList<Comment> {
-			val list = arrayListOf<Comment>()
-			for (i in 0 until count) {
-				list.add(
-					Comment(
-						i.toString(),
-						EasyFunctions.generateRandomString(10),
-						EasyFunctions.generateRandomString(10),
-						EasyFunctions.generateRandomString(30),
-						"Calendar.getInstance()",
-						Random.nextInt(),
-						Random.nextInt(),
-					)
-				)
-			}
-			return list
+		const val VOTE_UP = 1
+		const val VOTE_DOWN = 0
+		const val VOTE_NONE = -1
+	}
+	
+	fun isVoted(): Boolean? {
+		return when (voted) {
+			VOTE_NONE -> null
+			VOTE_DOWN -> false
+			VOTE_UP -> true
+			else -> null
 		}
 	}
+	
+	fun getUesr(): User {
+		return User(
+			id = userID,
+			username = username,
+			email = email,
+			profileDescription = profile,
+		)
+	}
+	
+	fun getScore(): Int = upvotes - downvotes
 	
 	override fun getDatabaseID(): String = id
 }

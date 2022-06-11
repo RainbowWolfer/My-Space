@@ -7,12 +7,13 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.RowDraftLayoutBinding
 import com.rainbowwolfer.myspacedemo1.models.Draft
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 
 class DraftsRecyclerViewAdapter(
 	private val context: Context,
+	private val lifecycleCoroutineScope: LifecycleCoroutineScope,
 ) : RecyclerView.Adapter<DraftsRecyclerViewAdapter.ViewHolder>() {
 	class ViewHolder(val binding: RowDraftLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 	
@@ -46,7 +48,7 @@ class DraftsRecyclerViewAdapter(
 							setMessage("Are you sure to delete this draft?")
 							setNegativeButton("No", null)
 							setPositiveButton("Yes") { _, _ ->
-								CoroutineScope(Dispatchers.IO).launch {
+								lifecycleCoroutineScope.launch(Dispatchers.IO) {
 									application.roomRepository.delete(data)
 								}
 							}

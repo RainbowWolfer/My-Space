@@ -1,12 +1,13 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
 import com.rainbowwolfer.myspacedemo1.models.Comment
+import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.Post
-import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.*
-import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
+import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
+import com.rainbowwolfer.myspacedemo1.models.records.ScoreRecord
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -98,12 +99,21 @@ interface MyApi {
 	
 	@GET("post/comments")
 	suspend fun getPostComments(
-		@Query("post_id") postID: String
+		@Query("post_id") postID: String,
+		@Query("offset") offset: Int,
+		@Query("email") email: String = "",
+		@Query("password") password: String = "",
+		@Query("limit") limit: Int = 15,
 	): Response<List<Comment>>
 	
 	@POST("post/vote")
 	suspend fun postVote(
-		@Body comment: NewVote
+		@Body vote: NewPostVote
+	): ResponseBody
+	
+	@POST("post/comment/vote")
+	suspend fun commentVote(
+		@Body vote: NewCommentVote
 	): ResponseBody
 	
 	@POST("post/repost")
@@ -111,5 +121,15 @@ interface MyApi {
 		@Body repost: NewRepost
 	): ResponseBody
 	
+	@GET("post/repostRecords")
+	suspend fun getRepostRecords(
+		@Query("post_id") postID: String,
+		@Query("offset") offset: Int,
+	): Response<List<RepostRecord>>
 	
+	@GET("post/scoreRecords")
+	suspend fun getScoreRecords(
+		@Query("post_id") postID: String,
+		@Query("offset") offset: Int,
+	): Response<List<ScoreRecord>>
 }

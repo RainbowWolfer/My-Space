@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="5dp"
+	android:background="@drawable/card_background"
+	android:clickable="true"
+	android:focusable="true"
+	android:foreground="@drawable/ripple_message_row_foreground"
+	android:padding="5dp">
+	
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/rowRepostRecord_image_avatar"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="16dp"
+		android:clickable="true"
+		android:contentDescription="@string/app_name"
+		android:focusable="true"
+		android:foreground="@drawable/round_ripple"
+		android:src="@drawable/default_avatar"
+		app:civ_border_color="@color/normal_text"
+		app:civ_border_overlay="true"
+		app:civ_border_width="1dp"
+		app:layout_constraintBottom_toBottomOf="@+id/rowRepostRecord_icon_repost"
+		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_icon_repost"
+		app:layout_constraintTop_toTopOf="@+id/rowRepostRecord_icon_repost"/>
+	
+	<TextView
+		android:id="@+id/rowRepostRecord_text_username"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:ellipsize="end"
+		android:ems="1"
+		android:maxLines="1"
+		android:text="RainbowWolfer"
+		android:textSize="18sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toStartOf="@+id/rowRepostRecord_button_quote"
+		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_image_avatar"
+		app:layout_constraintTop_toTopOf="@+id/rowRepostRecord_image_avatar"/>
+	
+	<TextView
+		android:id="@+id/rowRepostRecord_text_time"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:text="2022-02-22 22:22:22"
+		app:layout_constraintBottom_toBottomOf="@+id/rowRepostRecord_image_avatar"
+		app:layout_constraintEnd_toStartOf="@+id/rowRepostRecord_button_quote"
+		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_image_avatar"/>
+	
+	<ImageView
+		android:id="@+id/rowRepostRecord_icon_repost"
+		android:layout_width="28dp"
+		android:layout_height="28dp"
+		android:layout_marginStart="12dp"
+		android:layout_marginTop="12dp"
+		android:contentDescription=""
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
+	
+	<ImageView
+		android:id="@+id/rowRepostRecord_button_quote"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_marginEnd="8dp"
+		android:contentDescription="@string/app_name_space"
+		android:padding="10dp"
+		app:layout_constraintBottom_toBottomOf="@+id/rowRepostRecord_image_avatar"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/rowRepostRecord_image_avatar"
+		app:srcCompat="@drawable/ic_baseline_format_quote_24"
+		app:tint="@color/purple_500"/>
+	
+	<TextView
+		android:id="@+id/rowRepostRecord_text_quote"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginBottom="8dp"
+		android:ellipsize="end"
+		android:maxLines="5"
+		android:text="@string/welcome1_text"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/rowRepostRecord_button_quote"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

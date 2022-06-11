@@ -2,42 +2,35 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.main
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.activity.viewBinding
-import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.textfield.TextInputLayout
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 			return@registerForActivityResult
 		}
 		application.updateAvatar()
-		CoroutineScope(Dispatchers.Main).launch {
+		lifecycleScope.launch(Dispatchers.Main) {
 			application.userPreferencesRepository.updateUser(user.email, user.password)
 		}
 	}
@@ -141,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 					navController.popBackStack(R.id.item_home, true)
 					navController.navigate(R.id.item_home)
 					application.clearCurrent()
-					CoroutineScope(Dispatchers.Main).launch {
+					lifecycleScope.launch(Dispatchers.Main) {
 						application.userPreferencesRepository.clearUser()
 					}
 				}

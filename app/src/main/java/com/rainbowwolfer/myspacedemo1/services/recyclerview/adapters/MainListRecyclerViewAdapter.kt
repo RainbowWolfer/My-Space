@@ -35,7 +35,7 @@ import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
@@ -121,6 +121,7 @@ class MainListRecyclerViewAdapter(
 							val found = application.postsPool.findPostInfo(post.id)?.post
 							if (found != null) {
 								found.reposts += 1
+								post.reposts = found.reposts
 								successAction(found)
 							}
 						} catch (ex: Exception) {
@@ -183,7 +184,7 @@ class MainListRecyclerViewAdapter(
 				val navController = Navigation.findNavController(holder.itemView)
 				navController.navigate(
 					HomeFragmentDirections.actionItemHomeToPostDetailFragment(
-						if (post.isRepost) post.getOriginPost()!! else post
+						if (post.isRepost) post.getOriginPost()!!.id else post.id
 					)
 				)
 			}
@@ -191,7 +192,7 @@ class MainListRecyclerViewAdapter(
 			holder.binding.mainLayoutRepost.setOnClickListener {
 				if (post.isRepost) {
 					val navController = Navigation.findNavController(holder.itemView)
-					navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(post))
+					navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(post.id))
 				}
 			}
 			
@@ -258,6 +259,10 @@ class MainListRecyclerViewAdapter(
 			showRepostDialog(context, post) {
 				setMetas(post)
 			}
+//			val found = application.postsPool.findPostInfo(post.id)?.post
+//			if (found != null) {
+//				found.reposts = post.reposts
+//			}
 		}
 		
 		this.rowLayoutComment.buttonAction {
@@ -266,38 +271,48 @@ class MainListRecyclerViewAdapter(
 		
 		this.rowButtonUpvote.buttonAction {
 			if (post.isVoted() != true) {
-				application.vote(post.id, true)
+				application.votePost(post.id, true)
 				if (post.voted == Post.VOTE_DOWN) {
 					post.downvotes -= 1
 				}
 				post.voted = Post.VOTE_UP
 				post.upvotes += 1
 			} else {
-				application.vote(post.id, null)
+				application.votePost(post.id, null)
 				post.voted = Post.VOTE_NONE
 				post.upvotes -= 1
 			}
 			
 			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
 			setMetas(post)
+			val found = application.postsPool.findPostInfo(post.id)?.post
+			if (found != null) {
+				found.upvotes = post.upvotes
+				found.downvotes = post.downvotes
+			}
 		}
 		
 		this.rowButtonDownvote.buttonAction {
 			if (post.isVoted() != false) {
-				application.vote(post.id, false)
+				application.votePost(post.id, false)
 				if (post.voted == Post.VOTE_UP) {
 					post.upvotes -= 1
 				}
 				post.voted = Post.VOTE_DOWN
 				post.downvotes += 1
 			} else {
-				application.vote(post.id, null)
+				application.votePost(post.id, null)
 				post.voted = Post.VOTE_NONE
 				post.downvotes -= 1
 			}
 			
 			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
 			setMetas(post)
+			val found = application.postsPool.findPostInfo(post.id)?.post
+			if (found != null) {
+				found.upvotes = post.upvotes
+				found.downvotes = post.downvotes
+			}
 		}
 	}
 	
@@ -335,7 +350,7 @@ class MainListRecyclerViewAdapter(
 				commentInputBinding.bottomSheetCommentDialogButtonSend.isEnabled = !it.isNullOrEmpty() && it.length <= 200
 			}
 			commentInputBinding.bottomSheetCommentDialogButtonSend.setOnClickListener {
-				CoroutineScope(Dispatchers.Main).launch {
+				lifecycleScope.launch(Dispatchers.Main) {
 					val dialog = LoadingDialog(context).apply {
 						showDialog("Uploading Comment")
 					}
@@ -360,6 +375,7 @@ class MainListRecyclerViewAdapter(
 						val found = application.postsPool.findPostInfo(post.id)?.post
 						if (found != null) {
 							found.comments += 1
+							post.comments = found.comments
 							setMetas(found)
 						}
 					} catch (ex: Exception) {

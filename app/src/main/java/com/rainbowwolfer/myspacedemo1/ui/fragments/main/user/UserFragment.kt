@@ -5,13 +5,11 @@ import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
-import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserBinding
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.UserViewPagerAdapter
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 
 class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()

@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentSplashBinding
-import com.rainbowwolfer.myspacedemo1.models.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasValue
 import kotlinx.coroutines.*
@@ -28,7 +29,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 		data.asLiveData().observe(viewLifecycleOwner) {
 			skip = it.skip
 			if (it.hasValue()) {
-				CoroutineScope(Dispatchers.IO).launch {
+				lifecycleScope.launch(Dispatchers.IO) {
 					try {
 						val response = RetrofitInstance.api.tryLogin(it.email, it.password)
 						val user = response.body()!!
@@ -40,7 +41,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 					}
 				}
 			}
-			CoroutineScope(Dispatchers.Main).launch {
+			lifecycleScope.launch(Dispatchers.Main) {
 				delay(1000)
 				loadNext()
 			}
@@ -58,7 +59,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 	companion object {
 		@JvmStatic
 		fun jumpToMainActivity(fragment: Fragment) {
-			CoroutineScope(Dispatchers.Main).launch {
+			fragment.lifecycleScope.launch(Dispatchers.Main) {
 				MySpaceApplication.instance.userPreferencesRepository.updateSkip(true)
 			}
 			fragment.startActivity(Intent(fragment.requireContext(), MainActivity::class.java))
