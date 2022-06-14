@@ -32,6 +32,16 @@ class PostInfo(
 			return this.find { it.id == id }
 		}
 		
+		fun ArrayList<PostInfo>.findRelativePosts(postID: String): ArrayList<Post> {
+			val result = arrayListOf<Post>()
+			for (item in this) {
+				if (item.id == postID || item.post.originPostID == postID) {
+					result.add(item.post)
+				}
+			}
+			return result
+		}
+		
 		@JvmStatic
 		fun ArrayList<PostInfo>.addPost(post: Post) {
 			val found = this.findPostInfo(post.id)

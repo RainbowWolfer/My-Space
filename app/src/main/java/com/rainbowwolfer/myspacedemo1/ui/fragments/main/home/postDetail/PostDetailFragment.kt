@@ -20,6 +20,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -47,22 +48,25 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}
 		
 		@JvmStatic
-		fun updateVoteButtons(upButton: AppCompatImageButton, downButton: AppCompatImageButton, vote: Boolean?) {
+		fun updateVoteButtons(upButton: AppCompatImageButton, downButton: AppCompatImageButton, voted: Int) {
 			val application = MySpaceApplication.instance
 			val upIcon: Int
 			val downIcon: Int
-			when (vote) {
-				true -> {
+			when (voted) {
+				Post.VOTE_UP -> {
 					upIcon = R.drawable.ic_baseline_thumb_up_24
 					downIcon = R.drawable.ic_outline_thumb_down_24
 				}
-				false -> {
+				Post.VOTE_DOWN -> {
 					upIcon = R.drawable.ic_outline_thumb_up_24
 					downIcon = R.drawable.ic_baseline_thumb_down_24
 				}
-				null -> {
+				Post.VOTE_NONE -> {
 					upIcon = R.drawable.ic_outline_thumb_up_24
 					downIcon = R.drawable.ic_outline_thumb_down_24
+				}
+				else -> {
+					throw Exception("$voted not implemented")
 				}
 			}
 			upButton.setImageDrawable(ResourcesCompat.getDrawable(application.resources, upIcon, application.theme))
@@ -116,7 +120,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		viewModel.post.observe(viewLifecycleOwner) { post ->
 			binding.loadImages(post)
 			updatePost(post)
-			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.voted)
 			updateRepostButton(binding.postDetailButtonRepost, post.hasReposted)
 			binding.updateUser(post.getPublisher())
 		}
@@ -159,14 +163,23 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}
 		
 		binding.postDetailButtonRepost.buttonAction {
-			showRepostDialog(requireContext(), viewModel.post.value!!) {
-				viewModel.post.value = it
+			showRepostDialog(requireContext(), viewModel.post.value!!.id) {
+				val post = viewModel.post.value!!
+				post.updateReposts(1)
+				application.postsPool.findRelativePosts(post.readID()).forEach {
+					if (it.isRepost) {
+						it.originReposts = post.reposts
+					} else {
+						it.reposts = post.reposts
+					}
+				}
+				viewModel.post.value = post//refresh observer
 			}
 		}
 		
 		binding.postDetailButtonUpvote.buttonAction {
 			val post = viewModel.post.value!!
-			if (post.isVoted() != true) {
+			if (post.voted != Post.VOTE_UP) {
 				application.votePost(post.id, true)
 				if (post.voted == Post.VOTE_DOWN) {
 					post.downvotes -= 1
@@ -179,13 +192,24 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 				post.upvotes -= 1
 			}
 			
-			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.voted)
 			updatePost(post)
+			application.postsPool.findRelativePosts(post.readID()).forEach {
+				if (it.isRepost) {
+					it.originUpvotes = post.upvotes
+					it.originDownvotes = post.downvotes
+					it.originVoted = post.voted
+				} else {
+					it.upvotes = post.upvotes
+					it.downvotes = post.downvotes
+					it.voted = post.voted
+				}
+			}
 		}
 		
 		binding.postDetailButtonDownvote.buttonAction {
 			val post = viewModel.post.value!!
-			if (post.isVoted() != false) {
+			if (post.voted != Post.VOTE_DOWN) {
 				application.votePost(post.id, false)
 				if (post.voted == Post.VOTE_UP) {
 					post.upvotes -= 1
@@ -198,8 +222,19 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 				post.downvotes -= 1
 			}
 			
-			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.isVoted())
+			updateVoteButtons(binding.postDetailButtonUpvote, binding.postDetailButtonDownvote, post.voted)
 			updatePost(post)
+			application.postsPool.findRelativePosts(post.readID()).forEach {
+				if (it.isRepost) {
+					it.originUpvotes = post.upvotes
+					it.originDownvotes = post.downvotes
+					it.originVoted = post.voted
+				} else {
+					it.upvotes = post.upvotes
+					it.downvotes = post.downvotes
+					it.voted = post.voted
+				}
+			}
 		}
 	}
 	

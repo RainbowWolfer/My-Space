@@ -95,6 +95,7 @@ class MySpaceApplication : Application() {
 					withContext(Dispatchers.IO) {
 						try {
 							val response = RetrofitInstance.api.getAvatar(userID)
+							println("READING FROM THE SERVER")
 							avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
 						} catch (ex: HttpException) {
 							throw ResponseException(ex.response()!!.getHttpResponse())

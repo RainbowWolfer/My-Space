@@ -14,6 +14,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailCommentsBinding
 import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
@@ -205,14 +206,22 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 				
 				val post = application.postsPool.findPostInfo(postID)?.post
 				if (post != null) {
-					post.comments += 1
+					post.updateComments(1)
 					PostDetailFragment.instance.updatePost(post)
+					application.postsPool.findRelativePosts(post.readID()).forEach {
+						if (it.isRepost) {
+							it.originComments = post.comments
+						} else {
+							it.comments = post.comments
+						}
+					}
 				}
 				
 				viewModel.comments.value = (viewModel.comments.value ?: emptyList()).toMutableList().apply {
 					add(0, comment)
 				}
 				viewModel.post.value = post
+				
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			} finally {

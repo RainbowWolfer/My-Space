@@ -125,7 +125,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			}
 		} else {
 			val found = application.usersPool.findUserInfo(userID)
-			if (found != null) {
+			if (found?.user != null) {
 				viewModel.userInfo.value = found
 			} else {
 				application.findOrGetUserInfo(userID, {
@@ -140,7 +140,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 					return@observe
 				}
 				
-				binding.updateUserInfo(it.user)
+				binding.updateUserInfo(it.user!!)
 				binding.userImageAvatar.setImageBitmap(it.avatar)
 			}
 		}

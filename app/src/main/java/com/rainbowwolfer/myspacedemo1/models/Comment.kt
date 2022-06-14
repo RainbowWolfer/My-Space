@@ -31,14 +31,14 @@ data class Comment(
 		const val VOTE_NONE = -1
 	}
 	
-	fun isVoted(): Boolean? {
-		return when (voted) {
-			VOTE_NONE -> null
-			VOTE_DOWN -> false
-			VOTE_UP -> true
-			else -> null
-		}
-	}
+//	fun isVoted(): Boolean? {
+//		return when (voted) {
+//			VOTE_NONE -> null
+//			VOTE_DOWN -> false
+//			VOTE_UP -> true
+//			else -> null
+//		}
+//	}
 	
 	fun getUesr(): User {
 		return User(

@@ -62,11 +62,14 @@ class ImagesDisplayGridViewAdapter(
 		}
 		
 		@JvmStatic
-		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, scope: CoroutineScope) {
+		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, scope: CoroutineScope, doneAction: (Boolean) -> Unit = {}) {
 			val application = MySpaceApplication.instance
-			
+			var hasNewLoaded = false
+			val adapter = gridView.adapter
+			if (adapter !is ImagesDisplayGridViewAdapter) {
+				return
+			}
 			scope.launch(Dispatchers.Main) {
-				val adapter = gridView.adapter as ImagesDisplayGridViewAdapter
 				try {
 					for (index in 0 until post.imagesCount) {
 						val list = adapter.list.toMutableList()
@@ -75,6 +78,7 @@ class ImagesDisplayGridViewAdapter(
 							list[index] = Pair(image.bitmap.value, null)
 							adapter.setData(list)
 						} else {
+							hasNewLoaded = true
 							image.load()
 							image.bitmap.observe(lifecycleOwner) {
 								list[index] = Pair(it, null)
@@ -84,6 +88,8 @@ class ImagesDisplayGridViewAdapter(
 					}
 				} catch (ex: Exception) {
 					ex.printStackTrace()
+				} finally {
+					doneAction.invoke(hasNewLoaded)
 				}
 			}.ensureActive()
 		}

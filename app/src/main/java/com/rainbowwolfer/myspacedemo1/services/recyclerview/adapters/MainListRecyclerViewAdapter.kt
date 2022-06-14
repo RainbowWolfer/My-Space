@@ -33,6 +33,8 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirecti
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
+import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -61,7 +63,7 @@ class MainListRecyclerViewAdapter(
 		const val ITEM_TYPE_END = 2
 		
 		@JvmStatic
-		fun showRepostDialog(context: Context, post: Post, successAction: (Post) -> Unit) {
+		fun showRepostDialog(context: Context, postID: String, successAction: () -> Unit) {
 			val application = MySpaceApplication.instance
 			if (!application.hasLoggedIn()) {
 				return
@@ -106,7 +108,7 @@ class MainListRecyclerViewAdapter(
 							withContext(Dispatchers.IO) {
 								RetrofitInstance.api.repost(
 									NewRepost(
-										originPostID = post.id,
+										originPostID = postID,
 										publisherID = application.currentUser.value!!.id,
 										textContent = binding.bottomSheetRepostDialogEditText.text?.toString() ?: "",
 										postVisibility = PostVisibility.All,
@@ -117,13 +119,13 @@ class MainListRecyclerViewAdapter(
 									)
 								)
 							}
-							
-							val found = application.postsPool.findPostInfo(post.id)?.post
-							if (found != null) {
-								found.reposts += 1
-								post.reposts = found.reposts
-								successAction(found)
-							}
+
+//							post.updateReposts(1)
+							successAction()
+//							val found = application.postsPool.findPostInfo(post.readID())?.post
+//							if (found != null) {
+//								found.reposts += 1
+//							}
 						} catch (ex: Exception) {
 							ex.printStackTrace()
 						} finally {
@@ -145,7 +147,7 @@ class MainListRecyclerViewAdapter(
 	
 	var enableAvatarClicking: Boolean = true
 	
-	private var postsList = emptyList<Post>()
+	private var list = emptyList<Post>()
 	private val application = MySpaceApplication.instance
 	
 	private var endTextIndex = 0
@@ -160,45 +162,50 @@ class MainListRecyclerViewAdapter(
 	
 	override fun getItemViewType(position: Int): Int {
 		return when (position) {
-			postsList.size -> ITEM_TYPE_END
+			list.size -> ITEM_TYPE_END
 			else -> ITEM_TYPE_NORMAL
 		}
 	}
 	
-	override fun getItemCount(): Int = postsList.size + 1
+	override fun getItemCount(): Int = list.size + 1
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
-			val post = postsList[position]
-			application.postsPool.addPost(post)
-			if (post.isRepost) {
-				application.postsPool.addPost(post.getOriginPost()!!)
+//			val post = postsList[position]
+			application.postsPool.addPost(list[position])
+			if (list[position].isRepost) {
+				application.postsPool.addPost(list[position].getOriginPost()!!)
 			}
+			
+			val postID = list[position].id
+			val originID = list[position].originPostID
+			val isRepost = list[position].isRepost
 			
 			holder.binding.rowGridviewImages.isVerticalScrollBarEnabled = false
 			holder.binding.rowGridviewImages.isEnabled = false
 			
-			holder.binding.setPostView(post)
+			holder.binding.setPostView(postID)
 			
 			holder.binding.root.setOnClickListener {
 				val navController = Navigation.findNavController(holder.itemView)
 				navController.navigate(
 					HomeFragmentDirections.actionItemHomeToPostDetailFragment(
-						if (post.isRepost) post.getOriginPost()!!.id else post.id
+						if (isRepost) originID else postID
 					)
 				)
 			}
 			
 			holder.binding.mainLayoutRepost.setOnClickListener {
-				if (post.isRepost) {
+				if (isRepost) {
 					val navController = Navigation.findNavController(holder.itemView)
-					navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(post.id))
+					navController.navigate(HomeFragmentDirections.actionItemHomeToPostDetailFragment(postID))
 				}
 			}
 			
 			holder.binding.rowButtonMore.setOnClickListener {
 				val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
 				popupMenu.setOnMenuItemClickListener {
+					val post = list[position]
 					when (it.itemId) {
 						R.id.item_share -> {
 							val sharedIntent = Intent().apply {
@@ -211,7 +218,10 @@ class MainListRecyclerViewAdapter(
 							}
 							context.startActivity(sharedIntent)
 						}
-						R.id.item_flag -> Toast.makeText(context, "Flag $post", Toast.LENGTH_SHORT).show()
+						R.id.item_flag -> {
+							Toast.makeText(context, "Flag $post", Toast.LENGTH_LONG).show()
+							println(post)
+						}
 						R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
 					}
 					true
@@ -223,6 +233,7 @@ class MainListRecyclerViewAdapter(
 				popupMenu.show()
 			}
 			if (enableAvatarClicking) {
+				val post = list[position]
 				holder.binding.rowImagePublisherAvatar.setOnClickListener {
 					if (post.isRepost) {
 						navigateToUserProfile(holder.itemView, post.getOriginUser()!!.id)
@@ -254,69 +265,116 @@ class MainListRecyclerViewAdapter(
 		navController.navigate(action)
 	}
 	
-	private fun MainRowLayoutBinding.setButtons(post: Post) {
+	private fun MainRowLayoutBinding.setButtons(postID: String) {
 		this.rowLayoutRepost.buttonAction {
-			showRepostDialog(context, post) {
-				setMetas(post)
+			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
+			showRepostDialog(context, post.readID()) {
+				post.updateReposts(1)
+				setMetas(post.readID())
+				
+				with(application.postsPool.findRelativePosts(post.readID())) {
+					this.forEach {
+						if (it.isRepost) {
+							it.originReposts = post.reposts
+						} else {
+							it.reposts = post.reposts
+						}
+					}
+					updatePositions(this)
+				}
 			}
-//			val found = application.postsPool.findPostInfo(post.id)?.post
-//			if (found != null) {
-//				found.reposts = post.reposts
-//			}
 		}
 		
 		this.rowLayoutComment.buttonAction {
-			this.showCommentDialog(post)
+			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
+			this.showCommentDialog(post.readID()) {
+				post.updateComments(1)
+				setMetas(post.readID())
+				
+				with(application.postsPool.findRelativePosts(post.readID())) {
+					this.forEach {
+						if (it.isRepost) {
+							it.originComments = post.comments
+						} else {
+							it.comments = post.comments
+						}
+					}
+					updatePositions(this)
+				}
+			}
 		}
 		
 		this.rowButtonUpvote.buttonAction {
-			if (post.isVoted() != true) {
-				application.votePost(post.id, true)
-				if (post.voted == Post.VOTE_DOWN) {
-					post.downvotes -= 1
+			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
+			if (post.readVoted() != Post.VOTE_UP) {
+				application.votePost(post.readID(), true)
+				if (post.readVoted() == Post.VOTE_DOWN) {
+					post.updateDownvotes(-1)
 				}
-				post.voted = Post.VOTE_UP
-				post.upvotes += 1
+				post.updateVoted(Post.VOTE_UP)
+				post.updateUpvotes(1)
 			} else {
-				application.votePost(post.id, null)
-				post.voted = Post.VOTE_NONE
-				post.upvotes -= 1
+				application.votePost(post.readID(), null)
+				post.updateVoted(Post.VOTE_NONE)
+				post.updateUpvotes(-1)
 			}
 			
-			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
-			setMetas(post)
-			val found = application.postsPool.findPostInfo(post.id)?.post
-			if (found != null) {
-				found.upvotes = post.upvotes
-				found.downvotes = post.downvotes
+			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.readVoted())
+			setMetas(postID)
+			
+			with(application.postsPool.findRelativePosts(post.readID())) {
+				this.forEach {
+					if (it.isRepost) {
+						it.originUpvotes = post.upvotes
+						it.originDownvotes = post.downvotes
+						it.originVoted = post.voted
+					} else {
+						it.upvotes = post.upvotes
+						it.downvotes = post.downvotes
+						it.voted = post.voted
+					}
+				}
+				updatePositions(this)
 			}
 		}
 		
 		this.rowButtonDownvote.buttonAction {
-			if (post.isVoted() != false) {
+			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
+			if (post.readVoted() != Post.VOTE_DOWN) {
 				application.votePost(post.id, false)
-				if (post.voted == Post.VOTE_UP) {
-					post.upvotes -= 1
+				if (post.readVoted() == Post.VOTE_UP) {
+					post.updateUpvotes(-1)
 				}
-				post.voted = Post.VOTE_DOWN
-				post.downvotes += 1
+				post.updateVoted(Post.VOTE_DOWN)
+				post.updateDownvotes(1)
 			} else {
 				application.votePost(post.id, null)
-				post.voted = Post.VOTE_NONE
-				post.downvotes -= 1
+				post.updateVoted(Post.VOTE_NONE)
+				post.updateDownvotes(-1)
 			}
 			
-			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.isVoted())
-			setMetas(post)
-			val found = application.postsPool.findPostInfo(post.id)?.post
-			if (found != null) {
-				found.upvotes = post.upvotes
-				found.downvotes = post.downvotes
+			updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, post.readVoted())
+			setMetas(postID)
+			
+			with(application.postsPool.findRelativePosts(post.readID())) {
+				this.forEach {
+					if (it.isRepost) {
+						it.originUpvotes = post.upvotes
+						it.originDownvotes = post.downvotes
+						it.originVoted = post.voted
+					} else {
+						it.upvotes = post.upvotes
+						it.downvotes = post.downvotes
+						it.voted = post.voted
+					}
+				}
+				updatePositions(this)
 			}
+			
 		}
 	}
 	
-	private fun MainRowLayoutBinding.showCommentDialog(post: Post) {
+	private fun MainRowLayoutBinding.showCommentDialog(postID: String, onCommented: () -> Unit) {
 		BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
 //			window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 			setOnShowListener {
@@ -361,7 +419,7 @@ class MainListRecyclerViewAdapter(
 								NewComment(
 									application.currentUser.value?.email ?: "",
 									application.currentUser.value?.password ?: "",
-									post.id,
+									postID,
 									commentInputBinding.bottomSheetCommentDialogEditText.text?.toString() ?: ""
 								)
 							)
@@ -371,13 +429,15 @@ class MainListRecyclerViewAdapter(
 								throw Exception()
 							}
 						}
-						
-						val found = application.postsPool.findPostInfo(post.id)?.post
-						if (found != null) {
-							found.comments += 1
-							post.comments = found.comments
-							setMetas(found)
-						}
+						onCommented.invoke()
+//						post.updateComments(1)
+//						setMetas(post)
+
+//						val found = application.postsPool.findPostInfo(post.id)?.post
+//						if (found != null) {
+//							found.comments += 1
+//							post.comments = found.comments
+//						}
 					} catch (ex: Exception) {
 						ex.printStackTrace()
 					} finally {
@@ -401,17 +461,18 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	private fun MainRowLayoutBinding.setPostView(post: Post) {
-		this.setRepostView(post.isRepost)
-		this.setContent(post)
-		val result = if (post.isRepost) post.getOriginPost()!! else post
-		this.setTags(result.tags)
-		this.setMetas(result)
-		this.setPublisher(result)
-		this.setButtons(result)
-		this.loadImages(result)
-		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, result.isVoted())
-		updateRepostButton(this.rowImageRepostButtonIcon, post.hasReposted)
+	private fun MainRowLayoutBinding.setPostView(postID: String) {
+		val p = application.postsPool.findPostInfo(postID)!!.post
+		this.setRepostView(p.isRepost)
+		this.setContent(p)
+//		val result = if (p.isRepost) p.getOriginPost()!! else p
+		this.setTags(p.readTags())
+		this.setMetas(p.readID())
+		this.setPublisher(p.readUser())
+		this.setButtons(p.readID())//inlcude writes
+		this.loadImages(if (p.isRepost) p.getOriginPost()!! else p)
+		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, p.readVoted())
+		updateRepostButton(this.rowImageRepostButtonIcon, p.hasReposted)
 	}
 	
 	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {
@@ -457,22 +518,23 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	private fun MainRowLayoutBinding.setMetas(post: Post) {
-		this.rowRepostCount.text = "${post.reposts}"
-		this.rowCommentCount.text = "${post.comments}"
+	private fun MainRowLayoutBinding.setMetas(postID: String) {
+		val post = application.postsPool.findPostInfo(postID)?.post ?: return
+		this.rowRepostCount.text = "${post.readReposts()}"
+		this.rowCommentCount.text = "${post.readComments()}"
 //		val score = post.score + when (post.voted) {
 //			Post.VOTE_NONE -> 0
 //			Post.VOTE_DOWN -> -1
 //			Post.VOTE_UP -> +1
 //			else -> 0
 //		}
-		this.rowTextScore.text = "${post.upvotes - post.downvotes}"
+		this.rowTextScore.text = "${post.readUpvotes() - post.readDownvotes()}"
 	}
 	
-	private fun MainRowLayoutBinding.setPublisher(post: Post) {
+	private fun MainRowLayoutBinding.setPublisher(user: User) {
 		this.rowImagePublisherAvatar.setImageDrawable(null)
-		this.rowTextPublisherName.text = post.getPublisher().username
-		application.findOrGetAvatar(post.publisherID) {
+		this.rowTextPublisherName.text = user.username
+		application.findOrGetAvatar(user.id) {
 			this.rowImagePublisherAvatar.setImageBitmap(it)
 		}
 	}
@@ -487,14 +549,33 @@ class MainListRecyclerViewAdapter(
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		loadImages(this.rowGridviewImages, post, lifecycleOwner, lifecycleScope)
+		loadImages(this.rowGridviewImages, post, lifecycleOwner, lifecycleScope) {
+//			if (it) {
+//				application.postsPool.findRelativePosts(post.id).apply {
+//					updatePositions(this)
+//				}
+//			}
+		}
 	}
 	
-	fun setData(newPersonList: List<Post>) {
-		val diffUtil = DatabaseIdDiffUtil(postsList, newPersonList)
-		val diffResult = DiffUtil.calculateDiff(diffUtil)
-		postsList = newPersonList
-		diffResult.dispatchUpdatesTo(this)
+	private fun updatePositions(changes: List<Post>, onlyCompareID: Boolean = true) {
+		val positions = arrayListOf<Int>()
+		for (i in changes.indices) {
+			for (j in list.indices) {
+				if ((onlyCompareID && changes[i].id == list[j].id) || changes[i] == list[j]) {
+					positions.add(j)
+				}
+			}
+		}
+		positions.forEach {
+			notifyItemChanged(it)//idk but it just want to update specfic elements instead of whole view
+		}
+	}
+	
+	fun setData(new: List<Post>) {
+		val diffUtil = DatabaseIdDiffUtil(list, new)
+		list = new
+		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 		endTextIndex = 0
 	}
 }

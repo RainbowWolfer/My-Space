@@ -47,10 +47,10 @@ data class Post(
 	@SerializedName("OriginReply") val originReply: PostVisibility? = null,
 	@SerializedName("OriginIsRepost") val originIsRepost: Boolean? = null,
 	@SerializedName("OriginOriginPostID") val originOriginPostID: String? = null,
-	@SerializedName("OriginUpvotes") val originUpvotes: Int? = null,
-	@SerializedName("OriginDownvotes") val originDownvotes: Int? = null,
-	@SerializedName("OriginComments") val originComments: Int? = null,
-	@SerializedName("OriginReposts") val originReposts: Int? = null,
+	@SerializedName("OriginUpvotes") var originUpvotes: Int? = null,
+	@SerializedName("OriginDownvotes") var originDownvotes: Int? = null,
+	@SerializedName("OriginComments") var originComments: Int? = null,
+	@SerializedName("OriginReposts") var originReposts: Int? = null,
 	//------------
 	//Post Properties
 	@SerializedName("Score") val score: Int,//upvotes - downvotes
@@ -62,7 +62,7 @@ data class Post(
 	//------------
 	//if respost (Origin Post Properties)
 	@SerializedName("OriginScore") val originScore: Int? = null,
-	@SerializedName("OriginVoted") val originVoted: Int? = null,
+	@SerializedName("OriginVoted") var originVoted: Int? = null,
 //	@SerializedName("OriginHasReposted") val originHasReposted: Boolean? = null,
 ) : Parcelable, DatabaseID<String> {
 	companion object {
@@ -73,12 +73,21 @@ data class Post(
 	
 	override fun getDatabaseID(): String = id
 	
-	fun isVoted(): Boolean? {
-		return when (voted) {
-			VOTE_NONE -> null
-			VOTE_DOWN -> false
-			VOTE_UP -> true
-			else -> null
+	//	fun isVoted(): Boolean? {
+//		return when (voted) {
+//			VOTE_NONE -> null
+//			VOTE_DOWN -> false
+//			VOTE_UP -> true
+//			else -> null
+//		}
+//	}
+	fun readVoted(): Int = if (isRepost) originVoted!! else voted
+	
+	fun updateVoted(type: Int) {
+		if (isRepost) {
+			originVoted = type
+		} else {
+			voted = type
 		}
 	}
 	
@@ -136,4 +145,84 @@ data class Post(
 		}
 	}
 	
+	fun readID(): String = if (isRepost) originPostID else id
+	fun readUser(): User = if (isRepost) getOriginUser()!! else getPublisher()
+	
+	fun readComments(): Int {
+		return if (isRepost) {
+			originComments!!
+		} else {
+			comments
+		}
+	}
+	
+	fun updateComments(update: Int) {
+		if (isRepost) {
+			originComments = originComments?.plus(update)
+		} else {
+			comments += update
+		}
+	}
+	
+	fun readReposts(): Int {
+		return if (isRepost) {
+			originReposts!!
+		} else {
+			reposts
+		}
+	}
+	
+	fun updateReposts(update: Int) {
+		if (isRepost) {
+			originReposts = originReposts?.plus(update)
+		} else {
+			reposts += update
+		}
+	}
+	
+	fun readUpvotes(): Int {
+		return if (isRepost) {
+			originUpvotes!!
+		} else {
+			upvotes
+		}
+	}
+	
+	fun updateUpvotes(update: Int) {
+		if (isRepost) {
+			originUpvotes = originUpvotes?.plus(update)
+		} else {
+			upvotes += update
+		}
+	}
+	
+	fun readDownvotes(): Int {
+		return if (isRepost) {
+			originDownvotes!!
+		} else {
+			downvotes
+		}
+	}
+	
+	fun updateDownvotes(update: Int) {
+		if (isRepost) {
+			originDownvotes = originDownvotes?.plus(update)
+		} else {
+			downvotes += update
+		}
+	}
+	
+	fun readTags(): String {
+		return if (isRepost) {
+			originTags!!
+		} else {
+			tags
+		}
+	}
+	
+	
+	fun CopyFrom(post: Post) {//?
+		//make everthing var except id
+		
+	}
 }

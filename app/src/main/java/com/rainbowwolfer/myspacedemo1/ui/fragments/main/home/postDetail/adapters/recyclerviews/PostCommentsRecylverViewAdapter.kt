@@ -70,7 +70,7 @@ class PostCommentsRecylverViewAdapter(
 			
 			holder.updateComment(data)
 			holder.setMoreButton()
-			updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
+			updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.voted)
 			
 			if (application.currentUser.value?.id == data.userID) {
 				application.currentUser.observe(lifecycleOwner) {
@@ -100,7 +100,7 @@ class PostCommentsRecylverViewAdapter(
 			}
 			
 			holder.binding.commentRowButtonUpvote.buttonAction {
-				if (data.isVoted() != true) {
+				if (data.voted != Comment.VOTE_UP) {
 					application.voteComment(data.id, true)
 					if (data.voted == Comment.VOTE_DOWN) {
 						data.downvotes -= 1
@@ -112,12 +112,12 @@ class PostCommentsRecylverViewAdapter(
 					data.voted = Comment.VOTE_NONE
 					data.upvotes -= 1
 				}
-				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
+				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.voted)
 				holder.updateComment(data)
 			}
 			
 			holder.binding.commentRowButtonDownvote.buttonAction {
-				if (data.isVoted() != false) {
+				if (data.voted != Comment.VOTE_DOWN) {
 					application.voteComment(data.id, false)
 					if (data.voted == Comment.VOTE_UP) {
 						data.upvotes -= 1
@@ -129,7 +129,7 @@ class PostCommentsRecylverViewAdapter(
 					data.voted = Comment.VOTE_NONE
 					data.downvotes -= 1
 				}
-				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.isVoted())
+				updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.voted)
 				holder.updateComment(data)
 			}
 			

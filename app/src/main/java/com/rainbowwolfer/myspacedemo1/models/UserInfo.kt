@@ -1,10 +1,11 @@
 package com.rainbowwolfer.myspacedemo1.models
 
 import android.graphics.Bitmap
+import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
 
 class UserInfo(
 	val id: String,
-	var user: User,
+	var user: User?,
 	var avatar: Bitmap?,
 ) {
 	companion object {
@@ -38,6 +39,8 @@ class UserInfo(
 			val found = findUserInfo(id)
 			if (found != null) {
 				found.avatar = bitmap
+			} else {
+				this.add(UserInfo(id, null, bitmap))
 			}
 		}
 		

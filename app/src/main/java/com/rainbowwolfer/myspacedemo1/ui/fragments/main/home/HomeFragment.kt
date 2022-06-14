@@ -272,15 +272,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					}
 				}
 			} finally {
-				if (scrollToTop) {
-					binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+				try {
+					if (scrollToTop) {
+						binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+					}
+					if (showSwipeRefreshing) {
+						binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
+					}
+					delay(100)
+					binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
+					isLoading = false
+				} catch (ex: Exception) {
 				}
-				if (showSwipeRefreshing) {
-					binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
-				}
-				delay(100)
-				binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
-				isLoading = false
 			}
 		}
 	}
