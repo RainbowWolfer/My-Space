@@ -9,6 +9,7 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,6 +20,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserProfileBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
+import com.rainbowwolfer.myspacedemo1.models.api.NewUserFollow
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
@@ -136,10 +138,11 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			}
 			
 			viewModel.userInfo.observe(viewLifecycleOwner) {
-				if (it == null) {
+				if (it?.user == null) {
 					return@observe
 				}
 				
+				updateFollowState(it.user!!.isFollowing)
 				binding.updateUserInfo(it.user!!)
 				binding.userImageAvatar.setImageBitmap(it.avatar)
 			}
@@ -178,7 +181,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 				
 				class StringActionCallBack : ActionCallBack<String> {
 					override fun action(obj: String) {
-						CoroutineScope(Dispatchers.IO).launch {
+						lifecycleScope.launch(Dispatchers.IO) {
 							try {
 								val responde = RetrofitInstance.api.changeUsername(
 									NewUsername(user.id, user.username, user.password, obj)
@@ -221,9 +224,56 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 				dialog.showDialog(user.username)
 			}
 		} else {// not self
-		
+			binding.userFollowButton.setOnClickListener {
+				val user = viewModel.userInfo.value?.user ?: return@setOnClickListener
+				lifecycleScope.launch(Dispatchers.Main) {
+					try {
+						updateFollowState(null)
+						RetrofitInstance.api.postUserFollow(
+							NewUserFollow(
+								email = application.currentUser.value?.email ?: "",
+								password = application.currentUser.value?.password ?: "",
+								targetID = user.id,
+								cancel = user.isFollowing,
+							)
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					} finally {
+						kotlin.runCatching {
+							user.isFollowing = !user.isFollowing
+							updateFollowState(user.isFollowing)
+						}
+					}
+				}
+			}
+			
+			binding.userButtonMessage.setOnClickListener {
+			
+			}
 		}
 	}
+	
+	private fun updateFollowState(following: Boolean?) {
+		when (following) {
+			true -> {
+				binding.userFollowButton.isEnabled = true
+				binding.userFollowButton.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, requireContext().theme)
+				binding.userFollowButton.text = getString(R.string.Following)
+			}
+			false -> {
+				binding.userFollowButton.isEnabled = true
+				binding.userFollowButton.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, requireContext().theme)
+				binding.userFollowButton.text = getString(R.string.Follow)
+			}
+			else -> {//loading
+				binding.userFollowButton.isEnabled = false
+				binding.userFollowButton.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_more_horiz_24, requireContext().theme)
+				binding.userFollowButton.text = getString(R.string.Loading)
+			}
+		}
+	}
+	
 	
 	private fun FragmentUserProfileBinding.updateUserInfo(user: User) {
 		this.userTextUsername.text = user.username

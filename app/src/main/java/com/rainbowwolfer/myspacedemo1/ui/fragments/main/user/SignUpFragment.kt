@@ -25,11 +25,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		binding.signupEditTextUsername.setText("rainbow_wolfer")
-		binding.signupEditTextEmail.setText("1519787190@qq.com")
-		binding.signupEditTextPassword.setText("123456789")
-		binding.signupEditTextConfirmPassword.setText("123456789")
-		
+//		binding.signupEditTextUsername.setText("rainbow_wolfer")
+//		binding.signupEditTextEmail.setText("1519787190@qq.com")
+//		binding.signupEditTextPassword.setText("123456789")
+//		binding.signupEditTextConfirmPassword.setText("123456789")
+
 		binding.signupEditTextUsername.doAfterTextChanged {
 			if (skip) {
 				return@doAfterTextChanged

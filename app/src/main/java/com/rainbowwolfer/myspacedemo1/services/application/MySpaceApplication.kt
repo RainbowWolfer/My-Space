@@ -122,30 +122,32 @@ class MySpaceApplication : Application() {
 			try {
 				var user = usersPool.findUser(userID)
 				if (user == null) {
-					withContext(Dispatchers.IO) {
-						val response = RetrofitInstance.api.getUser(userID)
+					user = withContext(Dispatchers.IO) {
+						val response = RetrofitInstance.api.getUser(
+							id = userID,
+							selfID = currentUser.value?.id ?: "",
+						)
 						if (response.isSuccessful) {
-							user = response.body()!!
+							response.body()!!
 						} else {
-							val go = response.getHttpResponse()
-							throw ResponseException(go)
+							throw ResponseException(response.getHttpResponse())
 						}
 					}
-					usersPool.addUser(user!!)
+					usersPool.addUser(user)
 				}
-				onLoadUser.invoke(user!!)
+				onLoadUser.invoke(user)
 				
 				var avatarBitmap = usersPool.findAvatar(userID)
 				if (avatarBitmap == null) {
 					withContext(Dispatchers.IO) {
 						try {
-							val response = RetrofitInstance.api.getAvatar(user!!.id)
+							val response = RetrofitInstance.api.getAvatar(user.id)
 							avatarBitmap = BitmapFactory.decodeStream(response.byteStream())
 						} catch (ex: HttpException) {
 							throw ResponseException(ex.response()!!.getHttpResponse())
 						}
 					}
-					usersPool.updateAvatar(user!!.id, avatarBitmap)
+					usersPool.updateAvatar(user.id, avatarBitmap)
 				}
 				onLoadAvatar.invoke(avatarBitmap!!)
 			} catch (ex: Exception) {

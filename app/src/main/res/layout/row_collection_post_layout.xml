@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="5dp"
+	android:background="@drawable/round_background"
+	android:clickable="true"
+	android:focusable="true"
+	android:foreground="@drawable/ripple_small_corners_10dp"
+	android:padding="5dp">
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_imageCount"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:text="9"
+		app:layout_constraintBottom_toBottomOf="@+id/rowCollectionPost_icon_image"
+		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_icon_image"
+		app:layout_constraintTop_toTopOf="@+id/rowCollectionPost_icon_image"/>
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_username"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="4dp"
+		android:text="\@RainboWolfer"
+		android:textSize="18sp"
+		android:textStyle="bold"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/rowCollectionPost_text_title"/>
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_date"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:text="2022-02-22 22:22:22"
+		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_text_helper1"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/rowCollectionPost_button_more"
+		android:layout_width="42dp"
+		android:layout_height="42dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="8dp"
+		android:background="@color/transparent"
+		android:contentDescription="@string/app_name_space"
+		android:foreground="@drawable/ripple_small_corners"
+		android:src="@drawable/ic_baseline_more_vert_24"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_content"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="4dp"
+		android:layout_marginEnd="8dp"
+		android:layout_marginBottom="8dp"
+		android:ellipsize="end"
+		android:maxLines="3"
+		android:text="@string/welcome1_text"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/rowCollectionPost_text_username"/>
+	
+	<ImageView
+		android:id="@+id/rowCollectionPost_icon_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		app:layout_constraintBottom_toBottomOf="@+id/rowCollectionPost_text_username"
+		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_icon_repost"
+		app:layout_constraintTop_toTopOf="@+id/rowCollectionPost_text_username"
+		app:srcCompat="@drawable/ic_baseline_image_24"/>
+	
+	<ImageView
+		android:id="@+id/rowCollectionPost_icon_repost"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		app:layout_constraintBottom_toBottomOf="@+id/rowCollectionPost_text_username"
+		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_text_username"
+		app:layout_constraintTop_toTopOf="@+id/rowCollectionPost_text_username"
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:text="POST"
+		android:textStyle="bold|italic"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<TextView
+		android:id="@+id/rowCollectionPost_text_helper1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:text="-"
+		app:layout_constraintBottom_toBottomOf="@+id/rowCollectionPost_text_title"
+		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_text_title"
+		app:layout_constraintTop_toTopOf="@+id/rowCollectionPost_text_title"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

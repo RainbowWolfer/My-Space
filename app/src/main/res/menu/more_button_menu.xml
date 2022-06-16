@@ -5,9 +5,9 @@
 		android:icon="@drawable/ic_baseline_share_24"
 		android:title="Share"/>
 	<item
-		android:id="@+id/item_flag"
+		android:id="@+id/item_collection"
 		android:icon="@drawable/ic_baseline_flag_24"
-		android:title="Flag"/>
+		android:title="Add to Collection"/>
 	<item
 		android:id="@+id/item_report"
 		android:icon="@drawable/ic_baseline_report_24"

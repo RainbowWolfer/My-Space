@@ -1,4 +1,4 @@
-package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerviews
+package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview
 
 import android.content.Context
 import android.content.Intent
@@ -162,7 +162,7 @@ class PostCommentsRecylverViewAdapter(
 						}
 						context.startActivity(sharedIntent)
 					}
-					R.id.item_flag -> Toast.makeText(context, "Flag", Toast.LENGTH_SHORT).show()
+					R.id.item_collection -> Toast.makeText(context, "Flag", Toast.LENGTH_SHORT).show()
 					R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
 				}
 				true

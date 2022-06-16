@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
 import android.viewbinding.library.fragment.viewBinding
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -204,9 +205,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
 		if (isLoading) {
 			return
-			
 		}
 		isLoading = true
+		var success = true
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				if (showSwipeRefreshing) {
@@ -235,7 +236,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 							seed = viewModel.randomSeed.value!!,
 						)
 						if (response.isSuccessful) {
-							newList = response.body()!!
+							newList = response.body() ?: emptyList()
 						} else {
 							throw ResponseException(response.getHttpResponse())
 						}
@@ -254,6 +255,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					viewModel.posts.value = list
 				} while (newList.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
+				success = false
 				Snackbar.make(binding.root, "Something went wrong", Snackbar.LENGTH_LONG).setAction("Dismiss") {}.show()
 				ex.printStackTrace()
 				when (ex) {
@@ -282,6 +284,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					delay(100)
 					binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
 					isLoading = false
+					if (refresh && success) {
+						Toast.makeText(requireContext(), "Refresh Successsful", Toast.LENGTH_SHORT).show()
+					}
 				} catch (ex: Exception) {
 				}
 			}

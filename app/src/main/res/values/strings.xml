@@ -69,5 +69,8 @@
 	<string name="post_text5">Tell the world!</string>
 	
 	<string name="back">Back</string>
+	<string name="Following">Following</string>
+	<string name="Follow">Follow</string>
+	<string name="Loading">Loading</string>
 
 </resources>

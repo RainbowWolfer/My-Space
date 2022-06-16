@@ -23,15 +23,19 @@ import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter.Companion.showRepostDialog
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
@@ -105,7 +109,46 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		setHasOptionsMenu(true)
 		arguments?.let {
 			postID = it.getString(ARG_Post_ID) ?: ""
-			viewModel.post.value = application.postsPool.findPostInfo(postID)?.post
+			lifecycleScope.launch(Dispatchers.Main) {
+				try {
+					var post = application.postsPool.findPostInfo(postID)?.post
+					if (post == null && application.hasLoggedIn()) {
+						post = withContext(Dispatchers.IO) {
+							val response = RetrofitInstance.api.getPostByID(
+								postID = postID,
+								email = application.currentUser.value?.email ?: "",
+								password = application.currentUser.value?.password ?: "",
+							)
+							if (response.isSuccessful) {
+								response.body()!!
+							} else {
+								throw ResponseException(response.getHttpResponse())
+							}
+						}
+					}
+					viewModel.post.value = post
+				} catch (ex: Exception) {
+					ex.printStackTrace()
+					if (ex is ResponseException) {
+						println(ex.response)
+					}
+				} finally {
+					updateAvatar()
+					
+					val adapter = PostDetailViewPagerAdapter(this@PostDetailFragment, viewModel.post.value!!)
+					binding.postDetailViewPager2.adapter = adapter
+					
+					binding.postDetailViewPager2.offscreenPageLimit = 3
+					TabLayoutMediator(binding.postDetailTabsLayout, binding.postDetailViewPager2) { tab, position ->
+						tab.text = when (position) {
+							0 -> "Comments"
+							1 -> "Reposts"
+							2 -> "Scores"
+							else -> "Undefined"
+						}
+					}.attach()
+				}
+			}
 		}
 	}
 	
@@ -124,38 +167,6 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			updateRepostButton(binding.postDetailButtonRepost, post.hasReposted)
 			binding.updateUser(post.getPublisher())
 		}
-		
-		val id = viewModel.post.value!!.publisherID
-		if (application.currentUser.value?.id == id) {
-			application.currentAvatar.observe(viewLifecycleOwner) {
-				binding.updateAvatar(it)
-			}
-		} else {
-			val found = application.usersPool.findUserInfo(id)
-			if (found != null) {
-				binding.updateAvatar(found.avatar)
-			} else {
-				lifecycleScope.launch(Dispatchers.Main) {
-					application.findOrGetAvatar(id) {
-						binding.updateAvatar(it)
-					}
-				}
-			}
-		}
-		
-		
-		val adapter = PostDetailViewPagerAdapter(this, viewModel.post.value!!)
-		binding.postDetailViewPager2.adapter = adapter
-		
-		binding.postDetailViewPager2.offscreenPageLimit = 3
-		TabLayoutMediator(binding.postDetailTabsLayout, binding.postDetailViewPager2) { tab, position ->
-			tab.text = when (position) {
-				0 -> "Comments"
-				1 -> "Reposts"
-				2 -> "Scores"
-				else -> "Undefined"
-			}
-		}.attach()
 		
 		binding.postDetailButtonComment.buttonAction {
 			binding.postDetailViewPager2.currentItem = 0//make fragment is on comment
@@ -233,6 +244,26 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 					it.upvotes = post.upvotes
 					it.downvotes = post.downvotes
 					it.voted = post.voted
+				}
+			}
+		}
+	}
+	
+	private fun updateAvatar() {
+		val id = viewModel.post.value?.publisherID ?: return
+		if (application.currentUser.value?.id == id) {
+			application.currentAvatar.observe(viewLifecycleOwner) {
+				binding.updateAvatar(it)
+			}
+		} else {
+			val found = application.usersPool.findUserInfo(id)
+			if (found != null) {
+				binding.updateAvatar(found.avatar)
+			} else {
+				lifecycleScope.launch(Dispatchers.Main) {
+					application.findOrGetAvatar(id) {
+						binding.updateAvatar(it)
+					}
 				}
 			}
 		}

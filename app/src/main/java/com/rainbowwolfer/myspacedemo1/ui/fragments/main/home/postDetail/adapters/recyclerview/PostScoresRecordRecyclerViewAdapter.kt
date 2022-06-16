@@ -1,7 +1,6 @@
-package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerviews
+package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +12,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.RowEmptyLayoutBinding
-import com.rainbowwolfer.myspacedemo1.databinding.RowRepostRecordLayoutBinding
+import com.rainbowwolfer.myspacedemo1.databinding.RowScoreRecordLayoutBinding
+import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
-import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
+import com.rainbowwolfer.myspacedemo1.models.records.ScoreRecord
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment
 
-class PostRepostsRecordRecyclerViewAdapter(
+class PostScoresRecordRecyclerViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
 	private val lifecycleCoroutineScope: LifecycleCoroutineScope,
-) : RecyclerView.Adapter<PostRepostsRecordRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PostScoresRecordRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val TYPE_ROW = 0
 		const val TYPE_EMPTY = 1
@@ -33,10 +32,10 @@ class PostRepostsRecordRecyclerViewAdapter(
 	}
 	
 	open class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-	class RowViewHolder(val binding: RowRepostRecordLayoutBinding) : ViewHolder(binding.root)
+	class RowViewHolder(val binding: RowScoreRecordLayoutBinding) : ViewHolder(binding.root)
 	class EmptyViewHolder(val binding: RowEmptyLayoutBinding) : ViewHolder(binding.root)
 	
-	private var list: List<RepostRecord> = emptyList()
+	private var list: List<ScoreRecord> = emptyList()
 	
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		return when (viewType) {
@@ -44,7 +43,7 @@ class PostRepostsRecordRecyclerViewAdapter(
 				EmptyViewHolder(RowEmptyLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 			}
 			TYPE_ROW -> {
-				RowViewHolder(RowRepostRecordLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+				RowViewHolder(RowScoreRecordLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 			}
 			else -> {
 				ViewHolder(View(context))
@@ -67,39 +66,27 @@ class PostRepostsRecordRecyclerViewAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
 			val data = list[position]
-			holder.binding.rowRepostRecordTextUsername.text = data.username
-			holder.binding.rowRepostRecordTextTime.text = data.time
-			holder.binding.rowRepostRecordTextQuote.text = data.quote
+			holder.binding.rowScoreRecordTextUsername.text = data.username
+			holder.binding.rowScoreRecordTextTime.text = data.time
 			
-			if (data.userID == MySpaceApplication.instance.currentUser.value?.id) {
-				PostDetailFragment.updateRepostButton(holder.binding.rowRepostRecordIconRepost, true)
-			}
-			
-			if (!TextUtils.isEmpty(data.quote)) {
-				holder.binding.rowRepostRecordButtonQuote.visibility = View.VISIBLE
-				holder.binding.root.setOnClickListener {
-					if (holder.binding.root.tag == true) {
-						holder.binding.rowRepostRecordButtonQuote.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_format_quote_24))
-						holder.binding.root.tag = false
-						holder.binding.rowRepostRecordTextQuote.visibility = View.GONE
-					} else {
-						holder.binding.rowRepostRecordButtonQuote.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_outline_format_quote_24))
-						holder.binding.root.tag = true
-						holder.binding.rowRepostRecordTextQuote.visibility = View.VISIBLE
+			with(holder.binding.rowScoreRecordButtonVote) {
+				when (data.voted) {
+					Post.VOTE_UP -> {
+						this.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_outline_thumb_up_24))
+						this.imageTintList = AppCompatResources.getColorStateList(context, R.color.green)
+					}
+					Post.VOTE_DOWN -> {
+						this.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_outline_thumb_down_24))
+						this.imageTintList = AppCompatResources.getColorStateList(context, R.color.red)
 					}
 				}
-			} else {
-				holder.binding.rowRepostRecordButtonQuote.visibility = View.GONE
-			}
-			holder.binding.rowRepostRecordImageAvatar.setOnClickListener {
-			
 			}
 			
 			val application = MySpaceApplication.instance
 			
 			if (application.currentUser.value?.id == data.userID) {
 				application.currentAvatar.observe(lifecycleOwner) {
-					holder.binding.rowRepostRecordImageAvatar.setImageBitmap(it)
+					holder.binding.rowScoreRecordImageAvatar.setImageBitmap(it)
 				}
 			} else {
 				val userInfo: MutableLiveData<UserInfo> by lazy { MutableLiveData() }
@@ -115,7 +102,7 @@ class PostRepostsRecordRecyclerViewAdapter(
 				}
 				
 				userInfo.observe(lifecycleOwner) {
-					holder.binding.rowRepostRecordImageAvatar.setImageBitmap(it.avatar)
+					holder.binding.rowScoreRecordImageAvatar.setImageBitmap(it.avatar)
 				}
 			}
 		}
@@ -123,10 +110,11 @@ class PostRepostsRecordRecyclerViewAdapter(
 	
 	override fun getItemCount(): Int = list.size + 1
 	
-	fun setData(new: List<RepostRecord>) {
+	fun setData(new: List<ScoreRecord>) {
 		val diffUtil = DatabaseIdDiffUtil(list, new)
 		val diffResult = DiffUtil.calculateDiff(diffUtil)
 		list = new
+		println("SET DATA: $list ${list.size}")
 		diffResult.dispatchUpdatesTo(this)
 	}
 }

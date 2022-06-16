@@ -4,6 +4,7 @@ import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.UserCollection
 import com.rainbowwolfer.myspacedemo1.models.api.*
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
@@ -21,7 +22,8 @@ interface MyApi {
 	
 	@GET("user")
 	suspend fun getUser(
-		@Query("id") id: String
+		@Query("id") id: String,
+		@Query("self_id") selfID: String = "",
 	): Response<User>
 	
 	@GET("login")
@@ -74,6 +76,13 @@ interface MyApi {
 		@Part("tags") tags: RequestBody,
 		@Part images: ArrayList<MultipartBody.Part>,
 	): ResponseBody
+	
+	@GET("post/id")
+	suspend fun getPostByID(
+		@Query("post_id") postID: String,
+		@Query("email") email: String,
+		@Query("password") password: String,
+	): Response<Post>
 	
 	@GET("post")
 	suspend fun getPosts(
@@ -132,4 +141,27 @@ interface MyApi {
 		@Query("post_id") postID: String,
 		@Query("offset") offset: Int,
 	): Response<List<ScoreRecord>>
+	
+	@GET("collections")
+	suspend fun getCollections(
+		@Query("email") email: String,
+		@Query("password") password: String,
+		@Query("offset") offset: Int,
+		@Query("limit") limit: Int = 15,
+	): Response<List<UserCollection>>
+	
+	@POST("collections/add")
+	suspend fun addCollection(
+		@Body body: NewCollection,
+	): ResponseBody
+	
+	@POST("collections/remove")
+	suspend fun deleteCollection(
+		@Body body: RemoveCollection,
+	): ResponseBody
+	
+	@POST("user/follow")
+	suspend fun postUserFollow(
+		@Body body: NewUserFollow,
+	): ResponseBody
 }

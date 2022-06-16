@@ -7,14 +7,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailRepostsBinding
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerviews.PostRepostsRecordRecyclerViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostRepostsRecordRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
@@ -118,11 +117,9 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 					println(ex.response)
 				}
 			} finally {
-				try {
+				kotlin.runCatching {
 					isLoading = false
 					enableLoading(false)
-				} catch (ex: Exception) {
-					ex.printStackTrace()
 				}
 			}
 		}

@@ -30,7 +30,7 @@ data class Comment(
 		const val VOTE_DOWN = 0
 		const val VOTE_NONE = -1
 	}
-	
+
 //	fun isVoted(): Boolean? {
 //		return when (voted) {
 //			VOTE_NONE -> null
@@ -40,12 +40,13 @@ data class Comment(
 //		}
 //	}
 	
-	fun getUesr(): User {
+	fun getUesr(): User {//bad dont do this
 		return User(
 			id = userID,
 			username = username,
 			email = email,
 			profileDescription = profile,
+			isFollowing = false,
 		)
 	}
 	

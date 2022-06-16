@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -35,8 +36,10 @@ import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.NewCollection
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
+import com.rainbowwolfer.myspacedemo1.models.enums.CollectionType
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
@@ -218,9 +221,28 @@ class MainListRecyclerViewAdapter(
 							}
 							context.startActivity(sharedIntent)
 						}
-						R.id.item_flag -> {
-							Toast.makeText(context, "Flag $post", Toast.LENGTH_LONG).show()
-							println(post)
+						R.id.item_collection -> {
+//							Toast.makeText(context, "Flag $post", Toast.LENGTH_LONG).show()
+//							println(post)
+							if (application.hasLoggedIn()) {
+								lifecycleScope.launch(Dispatchers.IO) {
+									try {
+										RetrofitInstance.api.addCollection(
+											NewCollection(
+												targetID = postID,
+												type = CollectionType.Post,
+												email = application.currentUser.value?.email ?: "",
+												password = application.currentUser.value?.password ?: "",
+											)
+										)
+										withContext(Dispatchers.Main) {
+											Toast.makeText(context, "Successfully Added to Collection", Toast.LENGTH_SHORT).show()
+										}
+									} catch (ex: Exception) {
+										ex.printStackTrace()
+									}
+								}
+							}
 						}
 						R.id.item_report -> Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show()
 					}
@@ -424,7 +446,7 @@ class MainListRecyclerViewAdapter(
 								)
 							)
 							if (response.isSuccessful) {
-								return@withContext response.body()!!
+								response.body()!!
 							} else {
 								throw Exception()
 							}

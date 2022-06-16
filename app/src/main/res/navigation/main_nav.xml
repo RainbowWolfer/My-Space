@@ -43,6 +43,15 @@
 			app:argType="string"/>
 	</fragment>
 	<fragment
+		android:id="@+id/postDetailFragment2"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment"
+		android:label="Post"
+		tools:layout="@layout/fragment_post_detail">
+		<argument
+			android:name="post_id"
+			app:argType="string"/>
+	</fragment>
+	<fragment
 		android:id="@+id/nav_settings"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.settings.SettingsFragment"
 		android:label="Settings"/>
@@ -53,9 +62,17 @@
 		tools:layout="@layout/fragment_about"/>
 	<fragment
 		android:id="@+id/nav_collection"
-		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.CollectionFragment"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.collections.CollectionFragment"
 		android:label="Collection"
-		tools:layout="@layout/fragment_collection"/>
+		tools:layout="@layout/fragment_collection">
+		<action
+			android:id="@+id/action_nav_collection_to_postDetailFragment2"
+			app:destination="@id/postDetailFragment2"
+			app:enterAnim="@anim/from_right"
+			app:exitAnim="@anim/to_left"
+			app:popEnterAnim="@anim/from_left"
+			app:popExitAnim="@anim/to_right"/>
+	</fragment>
 	
 	<fragment
 		android:id="@+id/nav_detailMessage"

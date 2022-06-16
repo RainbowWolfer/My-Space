@@ -97,6 +97,7 @@ data class Post(
 			username = publisherUsername,
 			email = publisherEmail,
 			profileDescription = publisherProfile,
+			isFollowing = false,
 		)
 	}
 	
@@ -109,6 +110,7 @@ data class Post(
 				username = originUserUsername!!,
 				email = originUserEmail!!,
 				profileDescription = originUserProfile!!,
+				isFollowing = false,
 			)
 		}
 	}
