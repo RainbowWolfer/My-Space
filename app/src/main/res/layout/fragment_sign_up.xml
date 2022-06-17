@@ -5,7 +5,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".ui.fragments.main.user.SignUpFragment">
+	tools:context=".ui.fragments.main.login.SignUpFragment">
 	
 	<ScrollView
 		android:layout_width="match_parent"

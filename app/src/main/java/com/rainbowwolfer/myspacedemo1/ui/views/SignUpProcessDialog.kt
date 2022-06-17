@@ -16,7 +16,7 @@ import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
 import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.views.interfaces.ViewDialog
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

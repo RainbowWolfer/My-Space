@@ -112,9 +112,7 @@ class PostScoresRecordRecyclerViewAdapter(
 	
 	fun setData(new: List<ScoreRecord>) {
 		val diffUtil = DatabaseIdDiffUtil(list, new)
-		val diffResult = DiffUtil.calculateDiff(diffUtil)
 		list = new
-		println("SET DATA: $list ${list.size}")
-		diffResult.dispatchUpdatesTo(this)
+		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

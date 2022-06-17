@@ -23,7 +23,8 @@
 			android:contentDescription="@string/app_name"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"/>
+			app:layout_constraintTop_toTopOf="parent"
+			app:tabMode="scrollable"/>
 		
 		<androidx.viewpager2.widget.ViewPager2
 			android:id="@+id/user_viewPager2"

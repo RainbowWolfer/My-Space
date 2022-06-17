@@ -19,7 +19,7 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
 import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
 import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 
@@ -51,6 +51,8 @@ class MySpaceApplication : Application() {
 	val scoresPool: HashMap<String, Int> = hashMapOf()
 	
 	fun hasLoggedIn() = currentUser.value != null
+	fun getCurrentEmail(): String = currentUser.value?.email ?: ""
+	fun getCurrentPassword(): String = currentUser.value?.password ?: ""
 	
 	fun clearCurrent() {
 		currentUser.value = null

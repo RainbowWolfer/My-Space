@@ -21,7 +21,7 @@
 			android:name=".ui.activities.post.PostActivity"
 			android:exported="false"/>
 		<activity
-			android:name=".ui.activities.user.LoginActivity"
+			android:name=".ui.activities.login.LoginActivity"
 			android:exported="false"
 			android:windowSoftInputMode="adjustPan"/>
 		<activity

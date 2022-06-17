@@ -18,8 +18,9 @@ import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.collections.adapters.recyclerview.CollectionsRecyclerViewAdapter
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -73,35 +74,42 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				binding.collectionsSwipeLoader.isRefreshing = true
-				var list: List<UserCollection> = if (refresh) emptyList() else viewModel.collecitons.value!!
 				
-				var triedCount = 0
-				do {
-					val new = withContext(Dispatchers.IO) {
-						val response = RetrofitInstance.api.getCollections(
-							email = application.currentUser.value!!.email,
-							password = application.currentUser.value!!.password,
-							offset = viewModel.offset.value!!,
-						)
-						if (response.isSuccessful) {
-							response.body()!!
-						} else {
-							throw ResponseException(response.getHttpResponse())
-						}
-					}
-					var count = 0
-					if (new.isNotEmpty()) {
-						for (item in new) {
-							if (list.any { it.id == item.id }) {
-								continue
-							}
-							list = list.plus(item)
-							count++
-						}
-						viewModel.offset.value = viewModel.offset.value!!.plus(count)
-					}
-					viewModel.collecitons.value = list
-				} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
+				EasyFunctions.stackLoading(refresh, viewModel.collecitons, viewModel.offset) {
+					RetrofitInstance.api.getCollections(
+						email = application.currentUser.value!!.email,
+						password = application.currentUser.value!!.password,
+						offset = viewModel.offset.value!!,
+					)
+				}
+//				var list: List<UserCollection> = if (refresh) emptyList() else viewModel.collecitons.value!!
+//				var triedCount = 0
+//				do {
+//					val new = withContext(Dispatchers.IO) {
+//						val response = RetrofitInstance.api.getCollections(
+//							email = application.currentUser.value!!.email,
+//							password = application.currentUser.value!!.password,
+//							offset = viewModel.offset.value!!,
+//						)
+//						if (response.isSuccessful) {
+//							response.body()!!
+//						} else {
+//							throw ResponseException(response.getHttpResponse())
+//						}
+//					}
+//					var count = 0
+//					if (new.isNotEmpty()) {
+//						for (item in new) {
+//							if (list.any { it.id == item.id }) {
+//								continue
+//							}
+//							list = list.plus(item)
+//							count++
+//						}
+//						viewModel.offset.value = viewModel.offset.value!!.plus(count)
+//					}
+//					viewModel.collecitons.value = list
+//				} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				success = false
 				ex.printStackTrace()

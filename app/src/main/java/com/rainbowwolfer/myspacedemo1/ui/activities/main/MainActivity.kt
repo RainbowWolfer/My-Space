@@ -25,10 +25,9 @@ import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
-import kotlinx.coroutines.CoroutineScope
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

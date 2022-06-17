@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="5dp"
+	android:background="@drawable/round_background"
+	android:clickable="true"
+	android:focusable="true"
+	android:foreground="@drawable/ripple_small_corners_10dp"
+	android:padding="0dp">
+	
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/rowFollowers_image_avatar"
+		android:layout_width="42dp"
+		android:layout_height="42dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="8dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/round_ripple"
+		android:src="@drawable/default_avatar"
+		app:civ_border_color="@color/normal_text"
+		app:civ_border_overlay="true"
+		app:civ_border_width="1.5dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+	
+	<TextView
+		android:id="@+id/rowFollowers_text_username"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:textColor="@color/normal_text"
+		android:textSize="20sp"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toBottomOf="@+id/rowFollowers_image_avatar"
+		app:layout_constraintStart_toEndOf="@+id/rowFollowers_image_avatar"
+		app:layout_constraintTop_toTopOf="@+id/rowFollowers_image_avatar"
+		tools:text="RainbowWolfer"/>
+	
+	<ImageView
+		android:id="@+id/rowFollowers_button_follow"
+		android:layout_width="35dp"
+		android:layout_height="35dp"
+		android:layout_marginEnd="16dp"
+		android:background="@drawable/background_theme_round_5dp"
+		android:clickable="true"
+		android:contentDescription=""
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:padding="5dp"
+		android:src="@drawable/ic_baseline_favorite_border_24"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:tint="@color/white"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

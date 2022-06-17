@@ -1,9 +1,8 @@
-package com.rainbowwolfer.myspacedemo1.ui.activities.user
+package com.rainbowwolfer.myspacedemo1.ui.activities.login
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.viewbinding.library.activity.viewBinding
@@ -14,10 +13,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityLoginBinding
 import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.LoginFragment
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.SignUpFragment
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.LoginViewPagerAdapter
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.LoginFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.adapters.LoginViewPagerAdapter
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 
 class LoginActivity : AppCompatActivity() {
 	private val binding: ActivityLoginBinding by viewBinding()

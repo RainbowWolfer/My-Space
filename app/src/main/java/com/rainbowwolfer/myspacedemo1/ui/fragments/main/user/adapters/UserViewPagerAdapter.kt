@@ -16,8 +16,8 @@ class UserViewPagerAdapter(
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {
 			0 -> UserProfileFragment.newInstance(userID)
-			1 -> UserPostsFragment()
-			2 -> UserFollowersFragment()
+			1 -> UserPostsFragment.newInstance(userID)
+			2 -> UserFollowersFragment.newInstance(userID)
 			else -> throw Error()
 		}
 	}

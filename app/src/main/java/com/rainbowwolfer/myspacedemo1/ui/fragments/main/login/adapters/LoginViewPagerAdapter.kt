@@ -1,12 +1,12 @@
-package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters
+package com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.LoginFragment
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.SignUpFragment
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.LoginFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.SignUpFragment
 
 class LoginViewPagerAdapter(
 	private val loginActivity: LoginActivity,

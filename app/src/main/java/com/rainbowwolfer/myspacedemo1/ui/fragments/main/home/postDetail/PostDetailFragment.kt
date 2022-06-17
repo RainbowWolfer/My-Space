@@ -28,10 +28,10 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
-import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter.Companion.showRepostDialog
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -42,7 +42,6 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	companion object {
 		lateinit var instance: PostDetailFragment
 		const val ARG_Post_ID = "post_id"
-		
 		
 		@JvmStatic
 		fun newInstance(postID: String) = PostDetailFragment().apply {
@@ -174,7 +173,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}
 		
 		binding.postDetailButtonRepost.buttonAction {
-			showRepostDialog(requireContext(), viewModel.post.value!!.id) {
+			SheetDialogUtil.showRepostDialog(requireContext(), viewModel.post.value!!.id) {
 				val post = viewModel.post.value!!
 				post.updateReposts(1)
 				application.postsPool.findRelativePosts(post.readID()).forEach {

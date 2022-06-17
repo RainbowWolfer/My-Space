@@ -15,8 +15,9 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostRepostsRecordRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -85,32 +86,35 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 		}
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
-				var triedCount = 0
-				var list: List<RepostRecord> = if (refresh) emptyList() else viewModel.repostRecords.value!!
-				do {
-					val newList: List<RepostRecord> = withContext(Dispatchers.IO) {
-						val response = RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
-						if (response.isSuccessful) {
-							response.body() ?: emptyList()
-						} else {
-							throw ResponseException(response.getHttpResponse())
-						}
-					}
-					
-					var count = 0
-					if (newList.isNotEmpty()) {
-						for (item in newList) {
-							if (list.any { it.postID == item.postID }) {
-								continue
-							}
-							list = list.plus(item)
-							count++
-						}
-						viewModel.repostRecordsOffset.value = viewModel.repostRecordsOffset.value!!.plus(count)
-					}
-					
-					viewModel.repostRecords.value = list
-				} while (newList.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
+				EasyFunctions.stackLoading(refresh, viewModel.repostRecords, viewModel.repostRecordsOffset) {
+					RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
+				}
+//				var triedCount = 0
+//				var list: List<RepostRecord> = if (refresh) emptyList() else viewModel.repostRecords.value!!
+//				do {
+//					val new: List<RepostRecord> = withContext(Dispatchers.IO) {
+//						val response = RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
+//						if (response.isSuccessful) {
+//							response.body() ?: emptyList()
+//						} else {
+//							throw ResponseException(response.getHttpResponse())
+//						}
+//					}
+//
+//					var count = 0
+//					if (new.isNotEmpty()) {
+//						for (item in new) {
+//							if (list.any { it.postID == item.postID }) {
+//								continue
+//							}
+//							list = list.plus(item)
+//							count++
+//						}
+//						viewModel.repostRecordsOffset.value = viewModel.repostRecordsOffset.value!!.plus(count)
+//					}
+//
+//					viewModel.repostRecords.value = list
+//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is ResponseException) {

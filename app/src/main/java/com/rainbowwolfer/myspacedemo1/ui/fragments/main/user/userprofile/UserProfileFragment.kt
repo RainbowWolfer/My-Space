@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
@@ -25,13 +24,12 @@ import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
-import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import kotlinx.coroutines.CoroutineScope
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,7 +42,7 @@ import kotlin.Exception
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {
-		const val ARGS_USER_ID = "user_id"
+		private const val ARGS_USER_ID = "user_id"
 		
 		@JvmStatic
 		fun newInstance(user_id: String) = UserProfileFragment().apply {
@@ -54,8 +52,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		}
 	}
 	
-	private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-	private val viewModel: UserProfileViewModel by viewModels()
+	private val viewModel: UserFragmentViewModel by viewModels(
+		ownerProducer = { requireParentFragment() }
+	)
 	private val application = MySpaceApplication.instance
 	
 	private lateinit var userID: String
@@ -67,7 +66,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			if (userID == application.currentUser.value?.id) {
 				return true
 			}
-			return UserFragment.Instance?.isSelf ?: false
+			return UserFragment.instance?.isSelf ?: false
 		}
 	
 	private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

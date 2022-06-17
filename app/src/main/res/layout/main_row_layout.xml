@@ -51,13 +51,13 @@
 			android:id="@+id/main_text_repost"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:text="This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. "
 			android:textSize="14sp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintHorizontal_bias="0.5"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"/>
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. This is just repost test. "/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	<TextView
@@ -68,21 +68,21 @@
 		android:layout_marginEnd="8dp"
 		android:ellipsize="end"
 		android:maxLines="1"
-		android:text="Publisher Name"
 		android:textSize="20sp"
 		android:textStyle="bold"
 		app:layout_constraintEnd_toStartOf="@+id/row_button_more"
 		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"
-		app:layout_constraintTop_toTopOf="@+id/row_image_publisherAvatar"/>
+		app:layout_constraintTop_toTopOf="@+id/row_image_publisherAvatar"
+		tools:text="Publisher Name"/>
 	
 	<TextView
 		android:id="@+id/row_text_publishDateTime"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
-		android:text="2022/4/26 19:33:22"
 		app:layout_constraintBottom_toBottomOf="@+id/row_image_publisherAvatar"
-		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"/>
+		app:layout_constraintStart_toEndOf="@+id/row_image_publisherAvatar"
+		tools:text="2022/4/26 19:33:22"/>
 	
 	<TextView
 		android:id="@+id/row_text_content"
@@ -91,12 +91,12 @@
 		android:layout_marginStart="20dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="20dp"
-		android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"
 		android:textSize="16sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.501"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/row_image_publisherAvatar"/>
+		app:layout_constraintTop_toBottomOf="@+id/row_image_publisherAvatar"
+		tools:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/row_button_more"
@@ -105,7 +105,7 @@
 		android:layout_marginEnd="24dp"
 		android:background="#00ffffff"
 		android:contentDescription="@string/app_name"
-		android:foreground="@drawable/ripple_message_row_foreground"
+		android:foreground="@drawable/ripple_small_corners_10dp"
 		android:minWidth="48dp"
 		android:minHeight="48dp"
 		android:src="@drawable/ic_baseline_more_vert_24"
@@ -315,9 +315,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="5dp"
+			android:contentDescription=""
 			android:src="@drawable/ic_baseline_reply_all_24"
-			app:tint="?attr/colorControlNormal"
-			android:contentDescription=""/>
+			app:tint="?attr/colorControlNormal"/>
 		
 		<TextView
 			android:id="@+id/row_repost_count"
@@ -333,10 +333,10 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="24dp"
 		android:layout_marginTop="8dp"
+		android:contentDescription=""
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/ic_baseline_reply_all_24"
-		android:contentDescription=""/>
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
 	
 	<LinearLayout
 		android:id="@+id/row_layout_repostInfo"
@@ -372,7 +372,7 @@
 			android:layout_marginEnd="0dp"
 			android:ellipsize="end"
 			android:maxLines="1"
-			android:text="Repost From @RainbowWolfer"/>
+			tools:text="Repost From @RainbowWolfer"/>
 	
 	</LinearLayout>
 

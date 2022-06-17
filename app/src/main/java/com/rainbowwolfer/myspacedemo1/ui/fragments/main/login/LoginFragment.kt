@@ -1,8 +1,6 @@
-package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user
+package com.rainbowwolfer.myspacedemo1.ui.fragments.main.login
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -14,9 +12,9 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentLoginBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.*
 import retrofit2.Response
 import java.lang.Exception

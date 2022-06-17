@@ -15,8 +15,9 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostScoresRecordRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -82,32 +83,35 @@ class PostDetailScoresFragment : Fragment(R.layout.fragment_post_detail_scores) 
 		}
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
-				var triedCount = 0
-				var list: List<ScoreRecord> = if (refresh) emptyList() else viewModel.scoreRecords.value!!
-				do {
-					val newList: List<ScoreRecord> = withContext(Dispatchers.IO) {
-						val response = RetrofitInstance.api.getScoreRecords(postID, viewModel.scoreRecordsOffset.value ?: 0)
-						if (response.isSuccessful) {
-							response.body() ?: emptyList()
-						} else {
-							throw ResponseException(response.getHttpResponse())
-						}
-					}
-					
-					var count = 0
-					if (newList.isNotEmpty()) {
-						for (item in newList) {
-							if (list.any { it.likeID == item.likeID }) {
-								continue
-							}
-							list = list.plus(item)
-							count++
-						}
-						viewModel.scoreRecordsOffset.value = viewModel.scoreRecordsOffset.value!!.plus(count)
-					}
-					
-					viewModel.scoreRecords.value = list
-				} while (newList.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
+				EasyFunctions.stackLoading(refresh, viewModel.scoreRecords, viewModel.scoreRecordsOffset) {
+					RetrofitInstance.api.getScoreRecords(postID, viewModel.scoreRecordsOffset.value ?: 0)
+				}
+//				var triedCount = 0
+//				var list: List<ScoreRecord> = if (refresh) emptyList() else viewModel.scoreRecords.value!!
+//				do {
+//					val new: List<ScoreRecord> = withContext(Dispatchers.IO) {
+//						val response = RetrofitInstance.api.getScoreRecords(postID, viewModel.scoreRecordsOffset.value ?: 0)
+//						if (response.isSuccessful) {
+//							response.body() ?: emptyList()
+//						} else {
+//							throw ResponseException(response.getHttpResponse())
+//						}
+//					}
+//
+//					var count = 0
+//					if (new.isNotEmpty()) {
+//						for (item in new) {
+//							if (list.any { it.likeID == item.likeID }) {
+//								continue
+//							}
+//							list = list.plus(item)
+//							count++
+//						}
+//						viewModel.scoreRecordsOffset.value = viewModel.scoreRecordsOffset.value!!.plus(count)
+//					}
+//
+//					viewModel.scoreRecords.value = list
+//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			} finally {

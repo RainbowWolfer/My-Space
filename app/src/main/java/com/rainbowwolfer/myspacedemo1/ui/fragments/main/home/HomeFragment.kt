@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentHomeBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutBottomModalPostLimitBinding
-import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
@@ -26,11 +25,11 @@ import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRec
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
-import com.rainbowwolfer.myspacedemo1.ui.activities.user.LoginActivity
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.*
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.EOFException
 import java.net.SocketTimeoutException
 import kotlin.random.Random
@@ -220,48 +219,55 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					viewModel.randomSeed.value = Random.nextInt()
 				}
 				
-				var list: List<Post> = if (refresh) emptyList() else viewModel.posts.value!!
-				
-				var triedCount = 0
-				do {
-					println("tried $triedCount")
-					val newList: List<Post>
-					val response: Response<List<Post>>
-					withContext(Dispatchers.IO) {
-						response = RetrofitInstance.api.getPosts(
-							email = application.currentUser.value?.email ?: "",
-							password = application.currentUser.value?.password ?: "",
-							offset = viewModel.listOffset.value!!,
-							postsLimit = viewModel.postsLimit.value!!,
-							seed = viewModel.randomSeed.value!!,
-						)
-						if (response.isSuccessful) {
-							newList = response.body() ?: emptyList()
-						} else {
-							throw ResponseException(response.getHttpResponse())
-						}
-					}
-					var count = 0
-					if (newList.isNotEmpty()) {
-						for (item in newList) {
-							if (list.any { it.id == item.id }) {
-								continue
-							}
-							list = list.plus(item)
-							count++
-						}
-						viewModel.listOffset.value = viewModel.listOffset.value!!.plus(count)
-					}
-					viewModel.posts.value = list
-				} while (newList.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
+				EasyFunctions.stackLoading(refresh, viewModel.posts, viewModel.listOffset) {
+					RetrofitInstance.api.getPosts(
+						email = application.currentUser.value?.email ?: "",
+						password = application.currentUser.value?.password ?: "",
+						offset = viewModel.listOffset.value!!,
+						postsLimit = viewModel.postsLimit.value!!,
+						seed = viewModel.randomSeed.value!!,
+					)
+				}
+//
+//				var list: List<Post> = if (refresh) emptyList() else viewModel.posts.value!!
+//
+//				var triedCount = 0
+//				do {
+//					println("tried $triedCount")
+//					val new: List<Post> = withContext(Dispatchers.IO) {
+//						val response = RetrofitInstance.api.getPosts(
+//							email = application.currentUser.value?.email ?: "",
+//							password = application.currentUser.value?.password ?: "",
+//							offset = viewModel.listOffset.value!!,
+//							postsLimit = viewModel.postsLimit.value!!,
+//							seed = viewModel.randomSeed.value!!,
+//						)
+//						if (response.isSuccessful) {
+//							response.body() ?: emptyList()
+//						} else {
+//							throw ResponseException(response.getHttpResponse())
+//						}
+//					}
+//					var count = 0
+//					if (new.isNotEmpty()) {
+//						for (item in new) {
+//							if (list.any { it.id == item.id }) {
+//								continue
+//							}
+//							list = list.plus(item)
+//							count++
+//						}
+//						viewModel.listOffset.value = viewModel.listOffset.value!!.plus(count)
+//					}
+//					viewModel.posts.value = list
+//				} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				success = false
 				Snackbar.make(binding.root, "Something went wrong", Snackbar.LENGTH_LONG).setAction("Dismiss") {}.show()
 				ex.printStackTrace()
 				when (ex) {
 					is HttpException -> {
-						val go = ex.response()!!.getHttpResponse()
-						println(go)
+						println(ex.response()?.getHttpResponse())
 					}
 					is ResponseException -> {
 						println(ex.response)

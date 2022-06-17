@@ -164,4 +164,26 @@ interface MyApi {
 	suspend fun postUserFollow(
 		@Body body: NewUserFollow,
 	): ResponseBody
+	
+	@GET("post/user")
+	suspend fun getUserByUserID(
+		@Query("email") email: String,
+		@Query("password") password: String,
+		@Query("target_id") targetID: String,
+		@Query("offset") offset: Int,
+		@Query("limit") limit: Int = 5,
+	): Response<List<Post>>
+	
+	@GET("user/postsAndFollowersCount")
+	suspend fun getPostsAndFollowersCount(
+		@Query("user_id") user_id: String,
+	): Response<List<Int>>
+	
+	@GET("user/getFollowers")
+	suspend fun getUserFollowers(
+		@Query("user_id") user_id: String,
+		@Query("email") email: String,
+		@Query("password") password: String,
+	): Response<List<User>>
+	
 }

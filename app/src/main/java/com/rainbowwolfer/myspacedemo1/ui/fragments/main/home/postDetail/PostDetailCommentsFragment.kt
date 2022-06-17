@@ -21,8 +21,9 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostCommentsRecylverViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.getHttpResponse
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.Companion.scrollToUpdate
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -130,36 +131,45 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 					if (refresh) {
 						showLoading("Loading Comments")
 					}
-					var triedCount = 0
-					var list: List<Comment> = if (refresh) emptyList() else viewModel.comments.value!!
-					do {
-						val newList: List<Comment> = withContext(Dispatchers.IO) {
-							val response = RetrofitInstance.api.getPostComments(
-								postID = postID,
-								offset = viewModel.commentsOffset.value ?: 0,
-								email = application.currentUser.value?.email ?: "",
-								password = application.currentUser.value?.password ?: ""
-							)
-							if (response.isSuccessful) {
-								response.body() ?: emptyList()
-							} else {
-								throw ResponseException(response.getHttpResponse())
-							}
-						}
-						var count = 0
-						if (newList.isNotEmpty()) {
-							for (item in newList) {
-								if (list.any { it.id == item.id }) {
-									continue
-								}
-								list = list.plus(item)
-								count++
-							}
-							viewModel.commentsOffset.value = viewModel.commentsOffset.value!!.plus(count)
-						}
-						
-						viewModel.comments.value = list
-					} while (newList.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
+					
+					EasyFunctions.stackLoading(refresh, viewModel.comments, viewModel.commentsOffset) {
+						RetrofitInstance.api.getPostComments(
+							postID = postID,
+							offset = viewModel.commentsOffset.value ?: 0,
+							email = application.currentUser.value?.email ?: "",
+							password = application.currentUser.value?.password ?: ""
+						)
+					}
+//					var triedCount = 0
+//					var list: List<Comment> = if (refresh) emptyList() else viewModel.comments.value!!
+//					do {
+//						val new: List<Comment> = withContext(Dispatchers.IO) {
+//							val response = RetrofitInstance.api.getPostComments(
+//								postID = postID,
+//								offset = viewModel.commentsOffset.value ?: 0,
+//								email = application.currentUser.value?.email ?: "",
+//								password = application.currentUser.value?.password ?: ""
+//							)
+//							if (response.isSuccessful) {
+//								response.body() ?: emptyList()
+//							} else {
+//								throw ResponseException(response.getHttpResponse())
+//							}
+//						}
+//						var count = 0
+//						if (new.isNotEmpty()) {
+//							for (item in new) {
+//								if (list.any { it.id == item.id }) {
+//									continue
+//								}
+//								list = list.plus(item)
+//								count++
+//							}
+//							viewModel.commentsOffset.value = viewModel.commentsOffset.value!!.plus(count)
+//						}
+//
+//						viewModel.comments.value = list
+//					} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
 				} catch (ex: Exception) {
 					ex.printStackTrace()
 				} finally {
