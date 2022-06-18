@@ -27,7 +27,7 @@ class PostInfo(
 	}
 	
 	companion object {
-		@JvmStatic
+		
 		fun ArrayList<PostInfo>.findPostInfo(id: String): PostInfo? {
 			return this.find { it.id == id }
 		}
@@ -42,7 +42,7 @@ class PostInfo(
 			return result
 		}
 		
-		@JvmStatic
+		
 		fun ArrayList<PostInfo>.addPost(post: Post) {
 			val found = this.findPostInfo(post.id)
 			if (found != null) {
@@ -52,7 +52,7 @@ class PostInfo(
 			}
 		}
 
-//		@JvmStatic
+//		
 //		fun ArrayList<PostInfo>.updateImage(id: String, bitmap: Bitmap?, index: Int) {
 //			val found = this.findPostInfo(id) ?: return
 //			if (index !in found.images.indices) {
@@ -61,7 +61,7 @@ class PostInfo(
 //			found.images[index]?. = bitmap
 //		}
 		
-		@JvmStatic
+		
 		fun ArrayList<PostInfo>.getImage(id: String, index: Int): BitmapLoader? {
 			val found = this.findPostInfo(id) ?: return null
 			if (index !in found.images.indices) {
@@ -70,7 +70,7 @@ class PostInfo(
 			return found.images[index]
 		}
 		
-		@JvmStatic
+		
 		fun ArrayList<PostInfo>.getImages(id: String): List<Bitmap> {
 			val found = this.findPostInfo(id) ?: return emptyList()
 			return found.images.mapNotNull {

@@ -4,4 +4,6 @@ import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
 
 class ResponseException(
 	val response: GoResponse
-) : Exception()
+) : Exception() {
+	fun printResponseException() = println(response)
+}

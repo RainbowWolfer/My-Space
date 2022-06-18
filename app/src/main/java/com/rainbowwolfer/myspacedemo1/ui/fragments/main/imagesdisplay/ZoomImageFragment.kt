@@ -36,7 +36,7 @@ class ZoomImageFragment : Fragment(R.layout.fragment_zoom_image) {
 		const val ARG_IMAGE_INDEX = "image_index"
 		const val ARG_POST_ID = "post_id"
 		
-		@JvmStatic
+		
 		fun newInstance(postID: String, index: Int) = ZoomImageFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARG_POST_ID, postID)

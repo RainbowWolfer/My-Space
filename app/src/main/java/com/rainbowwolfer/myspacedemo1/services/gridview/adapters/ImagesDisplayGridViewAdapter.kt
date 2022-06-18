@@ -28,7 +28,7 @@ class ImagesDisplayGridViewAdapter(
 	context, R.layout.layout_image_display_gridview_item
 ) {
 	companion object {
-		@JvmStatic
+		
 		fun GridView.presetGridViewHeight(count: Int) {
 			this.layoutParams.height = context.resources.getDimension(
 				when (count) {
@@ -40,7 +40,7 @@ class ImagesDisplayGridViewAdapter(
 			).toInt()
 		}
 		
-		@JvmStatic
+		
 		fun getShuffledColorLists(context: Context, count: Int): MutableList<Pair<Bitmap?, Int?>> {
 			val colors = arrayListOf(
 				context.getColor(R.color.color1),
@@ -64,7 +64,7 @@ class ImagesDisplayGridViewAdapter(
 			return colors
 		}
 		
-		@JvmStatic
+		
 		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, doneAction: (Boolean) -> Unit = {}) {
 			val application = MySpaceApplication.instance
 			var hasNewLoaded = false

@@ -24,7 +24,7 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 		const val ARG_POST_ID = "post_id"
 		const val RELOAD_THRESHOLD = 3
 		
-		@JvmStatic
+		
 		fun newInstance(postID: String) = PostDetailRepostsFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARG_POST_ID, postID)

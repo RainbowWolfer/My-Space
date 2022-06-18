@@ -42,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		const val RELOAD_THREASHOLD = 3
 		var upadteScrollPosition: Boolean = false
 		
-		@JvmStatic
+		
 		fun popupNotLoggedInHint(view: View? = null) {
 			var v: View? = view
 			if (v == null) {

@@ -17,7 +17,7 @@ data class User(
 	@SerializedName("IsFollowing") var isFollowing: Boolean,
 ) : Parcelable, DatabaseID<String> {
 	companion object : GenerateDefault<User> {
-		@JvmStatic
+		
 		override fun generateDefault(): User {
 			return User(
 				id = EasyFunctions.generateRandomString(20),

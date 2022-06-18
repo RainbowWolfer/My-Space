@@ -37,6 +37,7 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateRepostButton
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
 import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -348,7 +349,7 @@ class MainListRecyclerViewAdapter(
 	private fun MainRowLayoutBinding.setContent(post: Post) {
 		if (post.isRepost) {
 			val origin = post.getOriginPost()!!
-			this.rowTextPublishDateTime.text = origin.publishDateTime
+			this.rowTextPublishDateTime.text = origin.publishDateTime.convertToRecentFormat(context)
 			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = origin.textContent
 			this.mainTextRepost.text = post.textContent
@@ -358,7 +359,7 @@ class MainListRecyclerViewAdapter(
 				this.mainImageRepostAvatar.setImageBitmap(it)
 			}
 		} else {
-			this.rowTextPublishDateTime.text = post.publishDateTime
+			this.rowTextPublishDateTime.text = post.publishDateTime.convertToRecentFormat(context)
 			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = post.textContent
 		}

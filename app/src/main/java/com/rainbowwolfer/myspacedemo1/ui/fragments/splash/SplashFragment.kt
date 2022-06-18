@@ -60,7 +60,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 	}
 	
 	companion object {
-		@JvmStatic
+		
 		fun jumpToMainActivity(fragment: Fragment) {
 			fragment.lifecycleScope.launch(Dispatchers.Main) {
 				MySpaceApplication.instance.userPreferencesRepository.updateSkip(true)

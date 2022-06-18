@@ -21,6 +21,7 @@ import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
 import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.*
+import org.joda.time.DateTime
 import retrofit2.HttpException
 
 class MySpaceApplication : Application() {
@@ -33,6 +34,7 @@ class MySpaceApplication : Application() {
 	
 	init {
 		instance = this
+		println(DateTime.now())
 	}
 	
 	val applicationScope = CoroutineScope(SupervisorJob())
@@ -47,10 +49,11 @@ class MySpaceApplication : Application() {
 	
 	val usersPool: ArrayList<UserInfo> = arrayListOf()
 	val postsPool: ArrayList<PostInfo> = arrayListOf()
-	
-	val scoresPool: HashMap<String, Int> = hashMapOf()
+
+//	val scoresPool: HashMap<String, Int> = hashMapOf()
 	
 	fun hasLoggedIn() = currentUser.value != null
+	fun getCurrentID(): String = currentUser.value?.id ?: ""
 	fun getCurrentEmail(): String = currentUser.value?.email ?: ""
 	fun getCurrentPassword(): String = currentUser.value?.password ?: ""
 	
@@ -58,14 +61,14 @@ class MySpaceApplication : Application() {
 		currentUser.value = null
 		currentAvatar.value = null
 	}
-	
-	fun updateVote(postID: String, score: Int) {
-		scoresPool[postID] = score
-	}
-	
-	fun findVote(postID: String): Int {
-		return scoresPool[postID] ?: 0
-	}
+
+//	fun updateVote(postID: String, score: Int) {
+//		scoresPool[postID] = score
+//	}
+//
+//	fun findVote(postID: String): Int {
+//		return scoresPool[postID] ?: 0
+//	}
 	
 	fun updateAvatar() {
 		if (currentUser.value == null) {

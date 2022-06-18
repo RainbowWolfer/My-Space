@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class DraftsFragment : Fragment(R.layout.fragment_drafts) {
 	companion object {
-		@JvmStatic
+		
 		fun newInstance() = DraftsFragment().apply {
 			arguments = Bundle().apply {
 				

@@ -1,5 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.util
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.view.MotionEvent
@@ -24,20 +25,21 @@ import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.joda.time.DateTime
+import org.joda.time.Days
+import org.joda.time.Minutes
 import org.json.JSONObject
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
 import kotlin.random.Random
 
+@Suppress("MemberVisibilityCanBePrivate")
 object EasyFunctions {
-	@JvmStatic
 	private val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 	
-	@JvmStatic
 	fun generateRandomString(length: Int = 10): String {
 		return (1..length)
 			.map {
@@ -47,7 +49,6 @@ object EasyFunctions {
 			.joinToString("")
 	}
 	
-	@JvmStatic
 	fun <T> generateRandomList(
 		minCount: Int, maxCount: Int, argsCallBack: ArgsCallBack<T>,
 	): ArrayList<T> {
@@ -60,44 +61,15 @@ object EasyFunctions {
 		return list
 	}
 	
-	@JvmStatic
-	fun formatDateTime(calendar: Calendar): String {
-		val year = calendar.get(Calendar.YEAR).toDuoNumber()
-		val month = (calendar.get(Calendar.MONTH) + 1).toDuoNumber()
-		val day = calendar.get(Calendar.DAY_OF_MONTH).toDuoNumber()
-		
-		val hour = calendar.get(Calendar.HOUR_OF_DAY).toDuoNumber()
-		val minute = calendar.get(Calendar.MINUTE).toDuoNumber()
-		val second = calendar.get(Calendar.SECOND).toDuoNumber()
-		
-		return "$year-$month-$day $hour:$minute:$second"
-	}
-	
-	@JvmStatic
-	fun Calendar.toFormatDateTime(): String {
-		return formatDateTime(this)
-	}
-	
-	fun Int.toDuoNumber(): String {
-		return if (this < 10) {
-			"0$this"
-		} else {
-			"$this"
-		}
-	}
-	
-	@JvmStatic
 	fun convertMD5(input: String): String {
 		val md = MessageDigest.getInstance("MD5")
 		return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
 	}
 	
-	@JvmStatic
 	fun String.toMD5(): String {
 		return convertMD5(this)
 	}
 	
-	@JvmStatic
 	fun Response<*>.getHttpResponse(): GoResponse {
 		return try {
 			val jsonResponse = JSONObject(this.errorBody()?.string().toString()).toString()
@@ -108,7 +80,6 @@ object EasyFunctions {
 		}
 	}
 	
-	@JvmStatic
 	fun getBytes(inputStream: InputStream): ByteArray {
 		val byteBuffer = ByteArrayOutputStream()
 		val bufferSize = 1024
@@ -120,7 +91,6 @@ object EasyFunctions {
 		return byteBuffer.toByteArray()
 	}
 	
-	@JvmStatic
 	fun AppCompatActivity.setAutoClearEditTextFocus(event: MotionEvent) {
 		if (event.action == MotionEvent.ACTION_DOWN) {
 			val v = currentFocus
@@ -136,8 +106,6 @@ object EasyFunctions {
 		}
 	}
 	
-	
-	@JvmStatic
 	fun RecyclerView.scrollToUpdate(threashold: Int = 2, updateAction: () -> Unit) {
 		if (this.adapter == null) {
 			return
@@ -162,7 +130,6 @@ object EasyFunctions {
 	private const val RELOAD_THRESHOLD = 3
 	private const val MAX_TRY_COUNT = 5
 	
-	@JvmStatic
 	suspend fun <T : DatabaseID<W>, W> stackLoading(refresh: Boolean, data: MutableLiveData<List<T>>, offset: MutableLiveData<Int>, callResponse: suspend () -> Response<List<T>>) {
 		if (refresh) {
 			offset.value = 0
@@ -194,7 +161,6 @@ object EasyFunctions {
 		} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= MAX_TRY_COUNT)
 	}
 	
-	@JvmStatic
 	fun LifecycleOwner.loadAvatar(userID: String, setAction: (Bitmap?) -> Unit) {
 		val application = MySpaceApplication.instance
 		if (application.currentUser.value?.id == userID) {
@@ -220,7 +186,6 @@ object EasyFunctions {
 		}
 	}
 	
-	@JvmStatic
 	fun defaultTransitionNavOption(): NavOptions {
 		return NavOptions.Builder().apply {
 			setEnterAnim(R.anim.from_right)
@@ -228,5 +193,52 @@ object EasyFunctions {
 			setPopEnterAnim(R.anim.from_left)
 			setPopExitAnim(R.anim.to_right)
 		}.build()
+	}
+	
+	fun Int.toDuo(): String {
+		return when {
+			this < 0 -> "$this"
+			this < 10 -> "0$this"
+			else -> "$this"
+		}
+	}
+	
+	fun String.toDateTime(): DateTime? {
+		val str = this.trim()
+		if (str.length != 19) {
+			return null
+		}
+		val year = kotlin.runCatching { str.substring(0, 4).toInt() }.getOrNull() ?: return null
+		val month = kotlin.runCatching { str.substring(5, 7).toInt() }.getOrNull() ?: return null
+		val day = kotlin.runCatching { str.substring(8, 10).toInt() }.getOrNull() ?: return null
+		val hour = kotlin.runCatching { str.substring(11, 13).toInt() }.getOrNull() ?: return null
+		val minute = kotlin.runCatching { str.substring(14, 16).toInt() }.getOrNull() ?: return null
+		val second = kotlin.runCatching { str.substring(17, 19).toInt() }.getOrNull() ?: return null
+		println("$str $year $month $day $hour $minute $second")
+		return DateTime(year, month, day, hour, minute, second)
+	}
+	
+	fun DateTime.getDate(): String = "${this.year.toDuo()}-${this.monthOfYear.toDuo()}-${this.dayOfMonth.toDuo()}"
+	fun DateTime.getTime(): String = "${this.hourOfDay.toDuo()}:${this.minuteOfHour.toDuo()}:${this.secondOfMinute.toDuo()}"
+	
+	fun String.convertToRecentFormat(context: Context): String {
+		val now = DateTime.now()
+		val from = this.toDateTime() ?: return context.getString(R.string.error)
+		val date = when (Days.daysBetween(from, now).days) {
+			0 -> context.getString(R.string.today)
+			1 -> context.getString(R.string.yesterday)
+			else -> from.getDate()
+		}
+		val minutes = Minutes.minutesBetween(from, now).minutes
+		val time = when {
+			minutes < 1 -> context.getString(R.string.just_now)
+			minutes < 2 -> context.getString(R.string.min1)
+			minutes < 5 -> context.getString(R.string.min5)
+			minutes < 10 -> context.getString(R.string.min10)
+			minutes < 30 -> context.getString(R.string.half_an_hour)
+			minutes < 60 -> context.getString(R.string.an_hour)
+			else -> from.getTime()
+		}
+		return "$date $time"
 	}
 }

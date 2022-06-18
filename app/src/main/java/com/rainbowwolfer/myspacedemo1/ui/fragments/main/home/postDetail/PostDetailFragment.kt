@@ -43,14 +43,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		lateinit var instance: PostDetailFragment
 		const val ARG_Post_ID = "post_id"
 		
-		@JvmStatic
+		
 		fun newInstance(postID: String) = PostDetailFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARG_Post_ID, postID)
 			}
 		}
 		
-		@JvmStatic
+		
 		fun updateVoteButtons(upButton: AppCompatImageButton, downButton: AppCompatImageButton, voted: Int) {
 			val application = MySpaceApplication.instance
 			val upIcon: Int
@@ -76,19 +76,19 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			downButton.setImageDrawable(ResourcesCompat.getDrawable(application.resources, downIcon, application.theme))
 		}
 		
-		@JvmStatic
+		
 		fun updateRepostButton(button: AppCompatImageButton, hasReposted: Boolean) {
 			val application = MySpaceApplication.instance
 			button.imageTintList = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
 		}
 		
-		@JvmStatic
+		
 		fun updateRepostButton(image: ImageView, hasReposted: Boolean) {
 			val application = MySpaceApplication.instance
 			image.imageTintList = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
 		}
 		
-		@JvmStatic
+		
 		private fun getHighlightedColorID(boolean: Boolean): Int {
 			return if (boolean) R.color.purple_200 else R.color.colorControlNomal
 		}

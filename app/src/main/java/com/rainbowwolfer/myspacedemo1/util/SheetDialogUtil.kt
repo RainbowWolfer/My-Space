@@ -24,8 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("MemberVisibilityCanBePrivate")
 object SheetDialogUtil {
-	@JvmStatic
 	fun showRepostDialog(context: Context, postID: String, successAction: () -> Unit) {
 		val application = MySpaceApplication.instance
 		if (!application.hasLoggedIn()) {
@@ -100,7 +100,6 @@ object SheetDialogUtil {
 		}
 	}
 	
-	@JvmStatic
 	fun showCommentDialog(context: Context, postID: String, onCommented: () -> Unit) {
 		val application = MySpaceApplication.instance
 		BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {

@@ -43,7 +43,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {
 		private const val ARGS_USER_ID = "user_id"
 		
-		@JvmStatic
+		
 		fun newInstance(user_id: String) = UserProfileFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARGS_USER_ID, user_id)

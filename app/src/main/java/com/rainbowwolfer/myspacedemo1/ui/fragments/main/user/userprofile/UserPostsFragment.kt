@@ -23,7 +23,7 @@ class UserPostsFragment : Fragment(R.layout.fragment_user_posts) {
 	companion object {
 		private const val ARGS_USER_ID = "user_id"
 		
-		@JvmStatic
+		
 		fun newInstance(user_id: String) = UserPostsFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARGS_USER_ID, user_id)

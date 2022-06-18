@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,15 +15,22 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.RowFollowersEmptyLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.RowFollowersLayoutBinding
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.NewUserFollow
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.loadAvatar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class FollowersRecylerViewAdapter(
+class FollowersRecyclerViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
 	private val targetUserID: String = "",
-) : RecyclerView.Adapter<FollowersRecylerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<FollowersRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val TYPE_ROW = 0
 		const val TYPE_EMPTY = 1
@@ -34,6 +42,7 @@ class FollowersRecylerViewAdapter(
 	class EmptyViewHolder(val binding: RowFollowersEmptyLayoutBinding) : ViewHolder(binding.root)
 	
 	private var list = emptyList<User>()
+	private val application = MySpaceApplication.instance
 	
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		return when (viewType) {
@@ -65,16 +74,7 @@ class FollowersRecylerViewAdapter(
 		if (holder is RowViewHolder) {
 			val data = list[position]
 			holder.binding.rowFollowersTextUsername.text = data.username
-			holder.binding.rowFollowersButtonFollow.setImageDrawable(
-				AppCompatResources.getDrawable(
-					context,
-					if (data.isFollowing) {
-						R.drawable.ic_baseline_favorite_24
-					} else {
-						R.drawable.ic_baseline_favorite_border_24
-					}
-				)
-			)
+			holder.updateFollowButtonIcon(data)
 			
 			if (data.id != targetUserID) {
 				holder.binding.rowFollowersImageAvatar.setOnClickListener {
@@ -84,19 +84,61 @@ class FollowersRecylerViewAdapter(
 					}, EasyFunctions.defaultTransitionNavOption())
 				}
 			}
-			
-			holder.binding.rowFollowersButtonFollow.setOnClickListener {
-				if (data.isFollowing) {
-				
-				} else {
-				
+			if (data.id != application.getCurrentID()) {
+				holder.binding.rowFollowersButtonFollow.setOnClickListener {
+					if (!application.hasLoggedIn()) {
+						return@setOnClickListener
+					}
+					lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+						try {
+							holder.binding.rowFollowersButtonFollow.isEnabled = false
+							holder.binding.rowFollowersButtonFollow.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_more_horiz_24))
+							withContext(Dispatchers.IO) {
+								RetrofitInstance.api.postUserFollow(
+									NewUserFollow(
+										email = application.getCurrentEmail(),
+										password = application.getCurrentPassword(),
+										targetID = data.id,
+										cancel = data.isFollowing,
+									)
+								)
+							}
+							data.isFollowing = !data.isFollowing
+						} catch (ex: Exception) {
+							ex.printStackTrace()
+							if (ex is ResponseException) {
+								ex.printResponseException()
+							}
+						} finally {
+							try {
+								holder.binding.rowFollowersButtonFollow.isEnabled = true
+								holder.updateFollowButtonIcon(data)
+							} catch (ex: Exception) {
+							}
+						}
+					}
 				}
+			} else {
+				holder.binding.rowFollowersButtonFollow.visibility = View.GONE
 			}
 			
 			lifecycleOwner.loadAvatar(data.id) {
 				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
 			}
 		}
+	}
+	
+	private fun RowViewHolder.updateFollowButtonIcon(user: User) {
+		binding.rowFollowersButtonFollow.setImageDrawable(
+			AppCompatResources.getDrawable(
+				context,
+				if (user.isFollowing) {
+					R.drawable.ic_baseline_favorite_24
+				} else {
+					R.drawable.ic_baseline_favorite_border_24
+				}
+			)
+		)
 	}
 	
 	override fun getItemCount(): Int = list.size + 1

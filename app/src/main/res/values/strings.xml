@@ -73,5 +73,15 @@
 	<string name="Follow">Follow</string>
 	<string name="Loading">Loading</string>
 	<string name="report">Report</string>
+	
+	<string name="today">Today</string>
+	<string name="yesterday">Yesterday</string>
+	
+	<string name="just_now">Just now</string>
+	<string name="min1">1 min ago</string>
+	<string name="min5">5 min ago</string>
+	<string name="min10">10 min ago</string>
+	<string name="half_an_hour">Half an hour</string>
+	<string name="an_hour">An hour</string>
 
 </resources>

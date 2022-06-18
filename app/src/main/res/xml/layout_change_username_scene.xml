@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:motion="http://schemas.android.com/apk/res-auto">
-
-    <Transition
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start"
-        motion:duration="300">
-       <KeyFrameSet>
-       </KeyFrameSet>
-    </Transition>
-
-    <ConstraintSet android:id="@+id/start">
-    </ConstraintSet>
-
-    <ConstraintSet android:id="@+id/end">
-	    <Constraint
-		    android:id="@+id/newUsername_progressBar"
-		    motion:layout_constraintEnd_toEndOf="parent"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_marginEnd="15dp"
-		    motion:layout_constraintTop_toBottomOf="@+id/newUsername_input_new"
-		    android:alpha="1"
-		    android:layout_marginStart="15dp"
-		    motion:layout_constraintStart_toStartOf="parent"
-		    android:layout_marginTop="8dp"/>
-    </ConstraintSet>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:motion="http://schemas.android.com/apk/res-auto">
+	
+	<Transition
+		motion:constraintSetEnd="@+id/end"
+		motion:constraintSetStart="@id/start"
+		motion:duration="300">
+		<KeyFrameSet></KeyFrameSet>
+	</Transition>
+	
+	<ConstraintSet android:id="@+id/start"></ConstraintSet>
+	
+	<ConstraintSet android:id="@+id/end">
+		<Constraint
+			android:id="@+id/newUsername_progressBar"
+			motion:layout_constraintEnd_toEndOf="parent"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="15dp"
+			motion:layout_constraintTop_toBottomOf="@+id/newUsername_input_new"
+			android:alpha="1"
+			android:layout_marginStart="15dp"
+			motion:layout_constraintStart_toStartOf="parent"
+			android:layout_marginTop="8dp"/>
+	</ConstraintSet>
 </MotionScene>

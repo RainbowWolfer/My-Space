@@ -33,7 +33,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 		private const val ARG_POST_ID = "post_id"
 		const val RELOAD_THREASHOLD = 3
 		
-		@JvmStatic
+		
 		fun newInstance(postID: String) = PostDetailCommentsFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARG_POST_ID, postID)

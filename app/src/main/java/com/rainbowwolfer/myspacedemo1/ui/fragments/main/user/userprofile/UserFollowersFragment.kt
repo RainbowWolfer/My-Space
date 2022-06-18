@@ -12,7 +12,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserFollowersBinding
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.FollowersRecylerViewAdapter
+import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.FollowersRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
@@ -23,7 +23,7 @@ class UserFollowersFragment : Fragment(R.layout.fragment_user_followers) {
 	companion object {
 		private const val ARGS_USER_ID = "user_id"
 		
-		@JvmStatic
+		
 		fun newInstance(user_id: String) = UserFollowersFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARGS_USER_ID, user_id)
@@ -36,7 +36,7 @@ class UserFollowersFragment : Fragment(R.layout.fragment_user_followers) {
 		ownerProducer = { requireParentFragment() }
 	)
 	private val application = MySpaceApplication.instance
-	private val adapter by lazy { FollowersRecylerViewAdapter(requireContext(), viewLifecycleOwner, userID) }
+	private val adapter by lazy { FollowersRecyclerViewAdapter(requireContext(), viewLifecycleOwner, userID) }
 	
 	private var isLoading = false
 	private lateinit var userID: String
