@@ -9,14 +9,8 @@ import android.view.LayoutInflater
 import androidx.core.widget.doAfterTextChanged
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutChangeUsernameBinding
-import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
 import com.rainbowwolfer.myspacedemo1.ui.views.interfaces.ViewDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 class ChangeUsernameDialog(
 	override val context: Context,

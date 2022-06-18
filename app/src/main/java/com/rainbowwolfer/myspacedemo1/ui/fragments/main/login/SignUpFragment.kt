@@ -3,18 +3,18 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.login
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.rainbowwolfer.myspacedemo1.R
-import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentSignUpBinding
 import com.rainbowwolfer.myspacedemo1.models.api.SignUpInfo
 import com.rainbowwolfer.myspacedemo1.services.PasswordStrengthCalculator
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.views.SignUpProcessDialog
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {

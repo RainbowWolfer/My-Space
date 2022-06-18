@@ -10,13 +10,16 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.GridView
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutImageDisplayGridviewItemBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.activities.imagesdisplay.ImagesDisplayActivity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 
 class ImagesDisplayGridViewAdapter(
 	context: Context,
@@ -62,14 +65,14 @@ class ImagesDisplayGridViewAdapter(
 		}
 		
 		@JvmStatic
-		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, scope: CoroutineScope, doneAction: (Boolean) -> Unit = {}) {
+		fun loadImages(gridView: GridView, post: Post, lifecycleOwner: LifecycleOwner, doneAction: (Boolean) -> Unit = {}) {
 			val application = MySpaceApplication.instance
 			var hasNewLoaded = false
 			val adapter = gridView.adapter
 			if (adapter !is ImagesDisplayGridViewAdapter) {
 				return
 			}
-			scope.launch(Dispatchers.Main) {
+			lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 				try {
 					for (index in 0 until post.imagesCount) {
 						val list = adapter.list.toMutableList()

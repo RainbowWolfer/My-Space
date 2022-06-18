@@ -8,14 +8,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetCommentInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetRepostInputBinding
-import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
@@ -23,7 +20,6 @@ import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

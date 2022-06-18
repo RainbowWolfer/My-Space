@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -14,7 +14,6 @@ import com.rainbowwolfer.myspacedemo1.databinding.MessageDetailRowLayoutLeftBind
 import com.rainbowwolfer.myspacedemo1.databinding.MessageDetailRowLayoutRightBinding
 import com.rainbowwolfer.myspacedemo1.models.MessageItem
 import com.rainbowwolfer.myspacedemo1.models.MessageSet
-import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import de.hdodenhof.circleimageview.CircleImageView

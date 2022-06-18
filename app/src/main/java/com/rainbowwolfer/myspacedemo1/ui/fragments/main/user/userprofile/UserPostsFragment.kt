@@ -1,15 +1,14 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserPostsBinding
-import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -38,11 +37,7 @@ class UserPostsFragment : Fragment(R.layout.fragment_user_posts) {
 	)
 	private val application = MySpaceApplication.instance
 	
-	private val adapter by lazy {
-		MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope).apply {
-			enableAvatarClicking = false
-		}
-	}
+	private val adapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner, userID) }
 	
 	private var isLoading = false
 	private lateinit var userID: String

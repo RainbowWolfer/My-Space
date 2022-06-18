@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
-import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.PostInfo
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
@@ -13,6 +12,7 @@ import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findAvatar
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.updateAvatar
+import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.api.NewPostVote
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance

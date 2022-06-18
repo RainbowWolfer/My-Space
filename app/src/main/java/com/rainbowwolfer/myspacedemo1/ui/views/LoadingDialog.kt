@@ -4,11 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.opengl.Visibility
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.LoadingDialogBinding
 import com.rainbowwolfer.myspacedemo1.ui.views.interfaces.ViewDialog
 

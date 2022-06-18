@@ -15,14 +15,12 @@ import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostCommentsRecylverViewAdapter
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostCommentsRecylverViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
 import com.rainbowwolfer.myspacedemo1.models.Comment
-import com.rainbowwolfer.myspacedemo1.models.api.NewCommentVote
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserCollection

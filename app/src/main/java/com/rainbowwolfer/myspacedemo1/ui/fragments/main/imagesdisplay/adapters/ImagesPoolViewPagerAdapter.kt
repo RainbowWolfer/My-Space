@@ -1,11 +1,9 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.imagesdisplay.adapters
 
-import android.graphics.Bitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.imagesdisplay.ZoomImageFragment
 
 class ImagesPoolViewPagerAdapter(

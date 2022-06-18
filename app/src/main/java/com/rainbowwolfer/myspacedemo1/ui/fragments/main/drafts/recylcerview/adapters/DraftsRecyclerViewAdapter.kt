@@ -16,7 +16,6 @@ import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.models
 
 import android.graphics.Bitmap
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.addUser
 
 class UserInfo(
 	val id: String,

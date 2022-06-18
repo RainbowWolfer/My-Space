@@ -34,6 +34,14 @@
 			app:argType="string"/>
 	</fragment>
 	<fragment
+		android:id="@+id/item_user_profile"
+		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment"
+		android:label="User">
+		<argument
+			android:name="user_id"
+			app:argType="string"/>
+	</fragment>
+	<fragment
 		android:id="@+id/postDetailFragment"
 		android:name="com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment"
 		android:label="Post"

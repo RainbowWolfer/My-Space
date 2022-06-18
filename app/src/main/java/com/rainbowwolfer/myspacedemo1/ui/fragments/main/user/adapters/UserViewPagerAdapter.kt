@@ -2,10 +2,10 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserFollowersFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserPostsFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile.UserProfileFragment
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 
 class UserViewPagerAdapter(
 	parent: UserFragment,

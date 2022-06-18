@@ -3,9 +3,9 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.message
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rainbowwolfer.myspacedemo1.R

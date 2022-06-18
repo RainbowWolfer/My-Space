@@ -5,11 +5,10 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import android.widget.Toast
-import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,9 +16,8 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserBinding
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.UserViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.adapters.UserViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.Dispatchers

@@ -15,9 +15,11 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Response
-import java.lang.Exception
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 	private val binding: FragmentLoginBinding by viewBinding()

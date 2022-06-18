@@ -2,19 +2,22 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.splash
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentSplashBinding
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasValue
-import kotlinx.coroutines.*
+import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 	private val binding: FragmentSplashBinding by viewBinding()

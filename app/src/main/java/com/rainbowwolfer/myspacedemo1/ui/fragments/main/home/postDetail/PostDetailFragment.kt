@@ -289,7 +289,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			it.list = colors
 		}
 		
-		ImagesDisplayGridViewAdapter.loadImages(this.postDetailGridviewImages, post, viewLifecycleOwner, lifecycleScope)
+		ImagesDisplayGridViewAdapter.loadImages(this.postDetailGridviewImages, post, viewLifecycleOwner)
 	}
 	
 	private fun FragmentPostDetailBinding.enableUserFunctions() {

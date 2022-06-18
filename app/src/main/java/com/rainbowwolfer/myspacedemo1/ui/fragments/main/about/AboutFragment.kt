@@ -1,9 +1,9 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.about
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentAboutBinding
 

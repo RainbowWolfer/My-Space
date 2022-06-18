@@ -1,7 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.welcome
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.rainbowwolfer.myspacedemo1.R
 
 class WelcomeActivity : AppCompatActivity() {

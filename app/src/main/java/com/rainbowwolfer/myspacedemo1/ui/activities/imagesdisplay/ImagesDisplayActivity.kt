@@ -1,11 +1,11 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.imagesdisplay
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.viewbinding.library.activity.viewBinding
+import androidx.appcompat.app.AppCompatActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityImagesDisplayBinding
 import com.rainbowwolfer.myspacedemo1.models.Post

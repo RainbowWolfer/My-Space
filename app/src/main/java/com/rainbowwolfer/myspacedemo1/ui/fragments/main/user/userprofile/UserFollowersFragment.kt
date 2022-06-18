@@ -1,9 +1,9 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.userprofile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +36,7 @@ class UserFollowersFragment : Fragment(R.layout.fragment_user_followers) {
 		ownerProducer = { requireParentFragment() }
 	)
 	private val application = MySpaceApplication.instance
-	private val adapter by lazy { FollowersRecylerViewAdapter(requireContext(), viewLifecycleOwner) }
+	private val adapter by lazy { FollowersRecylerViewAdapter(requireContext(), viewLifecycleOwner, userID) }
 	
 	private var isLoading = false
 	private lateinit var userID: String

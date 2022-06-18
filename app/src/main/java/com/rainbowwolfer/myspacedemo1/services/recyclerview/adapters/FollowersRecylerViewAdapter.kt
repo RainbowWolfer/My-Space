@@ -1,12 +1,13 @@
 package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
@@ -14,12 +15,13 @@ import com.rainbowwolfer.myspacedemo1.databinding.RowFollowersEmptyLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.RowFollowersLayoutBinding
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostScoresRecordRecyclerViewAdapter
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.loadAvatar
 
 class FollowersRecylerViewAdapter(
 	private val context: Context,
-	private val lifecycleOwner: LifecycleOwner
+	private val lifecycleOwner: LifecycleOwner,
+	private val targetUserID: String = "",
 ) : RecyclerView.Adapter<FollowersRecylerViewAdapter.ViewHolder>() {
 	companion object {
 		const val TYPE_ROW = 0
@@ -73,6 +75,23 @@ class FollowersRecylerViewAdapter(
 					}
 				)
 			)
+			
+			if (data.id != targetUserID) {
+				holder.binding.rowFollowersImageAvatar.setOnClickListener {
+					val navController = Navigation.findNavController(holder.itemView)
+					navController.navigate(R.id.item_user_profile, Bundle().apply {
+						putString("user_id", data.id)
+					}, EasyFunctions.defaultTransitionNavOption())
+				}
+			}
+			
+			holder.binding.rowFollowersButtonFollow.setOnClickListener {
+				if (data.isFollowing) {
+				
+				} else {
+				
+				}
+			}
 			
 			lifecycleOwner.loadAvatar(data.id) {
 				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)

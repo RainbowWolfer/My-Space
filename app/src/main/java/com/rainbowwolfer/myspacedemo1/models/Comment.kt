@@ -3,10 +3,7 @@ package com.rainbowwolfer.myspacedemo1.models
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import kotlinx.parcelize.Parcelize
-import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 @Parcelize
 data class Comment(

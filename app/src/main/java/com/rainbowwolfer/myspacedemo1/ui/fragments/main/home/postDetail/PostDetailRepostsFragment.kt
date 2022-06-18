@@ -10,17 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentPostDetailRepostsBinding
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
-import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostRepostsRecordRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts) {
 	companion object {

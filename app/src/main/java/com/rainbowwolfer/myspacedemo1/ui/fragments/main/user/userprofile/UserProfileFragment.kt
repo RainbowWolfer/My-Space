@@ -21,8 +21,8 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewUserFollow
 import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
@@ -38,7 +38,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.InputStream
-import kotlin.Exception
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {

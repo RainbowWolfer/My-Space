@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services
 
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import androidx.lifecycle.MutableLiveData
 import com.rainbowwolfer.myspacedemo1.R

@@ -3,11 +3,10 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.drafts
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +15,6 @@ import com.rainbowwolfer.myspacedemo1.databinding.FragmentDraftsBinding
 import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.drafts.recylcerview.adapters.DraftsRecyclerViewAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

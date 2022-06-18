@@ -5,42 +5,28 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavOptions
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.rainbowwolfer.myspacedemo1.R
-import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetCommentInputBinding
-import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetRepostInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MainRowLayoutEndBinding
-import com.rainbowwolfer.myspacedemo1.models.Comment
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.api.NewCollection
-import com.rainbowwolfer.myspacedemo1.models.api.NewComment
-import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
 import com.rainbowwolfer.myspacedemo1.models.enums.CollectionType
-import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter
@@ -48,13 +34,10 @@ import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGr
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateRepostButton
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
-import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -63,7 +46,7 @@ import kotlinx.coroutines.withContext
 class MainListRecyclerViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
-	private val lifecycleScope: LifecycleCoroutineScope,
+	private val targeUserID: String = "",
 ) : RecyclerView.Adapter<MainListRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
@@ -74,8 +57,6 @@ class MainListRecyclerViewAdapter(
 	
 	class RowViewHolder(val binding: MainRowLayoutBinding) : ViewHolder(binding.root)
 	class EndViewHolder(val binding: MainRowLayoutEndBinding) : ViewHolder(binding.root)
-	
-	var enableAvatarClicking: Boolean = true
 	
 	private var list = emptyList<Post>()
 	private val application = MySpaceApplication.instance
@@ -149,7 +130,7 @@ class MainListRecyclerViewAdapter(
 						}
 						R.id.item_collection -> {
 							if (application.hasLoggedIn()) {
-								lifecycleScope.launch(Dispatchers.IO) {
+								lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
 									try {
 										RetrofitInstance.api.addCollection(
 											NewCollection(
@@ -178,8 +159,9 @@ class MainListRecyclerViewAdapter(
 				popupMenu.inflate(R.menu.more_button_menu)
 				popupMenu.show()
 			}
-			if (enableAvatarClicking) {
-				val post = list[position]
+			//avatar clicking
+			val post = list[position]
+			if (targeUserID != post.readUser().id) {
 				holder.binding.rowImagePublisherAvatar.setOnClickListener {
 					if (post.isRepost) {
 						navigateToUserProfile(holder.itemView, post.getOriginUser()!!.id)
@@ -187,6 +169,8 @@ class MainListRecyclerViewAdapter(
 						navigateToUserProfile(holder.itemView, post.publisherID)
 					}
 				}
+			}
+			if (targeUserID != post.publisherID) {
 				holder.binding.rowLayoutRepostInfo.setOnClickListener {
 					if (post.isRepost) {
 						navigateToUserProfile(holder.itemView, post.publisherID)
@@ -206,9 +190,11 @@ class MainListRecyclerViewAdapter(
 	
 	private fun navigateToUserProfile(view: View, id: String) {
 		val navController = Navigation.findNavController(view)
-		navController.graph.findNode(R.id.userFragment)?.label = "User $id"
-		val action = HomeFragmentDirections.actionItemHomeToUserFragment(id)
-		navController.navigate(action)
+//		navController.graph.findNode(R.id.userFragment)?.label = "User $id"
+//		val action = HomeFragmentDirections.actionItemHomeToUserFragment(id)
+		navController.navigate(R.id.item_user_profile, Bundle().apply {
+			putString("user_id", id)
+		}, EasyFunctions.defaultTransitionNavOption())
 	}
 	
 	private fun MainRowLayoutBinding.setButtons(postID: String) {
@@ -363,7 +349,7 @@ class MainListRecyclerViewAdapter(
 		if (post.isRepost) {
 			val origin = post.getOriginPost()!!
 			this.rowTextPublishDateTime.text = origin.publishDateTime
-			//"${post.id}_${post.originPostID}" + 
+			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = origin.textContent
 			this.mainTextRepost.text = post.textContent
 			this.rowTextRepostInfo.text = "Repost From @${post.publisherUsername}"
@@ -414,7 +400,7 @@ class MainListRecyclerViewAdapter(
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		loadImages(this.rowGridviewImages, post, lifecycleOwner, lifecycleScope) {
+		loadImages(this.rowGridviewImages, post, lifecycleOwner) {
 //			if (it) {
 //				application.postsPool.findRelativePosts(post.id).apply {
 //					updatePositions(this)

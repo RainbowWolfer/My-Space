@@ -17,18 +17,20 @@ import com.google.android.material.snackbar.Snackbar
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentHomeBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutBottomModalPostLimitBinding
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MainListRecyclerViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
-import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.EOFException
 import java.net.SocketTimeoutException
@@ -62,7 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private val viewModel: MainActivityViewModel by activityViewModels()
 	private val application = MySpaceApplication.instance
 	
-	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope) }
+	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner) }
 	
 	private var isLoading = false
 

@@ -1,6 +1,5 @@
 package com.rainbowwolfer.myspacedemo1.util
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.view.MotionEvent
@@ -32,7 +31,6 @@ import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 object EasyFunctions {

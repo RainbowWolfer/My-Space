@@ -34,14 +34,13 @@ import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetTagInputBinding
 import com.rainbowwolfer.myspacedemo1.databinding.LayoutPostImageViewBinding
 import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.models.PostResult
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
