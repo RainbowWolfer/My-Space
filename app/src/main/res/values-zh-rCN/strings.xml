@@ -166,6 +166,22 @@
 	<string name="no_more">没有更多了</string>
 	<string name="not_found">未找到</string>
 	<string name="loading_comments">加载评论中</string>
+	<string name="are_you_sure_to_sign_out">你确认要注销吗？</string>
+	<string name="are_you_sure_to_delete_this_draft">你确认要删除此草稿吗？</string>
+	<string name="your_registration_has_not_been_validated_through_email">你的注册邮件还未通过验证</string>
+	<string name="email_or_password_is_wrong">邮箱或者密码错误</string>
+	<string name="something_went_wrong_please_try_again_later">有东西出错了，请稍后再试</string>
+	<string name="empty_password">密码为空</string>
+	<string name="empty_username">用户名为空</string>
+	<string name="empty_email">邮箱为空</string>
+	<string name="username_cannot_be_empty">用户名不能为空</string>
+	<string name="please_enter_a_valid_email_address">请输入一个合法的邮箱地址</string>
+	<string name="password_cannot_be_empty">密码不能为空</string>
+	<string name="password_must_be_at_least_7_length">密码最少长度为7位</string>
+	<string name="no_password_entered_yet">还未输入密码</string>
+	<string name="confirm_password_is_not_matched">确认密码不匹配</string>
+	<string name="you_have_empty_fields_to_fill">有输入项为空</string>
+	<string name="you_have_error_fields_to_fix">有输入项错误</string>
 
 
 </resources>

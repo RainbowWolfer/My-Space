@@ -1,5 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.imagesdisplay
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.ActivityImagesDisplayBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.imagesdisplay.adapters.ImagesPoolViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 
 class ImagesDisplayActivity : AppCompatActivity() {
 	companion object {
@@ -22,6 +24,10 @@ class ImagesDisplayActivity : AppCompatActivity() {
 	
 	private var post: Post? = null
 	private var current: Int = -1
+	
+	override fun attachBaseContext(newBase: Context?) {
+		super.attachBaseContext(LocaleUtils.attachBaseContext(newBase))
+	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

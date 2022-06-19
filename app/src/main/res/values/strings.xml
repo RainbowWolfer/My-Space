@@ -189,4 +189,20 @@
 	<string name="no_more">No More</string>
 	<string name="not_found">Not Found</string>
 	<string name="loading_comments">Loading Comments</string>
+	<string name="are_you_sure_to_sign_out">Are you sure to sign out?</string>
+	<string name="are_you_sure_to_delete_this_draft">Are you sure to delete this draft?</string>
+	<string name="your_registration_has_not_been_validated_through_email">Your registration has not been validated through email</string>
+	<string name="email_or_password_is_wrong">Email or Password is wrong</string>
+	<string name="something_went_wrong_please_try_again_later">Something went wrong. Please try again later</string>
+	<string name="empty_username">Empty Username</string>
+	<string name="empty_password">Empty Password</string>
+	<string name="empty_email">Empty Email</string>
+	<string name="username_cannot_be_empty">Username cannot be empty</string>
+	<string name="please_enter_a_valid_email_address">Please enter a valid email address</string>
+	<string name="password_cannot_be_empty">Password cannot be empty</string>
+	<string name="password_must_be_at_least_7_length">Password must be at least 7 length</string>
+	<string name="no_password_entered_yet">No password entered yet</string>
+	<string name="confirm_password_is_not_matched">Confirm password is not matched</string>
+	<string name="you_have_empty_fields_to_fill">You have empty field(s) to fill</string>
+	<string name="you_have_error_fields_to_fix">You have error field(s) to fix</string>
 </resources>

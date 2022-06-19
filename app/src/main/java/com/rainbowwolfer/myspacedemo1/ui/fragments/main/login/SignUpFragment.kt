@@ -36,7 +36,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 			}
 			val text = it.toString()
 			binding.signupInputUsername.error = if (TextUtils.isEmpty(text)) {
-				"Username cannot be empty"
+				getString(R.string.username_cannot_be_empty)
 			} else {
 				null
 			}
@@ -51,7 +51,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 			binding.signupInputEmail.error = if (emailValidation) {
 				null
 			} else {
-				"Please enter a valid email address"
+				getString(R.string.please_enter_a_valid_email_address)
 			}
 		}
 		
@@ -63,8 +63,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				return@observe
 			}
 			binding.signupInputPassword.error = when (it) {
-				0 -> "Password cannot be empty"
-				in 1..6 -> "Password must be at least 7 length"
+				0 -> getString(R.string.password_cannot_be_empty)
+				in 1..6 -> getString(R.string.password_must_be_at_least_7_length)
 				else -> null
 			}
 			binding.signupInputConfirmPassword.error = null
@@ -98,13 +98,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 			}
 			val password = binding.signupEditTextPassword.text.toString()
 			if (TextUtils.isEmpty(password)) {
-				binding.signupInputConfirmPassword.error = "No password entered yet"
+				binding.signupInputConfirmPassword.error = getString(R.string.no_password_entered_yet)
 				return@doAfterTextChanged
 			}
 			if (it.toString() == password) {
 				binding.signupInputConfirmPassword.error = null
 			} else {
-				binding.signupInputConfirmPassword.error = "Confirm password is not matched"
+				binding.signupInputConfirmPassword.error = getString(R.string.confirm_password_is_not_matched)
 			}
 		}
 		
@@ -117,7 +117,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 			).any { input -> TextUtils.isEmpty(input.text.toString()) }
 			
 			if (hasEmpty) {
-				Snackbar.make(view, "You have empty field(s) to fill", Snackbar.LENGTH_SHORT).show()
+				Snackbar.make(view, getString(R.string.you_have_empty_fields_to_fill), Snackbar.LENGTH_SHORT).show()
 				return@setOnClickListener
 			}
 			
@@ -129,7 +129,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 			).any { input -> input.error != null }
 			
 			if (hasError) {
-				Snackbar.make(view, "You have error field(s) to fix", Snackbar.LENGTH_SHORT).show()
+				Snackbar.make(view, getString(R.string.you_have_error_fields_to_fix), Snackbar.LENGTH_SHORT).show()
 				return@setOnClickListener
 			}
 			val dialog = SignUpProcessDialog(requireContext(), lifecycleScope).apply {

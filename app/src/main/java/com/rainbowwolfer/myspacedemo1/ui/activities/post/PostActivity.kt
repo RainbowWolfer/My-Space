@@ -2,6 +2,7 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.post
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -42,6 +43,7 @@ import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -72,6 +74,10 @@ class PostActivity : AppCompatActivity() {
 		viewModel.addImage(info)
 	}
 	
+	override fun attachBaseContext(newBase: Context?) {
+		super.attachBaseContext(LocaleUtils.attachBaseContext(newBase))
+	}
+	
 	private fun loadImageFromURI(uri: Uri): PostActivityViewModel.ImageInfo? {
 //		println("URI: $uri")
 		return try {
@@ -90,7 +96,6 @@ class PostActivity : AppCompatActivity() {
 		}
 	}
 	
-	@SuppressLint("SetTextI18n")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(binding.root)
@@ -130,6 +135,7 @@ class PostActivity : AppCompatActivity() {
 		}
 		
 		viewModel.content.observe(this) {
+			@SuppressLint("SetTextI18n")
 			binding.postTextCount.text = "${it.length}/$MAX_CHARACTERS"
 			binding.postTextCount.setTextColor(
 				resources.getColor(

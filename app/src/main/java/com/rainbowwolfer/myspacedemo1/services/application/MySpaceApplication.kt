@@ -31,8 +31,6 @@ class MySpaceApplication : Application() {
 	companion object {
 		lateinit var instance: MySpaceApplication
 			private set
-		
-		const val IMAGES_COUNT_PER_POST = 9
 	}
 	
 	init {

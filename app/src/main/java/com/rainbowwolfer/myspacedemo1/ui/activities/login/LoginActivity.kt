@@ -1,6 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.ui.activities.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.LoginFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.login.adapters.LoginViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 
 class LoginActivity : AppCompatActivity() {
 	private val binding: ActivityLoginBinding by viewBinding()
@@ -26,6 +28,10 @@ class LoginActivity : AppCompatActivity() {
 	
 	init {
 		Instance = this
+	}
+	
+	override fun attachBaseContext(newBase: Context?) {
+		super.attachBaseContext(LocaleUtils.attachBaseContext(newBase))
 	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {

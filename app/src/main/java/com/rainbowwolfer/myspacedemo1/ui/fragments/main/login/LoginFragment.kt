@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -44,10 +45,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 							val email = binding.loginEditTextEmail.text.toString()
 							val password = binding.loginEditTextPassword.text.toString()
 							response = RetrofitInstance.api.tryLogin(email, password)
-							println(response)
+//							println(response)
 							if (response!!.isSuccessful) {
 								user = response!!.body()
-								println(user)
+//								println(user)
 								if (user != null) {
 									dialog.hideDialog()
 									LoginActivity.Instance?.getBack(user!!)
@@ -55,19 +56,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 							}
 						}
 						if (jobLogin == null || response?.isSuccessful != true || user == null) {
-							println("result $jobLogin - ${response?.isSuccessful} - $user")
+//							println("result $jobLogin - ${response?.isSuccessful} - $user")
 							val r = response?.getHttpResponse()
 							val errorMessage = when (r?.errorCode) {
-								1 -> "Your registration has not been validated through email"
-								2 -> "Email or Password is wrong"
-								else -> "Something went wrong. Please try agian later"
+								1 -> getString(R.string.your_registration_has_not_been_validated_through_email)
+								2 -> getString(R.string.email_or_password_is_wrong)
+								else -> getString(R.string.something_went_wrong_please_try_again_later)
 							}
 							dialog.hideDialog()
 							AlertDialog.Builder(requireContext()).apply {
 								setCancelable(false)
-								setTitle("Error")
+								setTitle(getString(R.string.error))
 								setMessage(errorMessage)
-								setNegativeButton("Back", null)
+								setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_close_24))
+								setNegativeButton(getString(R.string.back), null)
 								show()
 							}
 						}
@@ -81,7 +83,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 		
 		binding.loginEditTextEmail.doAfterTextChanged {
 			if (TextUtils.isEmpty(it.toString())) {
-				binding.loginEditTextEmail.error = "Empty Username"
+				binding.loginEditTextEmail.error = getString(R.string.empty_email)
 			} else {
 				binding.loginEditTextEmail.error = null
 			}
@@ -89,7 +91,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 		
 		binding.loginEditTextPassword.doAfterTextChanged {
 			if (TextUtils.isEmpty(it.toString())) {
-				binding.loginEditTextPassword.error = "Empty Password"
+				binding.loginEditTextPassword.error = getString(R.string.empty_password)
 			} else {
 				binding.loginEditTextPassword.error = null
 			}
@@ -99,11 +101,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 	private fun checkParametersValid(): Boolean {
 		var error = false
 		if (TextUtils.isEmpty(binding.loginEditTextEmail.text)) {
-			binding.loginEditTextEmail.error = "Empty Username"
+			binding.loginEditTextEmail.error = getString(R.string.empty_email)
 			error = true
 		}
 		if (TextUtils.isEmpty(binding.loginEditTextPassword.text)) {
-			binding.loginEditTextPassword.error = "Empty Password"
+			binding.loginEditTextPassword.error = getString(R.string.empty_password)
 			error = true
 		}
 		return !error

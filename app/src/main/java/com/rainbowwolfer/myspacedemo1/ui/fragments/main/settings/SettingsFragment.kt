@@ -1,13 +1,11 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.settings
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
-import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -27,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 //						else -> ""
 //					}, Toast.LENGTH_LONG
 //				).show()
-				switchAppLanguage()
+				MainActivity.Instance?.switchAppLanguage()
 //				when (value) {
 //					"cn" -> {
 //						switchAppLanguage(LocaleUtils.Language.Chinese)
@@ -41,12 +39,5 @@ class SettingsFragment : PreferenceFragmentCompat() {
 			}
 			true
 		}
-	}
-	
-	private fun switchAppLanguage() {
-		LocaleUtils.notifyLanguageChanged(requireContext())
-		val intent = Intent(requireContext(), MainActivity::class.java)
-		intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-		startActivity(intent)
 	}
 }

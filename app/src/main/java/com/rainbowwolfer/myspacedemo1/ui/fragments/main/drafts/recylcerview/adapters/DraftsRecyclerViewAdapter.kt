@@ -44,10 +44,10 @@ class DraftsRecyclerViewAdapter(
 					}
 					R.id.item_delete -> {
 						AlertDialog.Builder(context).apply {
-							setTitle("Delete")
-							setMessage("Are you sure to delete this draft?")
-							setNegativeButton("No", null)
-							setPositiveButton("Yes") { _, _ ->
+							setTitle(context.getString(R.string.delete))
+							setMessage(context.getString(R.string.are_you_sure_to_delete_this_draft))
+							setNegativeButton(context.getString(R.string.no), null)
+							setPositiveButton(context.getString(R.string.yes)) { _, _ ->
 								lifecycleCoroutineScope.launch(Dispatchers.IO) {
 									application.roomRepository.delete(data)
 								}

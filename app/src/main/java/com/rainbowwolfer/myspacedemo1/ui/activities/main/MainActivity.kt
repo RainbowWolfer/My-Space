@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.MotionEvent
@@ -33,7 +32,6 @@ import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFoc
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 	
 	init {
 		Instance = this
-//		setLocal("zh-cn")
 	}
 	
 	private val binding: ActivityMainBinding by viewBinding()
@@ -134,10 +131,10 @@ class MainActivity : AppCompatActivity() {
 		
 		navViewHeaderBinding.headerButtonSignOut.setOnClickListener {
 			AlertDialog.Builder(this).apply {
-				setTitle("Confirm")
-				setMessage("Are you sure to sign out?")
-				setNegativeButton("No", null)
-				setPositiveButton("Yes") { _, _ ->
+				setTitle(getString(R.string.confirm))
+				setMessage(getString(R.string.are_you_sure_to_sign_out))
+				setNegativeButton(getString(R.string.no), null)
+				setPositiveButton(getString(R.string.yes)) { _, _ ->
 					binding.navView.menu.findItem(R.id.item_home).isChecked = true
 					navController.popBackStack(R.id.item_home, true)
 					navController.navigate(R.id.item_home)
@@ -183,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 			}
 		}
 		val loggedIn = application.hasLoggedIn()
-		navViewHeaderBinding.headerTextTitle.text = if (loggedIn) application.currentUser.value!!.username else "Welcome"
+		navViewHeaderBinding.headerTextTitle.text = if (loggedIn) application.currentUser.value!!.username else getString(R.string.welcome)
 		navViewHeaderBinding.headerButtonLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
 		navViewHeaderBinding.headerButtonSignOut.visibility = if (loggedIn) View.VISIBLE else View.GONE
 	}
@@ -193,31 +190,11 @@ class MainActivity : AppCompatActivity() {
 		return super.dispatchTouchEvent(event)
 	}
 	
-	@Suppress("DEPRECATION")
-	fun setLocal(language: String) {
-		println(language)
-//		val locale = Locale(language)
-//		Locale.setDefault(locale)
-//		val config = resources.configuration
-//		config.setLocale(locale)
-//		config.setLayoutDirection(locale)
-//		resources.updateConfiguration(config, resources.displayMetrics)
-
-//		val locale = Locale(language)
-//		Locale.setDefault(locale)
-//		val configuration = Configuration()
-//		configuration.setLocale(locale)
-//		this.applyOverrideConfiguration(configuration)
-		
-		val languageToLoad = language // your language
-		
-		val locale = Locale(languageToLoad)
-		Locale.setDefault(locale)
-		val config = Configuration()
-		config.locale = locale
-		baseContext.resources.updateConfiguration(
-			config,
-			baseContext.resources.displayMetrics
-		)
+	
+	fun switchAppLanguage() {
+		LocaleUtils.notifyLanguageChanged(this)
+		val intent = Intent(this, MainActivity::class.java)
+		intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+		startActivity(intent)
 	}
 }
