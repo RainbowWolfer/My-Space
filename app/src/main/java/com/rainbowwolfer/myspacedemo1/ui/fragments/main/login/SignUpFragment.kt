@@ -24,12 +24,12 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
+		
 //		binding.signupEditTextUsername.setText("rainbow_wolfer")
 //		binding.signupEditTextEmail.setText("1519787190@qq.com")
 //		binding.signupEditTextPassword.setText("123456789")
 //		binding.signupEditTextConfirmPassword.setText("123456789")
-		
+
 		binding.signupEditTextUsername.doAfterTextChanged {
 			if (skip) {
 				return@doAfterTextChanged
@@ -89,6 +89,23 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				binding.signupInputPassword.setHelperTextColor(color)
 				binding.signupInputPassword.setEndIconTintList(color)
 				binding.signupInputPassword.endIconMode = TextInputLayout.END_ICON_CUSTOM
+			}
+		}
+		
+		binding.signupEditTextPassword.doAfterTextChanged {
+			if (skip) {
+				return@doAfterTextChanged
+			}
+			val password = binding.signupEditTextPassword.text.toString()
+			if (TextUtils.isEmpty(password)) {
+				binding.signupInputConfirmPassword.error = getString(R.string.no_password_entered_yet)
+				return@doAfterTextChanged
+			}
+			val confirm = binding.signupEditTextConfirmPassword.text.toString()
+			if (confirm == password || confirm.isEmpty()) {
+				binding.signupInputConfirmPassword.error = null
+			} else {
+				binding.signupInputConfirmPassword.error = getString(R.string.confirm_password_is_not_matched)
 			}
 		}
 		

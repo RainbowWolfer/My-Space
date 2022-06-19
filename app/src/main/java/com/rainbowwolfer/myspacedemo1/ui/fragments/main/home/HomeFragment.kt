@@ -49,7 +49,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				v = instance?.requireView()
 			}
 			if (v != null) {
-				Snackbar.make(instance!!.requireView(), v.context.getString(R.string.you_have_not_signed_in), Snackbar.LENGTH_LONG).setAction(v.context.getString(R.string.sign_in)) {
+				Snackbar.make(v, v.context.getString(R.string.you_have_not_signed_in), Snackbar.LENGTH_LONG).setAction(v.context.getString(R.string.sign_in)) {
 					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(instance!!.requireContext(), LoginActivity::class.java))
 				}.show()
 			}

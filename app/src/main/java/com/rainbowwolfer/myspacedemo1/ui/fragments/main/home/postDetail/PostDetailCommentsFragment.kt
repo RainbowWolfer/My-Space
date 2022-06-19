@@ -53,7 +53,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	)
 	private val application = MySpaceApplication.instance
 	
-	private val adapter by lazy { PostCommentsRecylverViewAdapter(requireContext(), viewLifecycleOwner, lifecycleScope) }
+	private val adapter by lazy { PostCommentsRecylverViewAdapter(this) }
 	private var isLoading = false
 	
 	override fun onCreate(savedInstanceState: Bundle?) {

@@ -26,7 +26,7 @@ import java.net.SocketTimeoutException
 
 class SignUpProcessDialog(
 	override val context: Context,
-	val lifecycleCoroutineScope: LifecycleCoroutineScope,
+	private val lifecycleCoroutineScope: LifecycleCoroutineScope,
 ) : ViewDialog {
 	override lateinit var dialog: Dialog
 	private lateinit var binding: DialogSignupProcessBinding

@@ -1,6 +1,5 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
@@ -9,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
@@ -27,9 +26,7 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 
 class PostCommentsRecylverViewAdapter(
-	private val context: Context,
-	private val lifecycleOwner: LifecycleOwner,
-	private val lifecycleCoroutineScope: LifecycleCoroutineScope,
+	private val fragment: Fragment,
 ) : RecyclerView.Adapter<PostCommentsRecylverViewAdapter.ViewHolder>() {
 	companion object {
 		const val ID_ROW = 1
@@ -40,6 +37,7 @@ class PostCommentsRecylverViewAdapter(
 	class RowViewHolder(val binding: RowCommentLayoutBinding) : ViewHolder(binding.root)
 	class EndViewHolder(val binding: RowCommentEndLayoutBinding) : ViewHolder(binding.root)
 	
+	private val context = fragment.requireContext()
 	private var list = emptyList<Comment>()
 	
 	private var lastRow: EndViewHolder? = null
@@ -73,11 +71,11 @@ class PostCommentsRecylverViewAdapter(
 			updateVoteButtons(holder.binding.commentRowButtonUpvote, holder.binding.commentRowButtonDownvote, data.voted)
 			
 			if (application.currentUser.value?.id == data.userID) {
-				application.currentUser.observe(lifecycleOwner) {
+				application.currentUser.observe(fragment.viewLifecycleOwner) {
 					holder.updateUser(it)
 				}
 				
-				application.currentAvatar.observe(lifecycleOwner) {
+				application.currentAvatar.observe(fragment.viewLifecycleOwner) {
 					holder.updateAvatar(it)
 				}
 			} else {
@@ -90,10 +88,10 @@ class PostCommentsRecylverViewAdapter(
 						userInfo.value = application.usersPool.findUserInfo(data.userID)
 					}, {
 						userInfo.value = application.usersPool.findUserInfo(data.userID)
-					}, lifecycleCoroutineScope)
+					}, fragment.lifecycleScope)
 				}
 				
-				userInfo.observe(lifecycleOwner) {
+				userInfo.observe(fragment.viewLifecycleOwner) {
 					holder.updateUser(it.user)
 					holder.updateAvatar(it.avatar)
 				}
@@ -144,7 +142,7 @@ class PostCommentsRecylverViewAdapter(
 			if (application.hasLoggedIn()) {
 				onClick.invoke()
 			} else {
-				HomeFragment.popupNotLoggedInHint()
+				HomeFragment.popupNotLoggedInHint(fragment.requireView())
 			}
 		}
 	}
