@@ -39,8 +39,8 @@ import kotlin.random.Random
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	companion object {
 		var instance: HomeFragment? = null
-		const val RELOAD_THREASHOLD = 3
-		var upadteScrollPosition: Boolean = false
+		const val RELOAD_THRESHOLD = 3
+		var updateScrollPosition: Boolean = false
 		
 		
 		fun popupNotLoggedInHint(view: View? = null) {
@@ -49,7 +49,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				v = instance?.requireView()
 			}
 			if (v != null) {
-				Snackbar.make(instance!!.requireView(), "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
+				Snackbar.make(instance!!.requireView(), v.context.getString(R.string.you_have_not_signed_in), Snackbar.LENGTH_LONG).setAction(v.context.getString(R.string.sign_in)) {
 					MainActivity.Instance?.loginIntentLauncher!!.launch(Intent(instance!!.requireContext(), LoginActivity::class.java))
 				}.show()
 			}
@@ -67,25 +67,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private val listAdapter by lazy { MainListRecyclerViewAdapter(requireContext(), viewLifecycleOwner) }
 	
 	private var isLoading = false
-
-//	private var bewareEmpty = false
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
-		println("ONCREATED ${viewModel.posts.value!!.size}")
 	}
 	
 	override fun onDetach() {
 		super.onDetach()
-		println("detach")
-		upadteScrollPosition = true
+		updateScrollPosition = true
 	}
 	
 	override fun onDestroy() {
 		super.onDestroy()
-		println("destroy")
-		upadteScrollPosition = false
+		updateScrollPosition = false
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,16 +89,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding.mainRecyvlerViewList.adapter = listAdapter
 		
 		application.currentUser.observe(viewLifecycleOwner) {
-			println(viewModel.posts.value!!.size)
+//			println(viewModel.posts.value!!.size)
 			if (viewModel.posts.value?.size == 0) {
-				println("user changed refresh ${it == null}")
+//				println("user changed refresh ${it == null}")
 				updateList(true)
 			}
 			MainActivity.Instance?.drawerLayout?.closeDrawers()
 		}
 		
 		viewModel.posts.observe(viewLifecycleOwner) {
-			println("posts changed ${it.size}")
+//			println("posts changed ${it.size}")
 			if (it.isEmpty()) {
 				updateList(false)
 				binding.mainLayoutNothing.visibility = View.VISIBLE
@@ -113,9 +108,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				binding.mainRecyvlerViewList.visibility = View.VISIBLE
 				listAdapter.setData(it)
 			}
-			
-			println("last position:  " + viewModel.lastViewPosiiton.value)
-			if (viewModel.lastViewPosiiton.value != -1 && upadteScrollPosition) {
+
+//			println("last position:  " + viewModel.lastViewPosiiton.value)
+			if (viewModel.lastViewPosiiton.value != -1 && updateScrollPosition) {
 				binding.mainRecyvlerViewList.scrollToPosition(viewModel.lastViewPosiiton.value!!)
 			}
 		}
@@ -126,7 +121,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		
 		//only works for manually pull down
 		binding.mainSwipeRefreshLayout.setOnRefreshListener {
-			println("swipe refresh")
+//			println("swipe refresh")
 			updateList(true)
 		}
 		
@@ -171,7 +166,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					modalBinding.checkAll()
 					viewModel.postsLimit.value = PostsLimit.All
 					delayToHideAndUpdate()
-					
 				}
 				modalBinding.modalPostsLimitLayoutHot.setOnClickListener {
 					modalBinding.checkHot()
@@ -203,7 +197,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 	
 	private fun updateList(refresh: Boolean, scrollToTop: Boolean = true, showSwipeRefreshing: Boolean = true) {
-		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
+//		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
 		if (isLoading) {
 			return
 		}
@@ -262,10 +256,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //						viewModel.listOffset.value = viewModel.listOffset.value!!.plus(count)
 //					}
 //					viewModel.posts.value = list
-//				} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
+//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				success = false
-				Snackbar.make(binding.root, "Something went wrong", Snackbar.LENGTH_LONG).setAction("Dismiss") {}.show()
+				Snackbar.make(binding.root, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG).setAction(getString(R.string.dismiss)) {}.show()
 				ex.printStackTrace()
 				when (ex) {
 					is HttpException -> {
@@ -293,7 +287,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
 					isLoading = false
 					if (refresh && success) {
-						Toast.makeText(requireContext(), "Refresh Successsful", Toast.LENGTH_SHORT).show()
+						Toast.makeText(requireContext(), getString(R.string.refresh_successful), Toast.LENGTH_SHORT).show()
 					}
 				} catch (ex: Exception) {
 				}
@@ -412,19 +406,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		when (postsLimit) {
 			PostsLimit.All -> {
 				binding.mainImagePostsLimit.setImageResource(R.drawable.ic_baseline_widgets_24)
-				binding.mainTextPostsLimit.text = "All Posts"
+				binding.mainTextPostsLimit.text = getString(R.string.all_posts)
 			}
 			PostsLimit.Hot -> {
 				binding.mainImagePostsLimit.setImageResource(R.drawable.ic_baseline_whatshot_24)
-				binding.mainTextPostsLimit.text = "Hot"
+				binding.mainTextPostsLimit.text = getString(R.string.hot)
 			}
 			PostsLimit.Random -> {
 				binding.mainImagePostsLimit.setImageResource(R.drawable.ic_baseline_dice_100)
-				binding.mainTextPostsLimit.text = "Random"
+				binding.mainTextPostsLimit.text = getString(R.string.random)
 			}
 			PostsLimit.Following -> {
 				binding.mainImagePostsLimit.setImageResource(R.drawable.ic_baseline_people_alt_24)
-				binding.mainTextPostsLimit.text = "Following"
+				binding.mainTextPostsLimit.text = getString(R.string.following)
 			}
 		}
 	}
@@ -437,7 +431,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			R.id.item_refresh -> {
-				println("button refresh")
+//				println("button refresh")
 				updateList(true)
 			}
 			R.id.item_top -> {

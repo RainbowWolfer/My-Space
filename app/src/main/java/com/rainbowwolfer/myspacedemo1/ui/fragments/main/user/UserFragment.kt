@@ -70,10 +70,10 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 		viewmodel.postsAndFollowersCount.observe(viewLifecycleOwner) {
 			TabLayoutMediator(binding.userTabLayout, binding.userViewPager2) { tab, position ->
 				tab.text = when (position) {
-					0 -> "Profile"
-					1 -> "Posts" + if (it.first == -1) "" else " (${it.first})"
-					2 -> "Followers" + if (it.second == -1) "" else " (${it.second})"
-					else -> "Undefined"
+					0 -> getString(R.string.profile)
+					1 -> getString(R.string.posts) + if (it.first == -1) "" else " (${it.first})"
+					2 -> getString(R.string.followers) + if (it.second == -1) "" else " (${it.second})"
+					else -> getString(R.string.undefined)
 				}
 			}.attach()
 		}

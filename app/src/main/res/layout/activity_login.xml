@@ -27,7 +27,7 @@
 			style="@style/Widget.MaterialComponents.Button.OutlinedButton"
 			android:layout_width="140dp"
 			android:layout_height="wrap_content"
-			android:text="Login"
+			android:text="@string/login"
 			app:icon="@drawable/ic_baseline_login_24"/>
 		
 		<com.google.android.material.button.MaterialButton
@@ -35,7 +35,7 @@
 			style="@style/Widget.MaterialComponents.Button.OutlinedButton"
 			android:layout_width="140dp"
 			android:layout_height="wrap_content"
-			android:text="Sign Up"
+			android:text="@string/sign_up"
 			app:icon="@drawable/ic_baseline_assignment_ind_24"/>
 	
 	</com.google.android.material.button.MaterialButtonToggleGroup>

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
@@ -102,7 +103,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16sp"
-					android:text="Attached Images"
+					android:text="@string/attached_images"
 					android:textSize="18sp"
 					app:layout_constraintBottom_toBottomOf="@+id/post_view_1"
 					app:layout_constraintStart_toEndOf="@+id/post_view_1"
@@ -116,7 +117,8 @@
 					android:text="0/9"
 					app:layout_constraintBottom_toBottomOf="@+id/post_text_imagesTitle"
 					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="@+id/post_text_imagesTitle"/>
+					app:layout_constraintTop_toTopOf="@+id/post_text_imagesTitle"
+					tools:ignore="HardcodedText"/>
 				
 				<!--				-->
 				<!--				<GridView-->
@@ -247,7 +249,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
-					android:text="Miscellaneous"
+					android:text="@string/miscellaneous"
 					android:textSize="18sp"
 					app:layout_constraintBottom_toBottomOf="@+id/post_view_2"
 					app:layout_constraintStart_toEndOf="@+id/post_view_2"
@@ -258,7 +260,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
-					android:text="Tags"
+					android:text="@string/tags"
 					android:textSize="18sp"
 					app:layout_constraintBottom_toBottomOf="@+id/post_view_3"
 					app:layout_constraintStart_toEndOf="@+id/post_view_2"
@@ -272,7 +274,7 @@
 					android:layout_marginStart="32dp"
 					android:layout_marginTop="16dp"
 					android:layout_marginEnd="32dp"
-					android:hint="Visibility"
+					android:hint="@string/visibility"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@+id/post_text_miscellaneous"
@@ -284,7 +286,7 @@
 						android:layout_height="match_parent"
 						android:layout_weight="1"
 						android:inputType="none"
-						android:text="All can see"/>
+						android:text="@string/post_visibilities_all"/>
 				</com.google.android.material.textfield.TextInputLayout>
 				
 				<com.google.android.material.textfield.TextInputLayout
@@ -295,7 +297,7 @@
 					android:layout_marginStart="32dp"
 					android:layout_marginTop="16dp"
 					android:layout_marginEnd="32dp"
-					android:hint="Reply Limit"
+					android:hint="@string/reply_limit"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@+id/post_inputLayout_visibility"
@@ -307,7 +309,7 @@
 						android:layout_height="match_parent"
 						android:layout_weight="1"
 						android:inputType="none"
-						android:text="All can reply"/>
+						android:text="@string/reply_visibilities_all"/>
 				</com.google.android.material.textfield.TextInputLayout>
 				
 				<com.google.android.material.chip.ChipGroup
@@ -322,77 +324,14 @@
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@+id/post_text_miscellaneous2">
 					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip4"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip5"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip6"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip7"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip8"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip9"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip14"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
-					
-					<com.google.android.material.chip.Chip
-						android:id="@+id/chip15"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Hello"
-						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
 					
 					<com.google.android.material.chip.Chip
 						android:id="@+id/chip16"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="Hello"
 						app:closeIcon="@drawable/ic_baseline_close_24"
-						app:closeIconEnabled="true"/>
+						app:closeIconEnabled="true"
+						tools:text="Hello"/>
 					
 					<com.google.android.material.chip.Chip
 						android:id="@+id/chip10"

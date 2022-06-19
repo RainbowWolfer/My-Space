@@ -12,7 +12,7 @@ class UserPreferencesRepository(
 	private val context: Context
 ) {
 	companion object {
-		fun UserPreferences.hasValue(): Boolean {
+		fun UserPreferences.hasUserValue(): Boolean {
 			return !TextUtils.isEmpty(this.email) && !TextUtils.isEmpty(this.password)
 		}
 	}
@@ -23,6 +23,12 @@ class UserPreferencesRepository(
 	)
 	
 	fun getValue(): Flow<UserPreferences> = context.userDataStore.data
+	
+	suspend fun updateLanguage(language: UserPreferences.Languages) {
+		context.userDataStore.updateData {
+			it.toBuilder().setLanguage(language).build()
+		}
+	}
 	
 	suspend fun updateUser(email: String, password: String) {
 		context.userDataStore.updateData {

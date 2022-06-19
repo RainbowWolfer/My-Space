@@ -40,7 +40,7 @@
 		android:id="@+id/textView5"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Add New Comment"
+		android:text="@string/add_new_comment"
 		android:textSize="24sp"
 		app:layout_constraintBottom_toBottomOf="@+id/bottomSheetCommentDialog_button_back"
 		app:layout_constraintEnd_toStartOf="@+id/bottomSheetCommentDialog_button_send"
@@ -68,7 +68,7 @@
 			android:id="@+id/bottomSheetCommentDialog_editText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:hint="Leave a nice comment"
+			android:hint="@string/leave_a_nice_comment"
 			android:maxLines="5"/>
 	</com.google.android.material.textfield.TextInputLayout>
 

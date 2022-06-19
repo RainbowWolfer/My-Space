@@ -183,7 +183,7 @@ class PostCommentsRecylverViewAdapter(
 	
 	private fun RowViewHolder.updateUser(user: User?) {
 		if (user == null) {
-			this.binding.commentRowTextUsername.text = "Not Found"
+			this.binding.commentRowTextUsername.text = context.getString(R.string.not_found)
 		} else {
 			this.binding.commentRowTextUsername.text = user.username
 		}
@@ -202,7 +202,7 @@ class PostCommentsRecylverViewAdapter(
 		diffResult.dispatchUpdatesTo(this)
 		
 		if (lastRow != null) {
-			lastRow!!.binding.endCommentRowTextInfo.text = if (list.isEmpty()) "No Comments Yet" else "No More"
+			lastRow!!.binding.endCommentRowTextInfo.text = if (list.isEmpty()) context.getString(R.string.no_comments_yet) else context.getString(R.string.no_more)
 		}
 	}
 }

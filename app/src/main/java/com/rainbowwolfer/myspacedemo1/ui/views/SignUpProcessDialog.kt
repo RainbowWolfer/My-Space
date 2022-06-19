@@ -55,7 +55,7 @@ class SignUpProcessDialog(
 				withContext(Dispatchers.Main) {
 					binding.signupTextCheckingUsername.text = context.getText(R.string.checking_username)
 					binding.signupTextCheckingEmail.text = context.getText(R.string.checking_email)
-					binding.signupTextSendingEmail.text = context.getText(R.string.sending_validatoin_email)
+					binding.signupTextSendingEmail.text = context.getText(R.string.sending_validation_email)
 					
 					startText(binding.signupTextCheckingUsername)
 					pendingText(binding.signupTextCheckingEmail)

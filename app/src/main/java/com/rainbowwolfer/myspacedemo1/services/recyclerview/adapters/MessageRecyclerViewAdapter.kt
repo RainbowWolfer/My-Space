@@ -22,7 +22,7 @@ class MessageRecyclerViewAdapter(
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		val data = messages[position]
+//		val data = messages[position]
 		holder.binding.messageRowCardViewRoot.setOnClickListener {
 			Navigation.findNavController(holder.itemView).navigate(R.id.action_nav_message_to_nav_detailMessage)
 		}

@@ -40,6 +40,7 @@ import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.joda.time.DateTime
 import java.io.FileNotFoundException
 import java.io.InputStream
 
@@ -71,7 +73,7 @@ class PostActivity : AppCompatActivity() {
 	}
 	
 	private fun loadImageFromURI(uri: Uri): PostActivityViewModel.ImageInfo? {
-		println("URI: $uri")
+//		println("URI: $uri")
 		return try {
 			val fileName = uri.pathSegments.last()
 			val ext = fileName.substring(fileName.lastIndexOf("."))
@@ -96,11 +98,11 @@ class PostActivity : AppCompatActivity() {
 		draft = intent.getParcelableExtra(ARGS_DRAFT)
 		if (draft != null) {
 			binding.initializeWithDraft(draft!!)
-			println("Initialized with : $draft")
+//			println("Initialized with : $draft")
 		}
 		
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.title = if (draft == null) "New Post" else "Saved Draft"
+		supportActionBar?.title = if (draft == null) getString(R.string.new_post) else getString(R.string.saved_draft)
 		
 		binding.postEditTextContent.hint = resources.getString(
 			arrayListOf(
@@ -209,10 +211,10 @@ class PostActivity : AppCompatActivity() {
 			}
 			it.postImageViewButtonClose.setOnClickListener { _ ->
 				AlertDialog.Builder(this).apply {
-					setTitle("Confirm")
-					setMessage("Are you sure to remove this image?")
-					setNegativeButton("No", null)
-					setPositiveButton("Yes") { _, _ ->
+					setTitle(getString(R.string.confirm))
+					setMessage(getString(R.string.are_you_sure_to_remove_this_image))
+					setNegativeButton(getString(R.string.no), null)
+					setPositiveButton(getString(R.string.yes)) { _, _ ->
 						if (it.postImageViewImage.tag is Int) {
 							viewModel.removeImage(it.postImageViewImage.tag as Int)
 						}
@@ -225,8 +227,32 @@ class PostActivity : AppCompatActivity() {
 	
 	override fun onResume() {
 		super.onResume()
-		binding.postAutoTextVisibility.setAdapter(ArrayAdapter(this, R.layout.dropdown_text_item, resources.getStringArray(R.array.post_visiblities)))
-		binding.postAutoTextReply.setAdapter(ArrayAdapter(this, R.layout.dropdown_text_item, resources.getStringArray(R.array.reply_visiblities)))
+		binding.postAutoTextVisibility.setAdapter(
+			ArrayAdapter(
+				this, R.layout.dropdown_text_item, getPostVisibilitiesArray()
+			)
+		)
+		binding.postAutoTextReply.setAdapter(
+			ArrayAdapter(
+				this, R.layout.dropdown_text_item, getReplyVisibilitiesArray()
+			)
+		)
+	}
+	
+	private fun getPostVisibilitiesArray(): Array<String> {
+		return arrayOf(
+			getString(R.string.post_visibilities_all),
+			getString(R.string.post_visibilities_follower),
+			getString(R.string.post_visibilities_none),
+		)
+	}
+	
+	private fun getReplyVisibilitiesArray(): Array<String> {
+		return arrayOf(
+			getString(R.string.reply_visibilities_all),
+			getString(R.string.reply_visibilities_follower),
+			getString(R.string.reply_visibilities_none),
+		)
 	}
 	
 	private fun ActivityPostBinding.initializeWithDraft(draft: Draft) {
@@ -240,7 +266,7 @@ class PostActivity : AppCompatActivity() {
 		postEditTextContent.setText(draft.textContent)
 		
 		postAutoTextVisibility.setText(
-			resources.getStringArray(R.array.post_visiblities)[when (draft.postVisibility) {
+			getPostVisibilitiesArray()[when (draft.postVisibility) {
 				PostVisibility.All -> 0
 				PostVisibility.Follower -> 1
 				PostVisibility.None -> 2
@@ -248,7 +274,7 @@ class PostActivity : AppCompatActivity() {
 		)
 		
 		postAutoTextReply.setText(
-			resources.getStringArray(R.array.reply_visiblities)[when (draft.replyLimit) {
+			getReplyVisibilitiesArray()[when (draft.replyLimit) {
 				PostVisibility.All -> 0
 				PostVisibility.Follower -> 1
 				PostVisibility.None -> 2
@@ -289,10 +315,11 @@ class PostActivity : AppCompatActivity() {
 			
 			tagInputBinding.bottomSheetDialogEditTextTag.doAfterTextChanged {
 				tagInputBinding.bottomSheetDialogInputTag.error = when {
-					arrayListOf('!', '@', '#', '$', '%', '^', '&', '*', '&', '(', ')', '_', '=', '+', '{', '}', '/', '.', '<', '>', '|', '\\', '[', ']', '~', '-', ' ').any { c -> it.toString().contains(c) } -> "No Special Character Allowed"
-					TextUtils.isEmpty(it.toString()) -> "Tag cannot be empty"
-					it.toString().length > 20 -> "Max length is 20"
-					viewModel.hasTag(it.toString()) -> "Already exists"
+					//as long as it is not a-z, A-z or 0-9 (or chinese character)
+					arrayListOf('!', '@', '#', '$', '%', '^', '&', '*', '&', '(', ')', '_', '=', '+', '{', '}', '/', '.', '<', '>', '|', '\\', '[', ']', '~', '-', ' ').any { c -> it.toString().contains(c) } -> getString(R.string.no_special_character_allowed)
+					TextUtils.isEmpty(it.toString()) -> getString(R.string.tag_cannot_be_empty)
+					it.toString().length > 20 -> getString(R.string.max_length_is_20)
+					viewModel.hasTag(it.toString()) -> getString(R.string.already_exists)
 					else -> null
 				}
 				(tagInputBinding.bottomSheetDialogInputTag.error == null).also { b ->
@@ -346,12 +373,12 @@ class PostActivity : AppCompatActivity() {
 		
 	}
 	
-	@SuppressLint("SetTextI18n")
 	private fun updateImages(array: Array<PostActivityViewModel.ImageInfo?>) {
 		if (array.size < 9) {
 			throw Exception("how could this be possible?")
 		}
 		
+		@SuppressLint("SetTextI18n")
 		binding.postTextImageCount.text = "${array.count { it != null }}/${array.size}"
 		
 		binding.postRow1.visibility = View.VISIBLE
@@ -403,20 +430,20 @@ class PostActivity : AppCompatActivity() {
 	private fun complete(send: Boolean) {
 		//check content valid
 		if (viewModel.getContent().length < 5) {
-			binding.postEditTextContent.error = "Least 5 characters are needed"
+			binding.postEditTextContent.error = getString(R.string.least_5_characters_are_needed)
 			binding.postEditTextContent.requestFocus()
 			return
 		}
 		
 		AlertDialog.Builder(this).apply {
-			setTitle(if (send) "Send" else "Save as Draft")
-			setMessage("Are you sure to ${if (send) "send this post" else "save current post as a draft"}?")
-			setNegativeButton("No", null)
-			setPositiveButton("Yes") { _, _ ->
+			setTitle(getString(if (send) R.string.send else R.string.save_as_draft))
+			setMessage(getString(if (send) R.string.send_post_confirm_text else R.string.save_draft_confirm_text))
+			setNegativeButton(getString(R.string.no), null)
+			setPositiveButton(getString(R.string.yes)) { _, _ ->
 				if (send) {
 					lifecycleScope.launch(Dispatchers.Main) {
 						val dialog = LoadingDialog(this@PostActivity).apply {
-							showDialog("Posting...")
+							showDialog(getString(R.string.sending_post))
 						}
 						withContext(Dispatchers.IO) {
 							try {
@@ -459,34 +486,18 @@ class PostActivity : AppCompatActivity() {
 						dialog.hideDialog()
 					}
 				} else {//save to draft
-					if (draft == null) {
-						val new = Draft(
-							0,
-							application.currentUser.value!!.id,
-							"2022/06/06 11:11:11",
-							viewModel.getContent(),
-							viewModel.postVisibility.value!!,
-							viewModel.replyVisiblity.value!!,
-							Draft.convertTags(viewModel.tags.value!!),
-							Draft.convertImagesURI(viewModel.getNotNullURIs())
-						)
-						lifecycleScope.launch(Dispatchers.IO) {
-							application.roomRepository.insert(new)
-						}
-					} else {
-						val new = Draft(
-							draft!!.id,
-							application.currentUser.value!!.id,
-							"2022/06/06 11:11:11",
-							viewModel.getContent(),
-							viewModel.postVisibility.value!!,
-							viewModel.replyVisiblity.value!!,
-							Draft.convertTags(viewModel.tags.value!!),
-							Draft.convertImagesURI(viewModel.getNotNullURIs())
-						)
-						lifecycleScope.launch(Dispatchers.IO) {
-							application.roomRepository.update(new)
-						}
+					val new = Draft(
+						draft?.id ?: 0,
+						application.currentUser.value!!.id,
+						DateTime.now().getDateTime(),
+						viewModel.getContent(),
+						viewModel.postVisibility.value!!,
+						viewModel.replyVisiblity.value!!,
+						Draft.convertTags(viewModel.tags.value!!),
+						Draft.convertImagesURI(viewModel.getNotNullURIs())
+					)
+					lifecycleScope.launch(Dispatchers.IO) {
+						application.roomRepository.update(new)
 					}
 				}
 				

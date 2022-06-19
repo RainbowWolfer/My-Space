@@ -140,10 +140,10 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 					binding.postDetailViewPager2.offscreenPageLimit = 3
 					TabLayoutMediator(binding.postDetailTabsLayout, binding.postDetailViewPager2) { tab, position ->
 						tab.text = when (position) {
-							0 -> "Comments"
-							1 -> "Reposts"
-							2 -> "Scores"
-							else -> "Undefined"
+							0 -> getString(R.string.comments)
+							1 -> getString(R.string.reposts)
+							2 -> getString(R.string.scores)
+							else -> getString(R.string.undefined)
 						}
 					}.attach()
 				}
@@ -314,8 +314,8 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	
 	private fun FragmentPostDetailBinding.updateUser(user: User?) {
 		if (user == null) {
-			this.postDetailTextUsername.text = "Not found"
-			this.postDetailTextEmail.text = "Not found"
+			this.postDetailTextUsername.text = requireContext().getString(R.string.not_found)
+			this.postDetailTextEmail.text = requireContext().getString(R.string.not_found)
 		} else {
 			this.postDetailTextUsername.text = user.username
 			this.postDetailTextEmail.text = user.email
@@ -350,7 +350,12 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		binding.postDetailTextCommentsCount.text = "${post.comments}"
 		binding.postDetailTextScores.text = "${post.upvotes - post.downvotes}"
 		
-		binding.postDetailButtonRepost.visibility = if (post.isRepost) View.GONE else View.VISIBLE
+		with(if (post.isRepost) View.GONE else View.VISIBLE) {
+			binding.postDetailButtonRepost.visibility = this
+			binding.postDetailTextRepost.visibility = this
+			binding.postDetailTextRepostsCount.visibility = this
+//			(binding.postDetailViewPager2.adapter as PostDetailViewPagerAdapter).
+		}
 	}
 
 //	fun setMeta(post: Post) {

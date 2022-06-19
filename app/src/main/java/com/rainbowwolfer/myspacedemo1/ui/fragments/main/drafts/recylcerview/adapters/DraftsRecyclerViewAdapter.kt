@@ -16,6 +16,7 @@ import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -71,7 +72,7 @@ class DraftsRecyclerViewAdapter(
 			goPostActivity(data)
 		}
 		
-		holder.binding.draftRowTextTime.text = data.addedDateTime
+		holder.binding.draftRowTextTime.text = data.addedDateTime.convertToRecentFormat(context)
 		holder.binding.draftRowTextContent.text = data.textContent
 	}
 	

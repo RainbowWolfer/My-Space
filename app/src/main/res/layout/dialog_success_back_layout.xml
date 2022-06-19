@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:background="@drawable/layout_background_bottom_input_dialog"
@@ -20,7 +21,8 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
+		app:layout_constraintTop_toTopOf="parent"
+		tools:ignore="UseCompoundDrawables">
 		
 		<ImageView
 			android:id="@+id/successBackDialog_image_check"
@@ -28,14 +30,15 @@
 			android:layout_height="80dp"
 			android:layout_marginEnd="10dp"
 			app:srcCompat="@drawable/ic_baseline_check_24"
-			app:tint="@color/green"/>
+			app:tint="@color/green"
+			android:contentDescription=""/>
 		
 		<TextView
 			android:id="@+id/successBackDialog_text_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="10dp"
-			android:text="Success"
+			android:text="@string/success"
 			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 			android:textSize="24sp"/>
 	</LinearLayout>

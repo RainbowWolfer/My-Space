@@ -40,7 +40,7 @@
 		android:id="@+id/bottomSheetRepostDialog_text_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Repost"
+		android:text="@string/repost"
 		android:textSize="24sp"
 		app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRepostDialog_button_back"
 		app:layout_constraintEnd_toStartOf="@+id/bottomSheetRepostDialog_button_send"
@@ -68,7 +68,7 @@
 			android:id="@+id/bottomSheetRepostDialog_editText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:hint="Any thought on this post?"
+			android:hint="@string/any_thought"
 			android:maxLines="5"/>
 	</com.google.android.material.textfield.TextInputLayout>
 

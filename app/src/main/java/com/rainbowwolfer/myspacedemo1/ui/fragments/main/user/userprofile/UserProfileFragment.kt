@@ -43,7 +43,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	companion object {
 		private const val ARGS_USER_ID = "user_id"
 		
-		
 		fun newInstance(user_id: String) = UserProfileFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARGS_USER_ID, user_id)
@@ -57,7 +56,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 	private val application = MySpaceApplication.instance
 	
 	private lateinit var userID: String
-//	private var user: User? = null
 	
 	private val binding: FragmentUserProfileBinding by viewBinding()
 	private val isSelf: Boolean
@@ -208,9 +206,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 								withContext(Dispatchers.Main) {
 									dialog!!.hideDialog()
 									AlertDialog.Builder(requireContext()).apply {
-										setTitle("Update Username Failed")
+										setTitle(requireContext().getString(R.string.update_username_failed))
 										setMessage(errorMessage)
-										setNegativeButton("Back", null)
+										setNegativeButton(requireContext().getString(R.string.back), null)
 										show()
 									}
 								}
@@ -257,12 +255,12 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			true -> {
 				binding.userFollowButton.isEnabled = true
 				binding.userFollowButton.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, requireContext().theme)
-				binding.userFollowButton.text = getString(R.string.Following)
+				binding.userFollowButton.text = getString(R.string.already_following)
 			}
 			false -> {
 				binding.userFollowButton.isEnabled = true
 				binding.userFollowButton.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, requireContext().theme)
-				binding.userFollowButton.text = getString(R.string.Follow)
+				binding.userFollowButton.text = getString(R.string.follow)
 			}
 			else -> {//loading
 				binding.userFollowButton.isEnabled = false
@@ -283,7 +281,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 		this.userButtonEditAvatar.isEnabled = true
 		this.userButtonEditUsername.isEnabled = true
 		
-		(requireActivity() as AppCompatActivity).supportActionBar?.title = "User ${user.username}"
+		(requireActivity() as AppCompatActivity).supportActionBar?.title = requireContext().getString(R.string.user) + " " + user.username
 	}
 	
 	private fun FragmentUserProfileBinding.initializeLoadingState() {

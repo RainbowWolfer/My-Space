@@ -4,6 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_margin="5dp"
 	android:background="@drawable/card_background"
 	android:padding="5dp">
@@ -31,7 +32,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
-		android:text="RainbowWolfer"
+		tools:text="RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintStart_toEndOf="@+id/rowScoreRecord_image_avatar"
@@ -42,7 +43,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
-		android:text="2022-02-22 22:22:22"
+		tools:text="2022-02-22 22:22:22"
 		app:layout_constraintBottom_toBottomOf="@+id/rowScoreRecord_image_avatar"
 		app:layout_constraintStart_toEndOf="@+id/rowScoreRecord_image_avatar"/>
 	

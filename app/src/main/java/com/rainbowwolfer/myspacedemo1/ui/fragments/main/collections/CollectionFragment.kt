@@ -118,7 +118,7 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
 					isLoading = false
 					binding.collectionsSwipeLoader.isRefreshing = false
 					if (refresh && success) {
-						Toast.makeText(requireContext(), "Refresh Successsful", Toast.LENGTH_SHORT).show()
+						Toast.makeText(requireContext(), getString(R.string.refresh_successful), Toast.LENGTH_SHORT).show()
 					}
 				} catch (ex: Exception) {
 				}
@@ -132,14 +132,15 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
 	}
 	
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
+		return when (item.itemId) {
 			R.id.item_refresh -> {
 				lifecycleScope.launch(Dispatchers.Main) {
 					delay(100)
 					load(true)
 				}
+				true
 			}
+			else -> super.onOptionsItemSelected(item)
 		}
-		return true
 	}
 }

@@ -52,6 +52,7 @@ class MainListRecyclerViewAdapter(
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
 		const val ITEM_TYPE_END = 2
+		const val ARG_POST_ID = "post_id"
 	}
 	
 	abstract class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -62,7 +63,7 @@ class MainListRecyclerViewAdapter(
 	private var list = emptyList<Post>()
 	private val application = MySpaceApplication.instance
 	
-	private var endTextIndex = 0
+	private var endTextIndex = 1
 	
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		return when (viewType) {
@@ -100,7 +101,7 @@ class MainListRecyclerViewAdapter(
 			holder.binding.root.setOnClickListener {
 				val navController = Navigation.findNavController(holder.itemView)
 				navController.navigate(R.id.item_post_detail, Bundle().apply {
-					putString("post_id", if (isRepost) originID else postID)
+					putString(ARG_POST_ID, if (isRepost) originID else postID)
 				}, EasyFunctions.defaultTransitionNavOption())
 			}
 			
@@ -108,22 +109,27 @@ class MainListRecyclerViewAdapter(
 				if (isRepost) {
 					val navController = Navigation.findNavController(holder.itemView)
 					navController.navigate(R.id.item_post_detail, Bundle().apply {
-						putString("post_id", postID)
+						putString(ARG_POST_ID, postID)
 					}, EasyFunctions.defaultTransitionNavOption())
 				}
 			}
 			
 			holder.binding.rowButtonMore.setOnClickListener {
+				val post = list[position]
 				val popupMenu = PopupMenu(context, holder.binding.rowButtonMore)
 				popupMenu.setOnMenuItemClickListener {
-					val post = list[position]
 					when (it.itemId) {
+						R.id.item_delete -> {
+							Toast.makeText(context, "Test: Delete!", Toast.LENGTH_SHORT).show()
+						}
 						R.id.item_share -> {
 							val sharedIntent = Intent().apply {
 								this.action = Intent.ACTION_SEND
 								this.putExtra(
 									Intent.EXTRA_TEXT,
-									"Publisher: ${post.publisherUsername}\nDate: ${post.publishDateTime}\n${post.textContent}"
+									context.getString(R.string.publisher) + " :${post.publisherUsername}\n" +
+											context.getString(R.string.date) + " :${post.publishDateTime}\n" +
+											post.textContent
 								)
 								this.type = "text/plain"
 							}
@@ -142,7 +148,7 @@ class MainListRecyclerViewAdapter(
 											)
 										)
 										withContext(Dispatchers.Main) {
-											Toast.makeText(context, "Successfully Added to Collection", Toast.LENGTH_SHORT).show()
+											Toast.makeText(context, context.getString(R.string.successfully_added_to_collection), Toast.LENGTH_SHORT).show()
 										}
 									} catch (ex: Exception) {
 										ex.printStackTrace()
@@ -158,6 +164,20 @@ class MainListRecyclerViewAdapter(
 					popupMenu.setForceShowIcon(true)
 				}
 				popupMenu.inflate(R.menu.more_button_menu)
+				with(application.getCurrentID() == post.publisherID) {
+					popupMenu.menu.getItem(2).also { item ->
+						item.isVisible = this
+						item.isEnabled = this
+						if (this) {
+							item.title = if (post.isRepost) {
+								context.getString(R.string.delete_repost)
+							} else {
+								context.getString(R.string.delete)
+							}
+						}
+					}
+				}
+				
 				popupMenu.show()
 			}
 			//avatar clicking
@@ -180,7 +200,14 @@ class MainListRecyclerViewAdapter(
 			}
 		} else if (holder is EndViewHolder) {
 			holder.binding.rowEndTextCenter.setOnClickListener {
-				val array = context.resources.getStringArray(R.array.end_row_texts)
+				val array = arrayOf(
+					context.getString(R.string.end_row_text_1),
+					context.getString(R.string.end_row_text_2),
+					context.getString(R.string.end_row_text_3),
+					context.getString(R.string.end_row_text_4),
+					context.getString(R.string.end_row_text_5),
+				)
+//				val array = context.resources.getStringArray(R.array.end_row_texts)
 				holder.binding.rowEndTextCenter.text = array[endTextIndex]
 				if (++endTextIndex >= array.size) {
 					endTextIndex = 0
@@ -353,7 +380,7 @@ class MainListRecyclerViewAdapter(
 			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = origin.textContent
 			this.mainTextRepost.text = post.textContent
-			this.rowTextRepostInfo.text = "Repost From @${post.publisherUsername}"
+			this.rowTextRepostInfo.text = context.getString(R.string.repost_from) + " @${post.publisherUsername}"
 			//avatar
 			application.findOrGetAvatar(post.getPublisher().id) {
 				this.mainImageRepostAvatar.setImageBitmap(it)
@@ -428,6 +455,6 @@ class MainListRecyclerViewAdapter(
 		val diffUtil = DatabaseIdDiffUtil(list, new)
 		list = new
 		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
-		endTextIndex = 0
+		endTextIndex = 1
 	}
 }

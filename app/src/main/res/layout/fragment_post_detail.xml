@@ -65,12 +65,12 @@
 					android:layout_marginEnd="8dp"
 					android:ellipsize="end"
 					android:maxLines="1"
-					android:text="RainbowWolfer"
 					android:textSize="24sp"
 					android:textStyle="bold"
 					app:layout_constraintEnd_toStartOf="@+id/postDetail_button_more"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_image_avatar"
-					app:layout_constraintTop_toTopOf="@+id/postDetail_image_avatar"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_image_avatar"
+					tools:text="RainbowWolfer"/>
 				
 				<TextView
 					android:id="@+id/postDetail_text_email"
@@ -80,11 +80,11 @@
 					android:layout_marginEnd="8dp"
 					android:ellipsize="end"
 					android:maxLines="1"
-					android:text="RainbowWolfer@Outlook.com"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/postDetail_image_avatar"
 					app:layout_constraintEnd_toStartOf="@+id/postDetail_button_more"
-					app:layout_constraintStart_toEndOf="@+id/postDetail_image_avatar"/>
+					app:layout_constraintStart_toEndOf="@+id/postDetail_image_avatar"
+					tools:text="RainbowWolfer@Outlook.com"/>
 				
 				<TextView
 					android:id="@+id/postDetail_text_content"
@@ -155,11 +155,11 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="2022/05/11 23:03:21"
 					android:textSize="14sp"
 					app:layout_constraintBottom_toBottomOf="@+id/imageView4"
 					app:layout_constraintStart_toEndOf="@+id/imageView4"
-					app:layout_constraintTop_toTopOf="@+id/imageView4"/>
+					app:layout_constraintTop_toTopOf="@+id/imageView4"
+					tools:text="2022/05/11 23:03:21"/>
 				
 				<ImageView
 					android:id="@+id/imageView4"
@@ -167,6 +167,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
 					android:layout_marginTop="8dp"
+					android:contentDescription=""
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@+id/view2"
 					app:srcCompat="@drawable/ic_baseline_calendar_today_24"/>
@@ -177,6 +178,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
 					android:layout_marginTop="8dp"
+					android:contentDescription=""
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@+id/imageView4"
 					app:srcCompat="@drawable/ic_baseline_edit_24"/>
@@ -186,22 +188,22 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="(2)"
 					android:textSize="14sp"
 					app:layout_constraintBottom_toBottomOf="@+id/postDetail_image_edit"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_image_edit"
-					app:layout_constraintTop_toTopOf="@+id/postDetail_image_edit"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_image_edit"
+					tools:text="(2)"/>
 				
 				<TextView
 					android:id="@+id/postDetail_text_editDate"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="2022/05/11 23:06:21"
 					android:textSize="14sp"
 					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_editTimes"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_text_editTimes"
-					app:layout_constraintTop_toTopOf="@+id/postDetail_text_editTimes"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_editTimes"
+					tools:text="2022/05/11 23:06:21"/>
 				
 				<TextView
 					android:id="@+id/postDetail_text_repostsCount"
@@ -209,19 +211,19 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
 					android:layout_marginTop="8dp"
-					android:text="880"
 					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 					android:textSize="18sp"
 					android:textStyle="bold"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@+id/view3"/>
+					app:layout_constraintTop_toBottomOf="@+id/view3"
+					tools:text="880"/>
 				
 				<TextView
-					android:id="@+id/textView16"
+					android:id="@+id/postDetail_text_repost"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="Reposts"
+					android:text="@string/reposts"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_repostsCount"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_text_repostsCount"
@@ -232,31 +234,31 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
-					android:text="6"
+					android:layout_marginTop="8dp"
 					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 					android:textSize="18sp"
 					android:textStyle="bold"
-					app:layout_constraintBottom_toBottomOf="@+id/textView16"
-					app:layout_constraintStart_toEndOf="@+id/textView16"
-					app:layout_constraintTop_toTopOf="@+id/textView16"/>
+					app:layout_constraintStart_toEndOf="@+id/postDetail_text_repost"
+					app:layout_constraintTop_toBottomOf="@+id/view3"
+					tools:text="6"/>
 				
 				<TextView
 					android:id="@+id/textView18"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="Comments"
+					android:text="@string/comments"
 					android:textSize="16sp"
-					app:layout_constraintBottom_toBottomOf="@+id/textView16"
+					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_commentsCount"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_text_commentsCount"
-					app:layout_constraintTop_toTopOf="@+id/textView16"/>
+					app:layout_constraintTop_toTopOf="@+id/postDetail_text_commentsCount"/>
 				
 				<TextView
 					android:id="@+id/textView20"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8dp"
-					android:text="Scores"
+					android:text="@string/scores"
 					android:textSize="16sp"
 					app:layout_constraintBottom_toBottomOf="@+id/textView18"
 					app:layout_constraintStart_toEndOf="@+id/postDetail_text_scores"
@@ -267,13 +269,13 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
-					android:text="7,281"
 					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 					android:textSize="18sp"
 					android:textStyle="bold"
-					app:layout_constraintBottom_toBottomOf="@+id/postDetail_text_repostsCount"
+					app:layout_constraintBottom_toBottomOf="@+id/textView18"
 					app:layout_constraintStart_toEndOf="@+id/textView18"
-					app:layout_constraintTop_toTopOf="@+id/postDetail_text_repostsCount"/>
+					app:layout_constraintTop_toTopOf="@+id/textView18"
+					tools:text="7,281"/>
 				
 				<HorizontalScrollView
 					android:id="@+id/horizontalScrollView"
@@ -292,52 +294,11 @@
 						android:layout_height="match_parent">
 						
 						<com.google.android.material.chip.Chip
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
-							android:id="@+id/chip20"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
-							android:id="@+id/chip21"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
-							android:id="@+id/chip31"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
-							android:id="@+id/chip32"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
-							android:id="@+id/chip33"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
-						
-						<com.google.android.material.chip.Chip
 							android:id="@+id/chip34"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:backgroundTint="@color/gray"
-							android:text="Hello"/>
+							tools:text="Hello"/>
 					</com.google.android.material.chip.ChipGroup>
 				</HorizontalScrollView>
 				
@@ -409,17 +370,17 @@
 			<com.google.android.material.tabs.TabItem
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Comments"/>
+				android:text="@string/comments"/>
 			
 			<com.google.android.material.tabs.TabItem
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Repost"/>
+				android:text="@string/reposts"/>
 			
 			<com.google.android.material.tabs.TabItem
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Scores"/>
+				android:text="@string/scores"/>
 		</com.google.android.material.tabs.TabLayout>
 	</com.google.android.material.appbar.AppBarLayout>
 	

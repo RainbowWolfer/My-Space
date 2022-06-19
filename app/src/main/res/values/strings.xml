@@ -1,12 +1,9 @@
 <resources>
-	<string name="app_name">MySpace</string>
-	<string name="app_name_space">My Space</string>
+	<string name="app_name" translatable="false">MySpace</string>
+	<string name="app_name_space" translatable="false">My Space</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
-	<string name="nav_header_title">Android Studio</string>
-	<string name="nav_header_subtitle">android.studio@android.com</string>
-	<string name="nav_header_desc">Navigation header</string>
-	<string name="action_settings">Settings</string>
+	<string name="settings">Settings</string>
 	
 	<string name="open">Open</string>
 	<string name="close">Close</string>
@@ -14,31 +11,26 @@
 	<string name="welcome1_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
 	<string name="welcome2_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable.</string>
 	
-	
-	<string name="menu_home">Home</string>
-	<string name="menu_gallery">Gallery</string>
-	<string name="menu_slideshow">Slideshow</string>
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<!-- Preference Titles -->
 	<string name="messages_header">Messages</string>
 	<string name="sync_header">Sync</string>
 	
 	<!-- Messages Preferences -->
 	<string name="signature_title">Your signature</string>
-	<string name="reply_title">Default reply action</string>
+	<string name="set_language_title">Language</string>
 	
 	<!-- Sync Preferences -->
 	<string name="sync_title">Sync email periodically</string>
 	<string name="attachment_title">Download incoming attachments</string>
 	<string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
 	<string name="attachment_summary_off">Only download attachments when manually requested</string>
-	<string name="default_long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at nisl posuere libero laoreet pulvinar. Sed mauris metus, vulputate eu volutpat nec, cursus non augue. Nulla ac quam leo. Cras tincidunt maximus justo, id elementum metus. Donec tempus ipsum a eros ultrices egestas. Pellentesque accumsan orci ut erat sollicitudin, in convallis libero pretium. Duis blandit elementum nibh eu tempor. Vivamus accumsan, dui vestibulum fringilla commodo, odio magna commodo lectus, ac tempor augue augue vel sem. Duis non eleifend dui, ut imperdiet tellus.</string>
+	
+	<string name="default_long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at nisl posuere libero laoreet pulvinar. Sed mauris metus, vulputate eu volutpat nec, cursus non augue. Nulla ac quam leo. Cras tincidunt maximus justo, id elementum metus. Donec tempus ipsum a eros ultrices egestas. Pellentesque accumsan orci ut erat sollicitudin, in convallis libero pretium. Duis blandit elementum nibh eu tempor. Vivamus accumsan, dui vestibulum fringilla commodo, odio magna commodo lectus, ac tempor augue vel sem. Duis non eleifend dui, ut imperdiet tellus.</string>
 	<string name="please_wait">Please Wait</string>
 	<string name="cancel">Cancel</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>
-	<string name="sumbit">Sumbit</string>
+	<string name="submit">Submit</string>
 	<string name="forget_password">Forget Password</string>
 	<string name="app_icon">App Icon</string>
 	<string name="updating">Updating</string>
@@ -46,7 +38,7 @@
 	
 	<string name="checking_username">Checking Username</string>
 	<string name="checking_email">Checking Email</string>
-	<string name="sending_validatoin_email">Sending Validatoin Email</string>
+	<string name="sending_validation_email">Sending Validation Email</string>
 	
 	<string name="username_checked">Username Checked</string>
 	<string name="email_checked">Email Checked</string>
@@ -69,8 +61,8 @@
 	<string name="post_text5">Tell the world!</string>
 	
 	<string name="back">Back</string>
-	<string name="Following">Following</string>
-	<string name="Follow">Follow</string>
+	<string name="already_following">Following</string>
+	<string name="follow">Follow</string>
 	<string name="Loading">Loading</string>
 	<string name="report">Report</string>
 	
@@ -83,5 +75,118 @@
 	<string name="min10">10 min ago</string>
 	<string name="half_an_hour">Half an hour</string>
 	<string name="an_hour">An hour</string>
+	
+	<string name="repost_from">\"Repost From \"</string>
+	<string name="successfully_added_to_collection">Successfully Added to Collection</string>
+	<string name="publisher">Publisher</string>
+	<string name="date">Date</string>
+	<string name="profile">Profile</string>
+	<string name="posts">Posts</string>
+	<string name="followers">Followers</string>
+	<string name="undefined">Undefined</string>
+	<string name="share">Share</string>
+	<string name="add_to_collection">Add to Collection</string>
+	<string name="delete">Delete</string>
+	<string name="delete_repost">Delete Repost</string>
+	<string name="all_posts">All Posts</string>
+	<string name="hot">Hot</string>
+	<string name="random">Random</string>
+	<string name="following">Following</string>
+	<string name="something_went_wrong">Something went wrong</string>
+	<string name="dismiss">Dismiss</string>
+	<string name="refresh_successful">Refresh Successful</string>
+	<string name="download">Download</string>
+	<string name="you_have_not_signed_in">You have not signed in</string>
+	<string name="sign_in">Sign in</string>
+	<string name="home">Home</string>
+	<string name="message">Message</string>
+	<string name="user">User</string>
+	<string name="collection">Collections</string>
+	<string name="drafts">Drafts</string>
+	<string name="more">More</string>
+	<string name="about">About</string>
+	<string name="login">Login</string>
+	<string name="sign_up">Sign Up</string>
+	<string name="attached_images">Attached Images</string>
+	<string name="miscellaneous">Miscellaneous</string>
+	<string name="tags">Tags</string>
+	<string name="visibility">Visibility</string>
+	<string name="reply_limit">Reply Limit</string>
+	<string name="leave_a_nice_comment">Leave a nice comment</string>
+	<string name="add_new_comment">Add New Comment</string>
+	<string name="repost">Repost</string>
+	<string name="any_thought">Any thought?</string>
+	<string name="add_new_tag">Add New Tag</string>
+	<string name="your_tag">Your Tag</string>
+	<string name="success">Success</string>
+	<string name="made_by_rainbowwolfer">Made by RainbowWolfer</string>
+	<string name="check_for_update">Check For Update</string>
+	<string name="rate_us_in_appstore">Rate us in appstore</string>
+	<string name="version">Version %1$s</string>
+	<string name="nothing_here">Nothing Here</string>
+	<string name="search">Search</string>
+	<string name="be_the_first">Be the first</string>
+	<string name="tell_the_rest">Tell the rest</string>
+	<string name="reposts">Reposts</string>
+	<string name="comments">Comments</string>
+	<string name="scores">Scores</string>
+	<string name="uploading_comment">Uploading Comment</string>
+	<string name="confirm_password">Confirm Password</string>
+	<string name="personal_message">Message</string>
+	<string name="edit_avatar">Edit Avatar</string>
+	<string name="edit_username">Edit Username</string>
+	<string name="profile_description">Profile Description</string>
+	<string name="next">Next</string>
+	<string name="finish">Finish</string>
+	<string name="previous">Previous</string>
+	<string name="sorts_posts_by">Sorts posts by</string>
+	<string name="change_your_username">Change your username</string>
+	<string name="new_username">New Username</string>
+	<string name="confirm">Confirm</string>
+	<string name="something_is_happening">Something is happening…</string>
+	<string name="welcome">Welcome</string>
+	<string name="sign_out">Sign Out</string>
+	<string name="no_collections">No Collections</string>
+	<string name="post">POST</string>
+	<string name="loading">Loading</string>
+	<string name="no_followers">No Followers</string>
+	
+	<string name="end_row_text_1">You have reached the end</string>
+	<string name="end_row_text_2">Look up!</string>
+	<string name="end_row_text_3">This is over but life isn\'t</string>
+	<string name="end_row_text_4">But not here</string>
+	<string name="end_row_text_5">Do a stretch-up will you?</string>
+	
+	<string name="post_visibilities_all">All can see</string>
+	<string name="post_visibilities_follower">Followers can see</string>
+	<string name="post_visibilities_none">No one can see</string>
+	
+	<string name="reply_visibilities_all">All can reply</string>
+	<string name="reply_visibilities_follower">Followers can reply</string>
+	<string name="reply_visibilities_none">No one can reply</string>
+	<string name="refresh">Refresh</string>
+	<string name="edit">Edit</string>
+	<string name="top">Top</string>
+	<string name="save_as_draft">Save as Draft</string>
+	<string name="send_post">Post</string>
+	<string name="send">Send</string>
+	<string name="sending_post">Posting…</string>
+	<string name="no">No</string>
+	<string name="yes">Yes</string>
 
+	<string name="send_post_confirm_text">Are you sure to send this post?</string>
+	<string name="save_draft_confirm_text">Are you sure to save current post as a draft?</string>
+	<string name="least_5_characters_are_needed">Least 5 characters are needed</string>
+	<string name="no_special_character_allowed">No Special Character Allowed</string>
+	<string name="tag_cannot_be_empty">Tag cannot be empty</string>
+	<string name="max_length_is_20">Max length is 20</string>
+	<string name="already_exists">Already exists</string>
+	<string name="are_you_sure_to_remove_this_image">Are you sure to remove this image?</string>
+	<string name="new_post">New Post</string>
+	<string name="saved_draft">Saved Draft</string>
+	<string name="update_username_failed">Update Username Failed</string>
+	<string name="no_comments_yet">No Comments Yet</string>
+	<string name="no_more">No More</string>
+	<string name="not_found">Not Found</string>
+	<string name="loading_comments">Loading Comments</string>
 </resources>

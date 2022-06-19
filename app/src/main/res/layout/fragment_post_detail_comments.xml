@@ -22,7 +22,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="10dp"
-			android:text="Uploading Comment"
+			android:text="@string/uploading_comment"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"/>
@@ -66,7 +66,7 @@
 			android:id="@+id/postDetailComments_editText_comment"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:hint="Leave a nice comment"
+			android:hint="@string/leave_a_nice_comment"
 			android:imeOptions="actionDone"
 			android:inputType="text"
 			android:maxLines="1"/>

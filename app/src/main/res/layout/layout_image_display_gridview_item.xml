@@ -17,7 +17,8 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+		tools:srcCompat="@tools:sample/backgrounds/scenic"
+		android:contentDescription=""/>
 	
 	<TextView
 		android:id="@+id/textView24"

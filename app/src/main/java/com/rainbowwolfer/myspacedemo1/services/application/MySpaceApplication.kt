@@ -1,6 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.services.application
 
 import android.app.Application
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -20,9 +21,11 @@ import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPrefer
 import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
 import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import retrofit2.HttpException
+import java.util.*
 
 class MySpaceApplication : Application() {
 	companion object {
@@ -49,6 +52,19 @@ class MySpaceApplication : Application() {
 	
 	val usersPool: ArrayList<UserInfo> = arrayListOf()
 	val postsPool: ArrayList<PostInfo> = arrayListOf()
+	
+	override fun onCreate() {
+		super.onCreate()
+		LocaleUtils.notifyLanguageChanged(this)
+	}
+	
+	override fun onConfigurationChanged(newConfig: Configuration) {
+		super.onConfigurationChanged(newConfig)
+		val locale = LocaleUtils.getLanguagePreference(this)
+		Locale.setDefault(locale)
+		LocaleUtils.notifyLanguageChanged(this)
+	}
+
 
 //	val scoresPool: HashMap<String, Int> = hashMapOf()
 	

@@ -3,51 +3,51 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:showIn="navigation_view">
 	<group android:checkableBehavior="single">
-		<item android:title="My Space">
+		<item android:title="@string/app_name_space">
 			<menu>
 				<item
 					android:id="@+id/item_home"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_home_24"
-					android:title="Home"/>
+					android:title="@string/home"/>
 				<item
 					android:id="@+id/nav_message"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_message_24"
-					android:title="Message"/>
+					android:title="@string/message"/>
 			</menu>
 		</item>
-		<item android:title="User">
+		<item android:title="@string/user">
 			<menu>
 				<item
 					android:id="@+id/nav_collection"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_flag_24"
-					android:title="Collection"/>
+					android:title="@string/collection"/>
 				<item
 					android:id="@+id/nav_drafts"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_drafts_24"
-					android:title="Drafts"/>
+					android:title="@string/drafts"/>
 				<item
 					android:id="@+id/nav_profile"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_person_24"
-					android:title="Profile"/>
+					android:title="@string/profile"/>
 			</menu>
 		</item>
-		<item android:title="More">
+		<item android:title="@string/more">
 			<menu>
-				<item
-					android:id="@+id/nav_about"
-					android:checkable="true"
-					android:icon="@drawable/ic_baseline_info_24"
-					android:title="About"/>
 				<item
 					android:id="@+id/nav_settings"
 					android:checkable="true"
 					android:icon="@drawable/ic_baseline_settings_24"
-					android:title="Settings"/>
+					android:title="@string/settings"/>
+				<item
+					android:id="@+id/nav_about"
+					android:checkable="true"
+					android:icon="@drawable/ic_baseline_info_24"
+					android:title="@string/about"/>
 			</menu>
 		</item>
 	</group>

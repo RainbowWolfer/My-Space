@@ -11,6 +11,7 @@
 		android:id="@+id/imageView"
 		android:layout_width="0dp"
 		android:layout_height="160dp"
+		android:contentDescription=""
 		android:src="@drawable/icon_my_space"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -32,23 +33,23 @@
 		app:layout_constraintTop_toBottomOf="@+id/imageView"/>
 	
 	<TextView
-		android:id="@+id/textView2"
+		android:id="@+id/about_text_version"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="16dp"
-		android:text="Version 1.0.0.0"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.5"
-		app:layout_constraintStart_toStartOf="parent"/>
+		app:layout_constraintStart_toStartOf="parent"
+		tools:text="Version 1.0.0.0"/>
 	
 	<TextView
 		android:id="@+id/textView3"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
-		android:text="Made by RainbowWolfer"
-		app:layout_constraintBottom_toTopOf="@+id/textView2"
+		android:text="@string/made_by_rainbowwolfer"
+		app:layout_constraintBottom_toTopOf="@+id/about_text_version"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"/>
 	
@@ -57,7 +58,7 @@
 		android:layout_width="260dp"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="24dp"
-		android:text="Check For Update"
+		android:text="@string/check_for_update"
 		app:icon="@drawable/ic_baseline_system_update_alt_24"
 		app:layout_constraintBottom_toTopOf="@+id/textView3"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +69,7 @@
 		android:layout_width="260dp"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
-		android:text="Rate us in appstore"
+		android:text="@string/rate_us_in_appstore"
 		app:icon="@drawable/ic_baseline_rate_review_24"
 		app:layout_constraintBottom_toTopOf="@+id/button3"
 		app:layout_constraintEnd_toEndOf="parent"

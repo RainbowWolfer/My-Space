@@ -2,7 +2,9 @@ package com.rainbowwolfer.myspacedemo1.ui.activities.main
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.MotionEvent
@@ -28,8 +30,10 @@ import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 	
 	init {
 		Instance = this
+//		setLocal("zh-cn")
 	}
 	
 	private val binding: ActivityMainBinding by viewBinding()
@@ -78,6 +83,10 @@ class MainActivity : AppCompatActivity() {
 			println("draft")
 		}
 		println(post)
+	}
+	
+	override fun attachBaseContext(newBase: Context?) {
+		super.attachBaseContext(LocaleUtils.attachBaseContext(newBase))
 	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,5 +191,33 @@ class MainActivity : AppCompatActivity() {
 	override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 		this.setAutoClearEditTextFocus(event)
 		return super.dispatchTouchEvent(event)
+	}
+	
+	@Suppress("DEPRECATION")
+	fun setLocal(language: String) {
+		println(language)
+//		val locale = Locale(language)
+//		Locale.setDefault(locale)
+//		val config = resources.configuration
+//		config.setLocale(locale)
+//		config.setLayoutDirection(locale)
+//		resources.updateConfiguration(config, resources.displayMetrics)
+
+//		val locale = Locale(language)
+//		Locale.setDefault(locale)
+//		val configuration = Configuration()
+//		configuration.setLocale(locale)
+//		this.applyOverrideConfiguration(configuration)
+		
+		val languageToLoad = language // your language
+		
+		val locale = Locale(languageToLoad)
+		Locale.setDefault(locale)
+		val config = Configuration()
+		config.locale = locale
+		baseContext.resources.updateConfiguration(
+			config,
+			baseContext.resources.displayMetrics
+		)
 	}
 }

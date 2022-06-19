@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_margin="5dp"
@@ -36,12 +37,12 @@
 		android:ellipsize="end"
 		android:ems="1"
 		android:maxLines="1"
-		android:text="RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintEnd_toStartOf="@+id/rowRepostRecord_button_quote"
 		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_image_avatar"
-		app:layout_constraintTop_toTopOf="@+id/rowRepostRecord_image_avatar"/>
+		app:layout_constraintTop_toTopOf="@+id/rowRepostRecord_image_avatar"
+		tools:text="RainbowWolfer"/>
 	
 	<TextView
 		android:id="@+id/rowRepostRecord_text_time"
@@ -50,10 +51,10 @@
 		android:layout_marginStart="8dp"
 		android:ellipsize="end"
 		android:maxLines="1"
-		android:text="2022-02-22 22:22:22"
 		app:layout_constraintBottom_toBottomOf="@+id/rowRepostRecord_image_avatar"
 		app:layout_constraintEnd_toStartOf="@+id/rowRepostRecord_button_quote"
-		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_image_avatar"/>
+		app:layout_constraintStart_toEndOf="@+id/rowRepostRecord_image_avatar"
+		tools:text="2022-02-22 22:22:22"/>
 	
 	<ImageView
 		android:id="@+id/rowRepostRecord_icon_repost"

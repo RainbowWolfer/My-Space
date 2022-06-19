@@ -59,7 +59,7 @@ data class Post(
 	//1  -> up
 	@SerializedName("Voted") var voted: Int,//whether user had voted (depends on query)
 	//------------
-	//if respost (Origin Post Properties)
+	//if repost (Origin Post Properties)
 	@SerializedName("OriginScore") val originScore: Int? = null,
 	@SerializedName("OriginVoted") var originVoted: Int? = null,
 //	@SerializedName("OriginHasReposted") val originHasReposted: Boolean? = null,
@@ -219,11 +219,5 @@ data class Post(
 		} else {
 			tags
 		}
-	}
-	
-	
-	fun CopyFrom(post: Post) {//?
-		//make everthing var except id
-		
 	}
 }

@@ -3,14 +3,17 @@
 	<item
 		android:id="@+id/item_share"
 		android:icon="@drawable/ic_baseline_share_24"
-		android:title="Share"/>
+		android:title="@string/share"/>
 	<item
 		android:id="@+id/item_collection"
 		android:icon="@drawable/ic_baseline_flag_24"
-		android:title="Add to Collection"/>
+		android:title="@string/add_to_collection"/>
+	<item
+		android:id="@+id/item_delete"
+		android:icon="@drawable/ic_baseline_delete_forever_24"
+		android:title="@string/delete"/>
 	<item
 		android:id="@+id/item_report"
 		android:icon="@drawable/ic_baseline_report_24"
-		android:title="Report"/>
-
+		android:title="@string/report"/>
 </menu>

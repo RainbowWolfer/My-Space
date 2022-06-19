@@ -12,6 +12,6 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
+		binding.aboutTextVersion.text = getString(R.string.version, "1.0.0.0")
 	}
 }

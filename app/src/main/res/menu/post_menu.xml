@@ -4,11 +4,11 @@
 	<item
 		android:id="@+id/post_draft"
 		android:icon="@drawable/ic_baseline_drafts_24"
-		android:title="Save as Draft"
+		android:title="@string/save_as_draft"
 		app:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/post_send"
 		android:icon="@drawable/ic_baseline_send_24"
-		android:title="Post"
+		android:title="@string/send_post"
 		app:showAsAction="always"/>
 </menu>

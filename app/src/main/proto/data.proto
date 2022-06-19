@@ -7,4 +7,9 @@ message UserPreferences{
   string email = 1;
   string password = 2;
   bool skip = 3;
+  enum Languages{
+    English = 0;
+    Chinese = 1;
+  }
+  Languages language = 4;
 }

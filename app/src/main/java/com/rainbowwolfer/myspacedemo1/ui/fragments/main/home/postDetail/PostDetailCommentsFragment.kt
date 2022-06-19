@@ -95,10 +95,10 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 		
 		application.currentUser.observe(viewLifecycleOwner) {
 			if (application.hasLoggedIn()) {
-				binding.postDetailCommentsInputComment.hint = "Leave a nice comment"
+				binding.postDetailCommentsInputComment.hint = getString(R.string.leave_a_nice_comment)
 				binding.postDetailCommentsInputComment.isEnabled = true
 			} else {
-				binding.postDetailCommentsInputComment.hint = "You have not logged in"
+				binding.postDetailCommentsInputComment.hint = getString(R.string.you_have_not_signed_in)
 				binding.postDetailCommentsInputComment.isEnabled = false
 			}
 		}
@@ -127,7 +127,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 			lifecycleScope.launch(Dispatchers.Main) {
 				try {
 					if (refresh) {
-						showLoading("Loading Comments")
+						showLoading(getString(R.string.loading_comments))
 					}
 					
 					EasyFunctions.stackLoading(refresh, viewModel.comments, viewModel.commentsOffset) {
@@ -191,7 +191,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				binding.postDetailCommentsInputComment.isEnabled = false
-				showLoading("Uploading Comment")
+				showLoading(getString(R.string.uploading_comment))
 				val comment: Comment
 				withContext(Dispatchers.IO) {
 					val response = RetrofitInstance.api.postComment(

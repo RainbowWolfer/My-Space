@@ -220,6 +220,7 @@ object EasyFunctions {
 	
 	fun DateTime.getDate(): String = "${this.year.toDuo()}-${this.monthOfYear.toDuo()}-${this.dayOfMonth.toDuo()}"
 	fun DateTime.getTime(): String = "${this.hourOfDay.toDuo()}:${this.minuteOfHour.toDuo()}:${this.secondOfMinute.toDuo()}"
+	fun DateTime.getDateTime(): String = "${this.getDate()} ${this.getTime()}"
 	
 	fun String.convertToRecentFormat(context: Context): String {
 		val now = DateTime.now()

@@ -24,6 +24,7 @@ import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffU
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.interfaces.IRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.collections.CollectionFragmentDirections
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,7 +76,7 @@ class CollectionsRecyclerViewAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowPostViewHolder) {
 			val data = list[position]
-			holder.binding.rowCollectionPostTextDate.text = data.time
+			holder.binding.rowCollectionPostTextDate.text = data.time.convertToRecentFormat(context)
 			holder.binding.rowCollectionPostTextUsername.text = "@${data.publisherUsername}"
 			holder.binding.rowCollectionPostIconRepost.visibility = if (data.isRepost) View.VISIBLE else View.GONE
 			with(if (data.imagesCount != 0) View.VISIBLE else View.GONE) {

@@ -84,7 +84,7 @@
 				android:layout_width="140dp"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="8dp"
-				android:text="@string/sumbit"
+				android:text="@string/submit"
 				app:icon="@drawable/ic_baseline_check_24"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"

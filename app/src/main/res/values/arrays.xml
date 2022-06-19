@@ -1,33 +1,12 @@
 <resources>
-	<!-- Reply Preference -->
-	<string-array name="reply_entries">
-		<item>Reply</item>
-		<item>Reply to all</item>
+	<string-array name="languages_entries">
+		<item>English 🇬🇧</item>
+		<item>Chinese 🇨🇳</item>
 	</string-array>
 	
-	<string-array name="reply_values">
-		<item>reply</item>
-		<item>reply_all</item>
+	<string-array name="languages_values">
+		<item>en</item>
+		<item>cn</item>
 	</string-array>
 	
-	<string-array name="post_visiblities">
-		<item>All can see</item>
-		<item>Followers can see</item>
-		<item>No one can see</item>
-	</string-array>
-	
-	<string-array name="reply_visiblities">
-		<item>All can reply</item>
-		<item>Followers can reply</item>
-		<item>No one can reply</item>
-	</string-array>
-	
-	<string-array name="end_row_texts">
-		<item>You have reached the end</item>
-		<item>Look up!</item>
-		<item>This is over but life isn\'t</item>
-		<item>You really need something</item>
-		<item>But not here</item>
-		<item>Do a stretsch-up will you?</item>
-	</string-array>
 </resources>

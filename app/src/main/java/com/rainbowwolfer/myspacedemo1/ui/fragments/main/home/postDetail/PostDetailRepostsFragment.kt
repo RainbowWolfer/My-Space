@@ -51,14 +51,14 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		println("Start Here $postID")
+//		println("Start Here $postID")
 		binding.postDetailRepostsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		binding.postDetailRepostsRecyclerView.adapter = adapter
 		
 		loadRepostRecords(true)
 		
 		viewModel.repostRecords.observe(viewLifecycleOwner) {
-			println("SET ${it.size}")
+//			println("SET ${it.size}")
 			adapter.setData(it)
 		}
 		
@@ -73,7 +73,7 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 	}
 	
 	private fun loadRepostRecords(refresh: Boolean) {
-		println("LOADING: refresh:$refresh loading:$isLoading")
+//		println("LOADING: refresh:$refresh loading:$isLoading")
 		if (isLoading) {
 			return
 		}

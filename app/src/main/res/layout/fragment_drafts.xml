@@ -34,7 +34,7 @@
 					android:id="@+id/drafts_edit_search"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:hint="Search"
+					android:hint="@string/search"
 					android:imeOptions="actionSearch"
 					android:inputType="text"
 					android:maxLines="1"/>
@@ -69,7 +69,8 @@
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/drafts_input_search">
+				app:layout_constraintTop_toBottomOf="@+id/drafts_input_search"
+				tools:ignore="UseCompoundDrawables">
 				
 				<ImageView
 					android:id="@+id/imageView5"
@@ -83,7 +84,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="5dp"
-					android:text="Nothing Here"
+					android:text="@string/nothing_here"
 					android:textAlignment="center"
 					android:textSize="24sp"
 					android:textStyle="bold"/>

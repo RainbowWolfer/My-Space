@@ -2,8 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:layout_marginTop="2dp"
+	android:layout_marginBottom="8dp"
 	android:background="@drawable/round_background"
 	android:clickable="true"
 	android:focusable="true"
@@ -15,16 +18,16 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="16dp"
-		android:text="2022-05-06 11:11:11"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"/>
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="2022-05-06 11:11:11"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/draftRow_button_more"
-		android:layout_width="32dp"
-		android:layout_height="32dp"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="8dp"
 		android:background="@color/transparent"
@@ -40,13 +43,13 @@
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
-		android:textSize="13sp"
 		android:layout_marginBottom="16dp"
 		android:ellipsize="end"
 		android:maxLines="3"
-		android:text="@string/default_long_text"
+		android:textSize="13sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/draftRow_button_more"/>
+		app:layout_constraintTop_toBottomOf="@+id/draftRow_text_time"
+		tools:text="@string/default_long_text"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

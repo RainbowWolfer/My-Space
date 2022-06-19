@@ -145,81 +145,11 @@
 			android:layout_height="wrap_content">
 			
 			<com.google.android.material.chip.Chip
-				android:id="@+id/chip28"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip11"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip12"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip13"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip17"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip18"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip19"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip22"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip23"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
-				android:id="@+id/chip29"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
-			
-			<com.google.android.material.chip.Chip
 				android:id="@+id/chip30"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:backgroundTint="@color/gray"
-				android:text="Hello"/>
+				tools:text="Hello"/>
 		</com.google.android.material.chip.ChipGroup>
 	</HorizontalScrollView>
 	
@@ -260,7 +190,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="8dp"
-		android:text="21"
+		tools:text="21"
 		android:textSize="18sp"
 		app:layout_constraintBottom_toBottomOf="@+id/row_button_upvote"
 		app:layout_constraintEnd_toStartOf="@+id/row_button_upvote"
@@ -279,20 +209,22 @@
 		android:paddingEnd="10dp"
 		app:layout_constraintBottom_toBottomOf="@+id/row_button_downvote"
 		app:layout_constraintEnd_toStartOf="@+id/row_button_downvote"
-		app:layout_constraintTop_toTopOf="@+id/row_button_downvote">
+		app:layout_constraintTop_toTopOf="@+id/row_button_downvote"
+		tools:ignore="UseCompoundDrawables">
 		
 		<ImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="5dp"
-			android:src="@drawable/ic_baseline_comment_24"/>
+			android:src="@drawable/ic_baseline_comment_24"
+			android:contentDescription=""/>
 		
 		<TextView
 			android:id="@+id/row_comment_count"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="5dp"
-			android:text="4"/>
+			tools:text="4"/>
 	</LinearLayout>
 	
 	<LinearLayout
@@ -308,7 +240,8 @@
 		android:paddingEnd="10dp"
 		app:layout_constraintBottom_toBottomOf="@+id/row_button_downvote"
 		app:layout_constraintEnd_toStartOf="@+id/row_layout_comment"
-		app:layout_constraintTop_toTopOf="@+id/row_button_downvote">
+		app:layout_constraintTop_toTopOf="@+id/row_button_downvote"
+		tools:ignore="UseCompoundDrawables">
 		
 		<ImageView
 			android:id="@+id/row_image_repostButtonIcon"
@@ -324,7 +257,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="5dp"
-			android:text="20"/>
+			tools:text="20"/>
 	</LinearLayout>
 	
 	<ImageView

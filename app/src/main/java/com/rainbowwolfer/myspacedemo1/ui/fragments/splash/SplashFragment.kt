@@ -12,7 +12,7 @@ import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentSplashBinding
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasValue
+import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasUserValue
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,7 +31,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 		val data = application.userPreferencesRepository.getValue()
 		data.asLiveData().observe(viewLifecycleOwner) {
 			skip = it.skip
-			if (it.hasValue()) {
+			if (it.hasUserValue()) {
 				lifecycleScope.launch(Dispatchers.IO) {
 					try {
 						val response = RetrofitInstance.api.tryLogin(it.email, it.password)
