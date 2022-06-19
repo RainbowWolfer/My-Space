@@ -185,4 +185,8 @@ interface MyApi {
 		@Query("password") password: String,
 	): Response<List<User>>
 	
+	@POST("post/delete")
+	suspend fun postDelete(
+		@Body body: DeletePost
+	): ResponseBody
 }

@@ -1,6 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -25,6 +26,7 @@ import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.addPost
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.models.api.DeletePost
 import com.rainbowwolfer.myspacedemo1.models.api.NewCollection
 import com.rainbowwolfer.myspacedemo1.models.enums.CollectionType
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
@@ -120,7 +122,38 @@ class MainListRecyclerViewAdapter(
 				popupMenu.setOnMenuItemClickListener {
 					when (it.itemId) {
 						R.id.item_delete -> {
-							Toast.makeText(context, "Test: Delete!", Toast.LENGTH_SHORT).show()
+							AlertDialog.Builder(context).apply {
+								setTitle(context.getString(R.string.confirm))
+								setMessage(context.getString(R.string.are_you_sure_to_delete_post))
+								setNegativeButton(context.getString(R.string.no), null)
+								setPositiveButton(context.getString(R.string.yes)) { _, _ ->
+									lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+										try {
+											withContext(Dispatchers.IO) {
+												RetrofitInstance.api.postDelete(
+													DeletePost(
+														postID = postID,
+														email = application.getCurrentEmail(),
+														password = application.getCurrentPassword(),
+													)
+												)
+											}
+											Toast.makeText(context, context.getString(R.string.delete_success), Toast.LENGTH_SHORT).show()
+										} catch (ex: Exception) {
+											ex.printStackTrace()
+										} finally {
+											try {
+												setData(list.filter { item ->
+													item.id != postID
+												})
+											} catch (ex: Exception) {
+											}
+										}
+									}
+								}
+								create()
+								show()
+							}
 						}
 						R.id.item_share -> {
 							val sharedIntent = Intent().apply {

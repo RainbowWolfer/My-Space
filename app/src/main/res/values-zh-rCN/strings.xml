@@ -62,7 +62,7 @@
 	<string name="publisher">发布者</string>
 	<string name="date">日期</string>
 	<string name="profile">个人资料</string>
-	<string name="posts">帖子</string>
+	<string name="posts">贴文</string>
 	<string name="followers">关注者</string>
 	<string name="undefined">未定义</string>
 	<string name="share">分享</string>
@@ -120,7 +120,7 @@
 	<string name="next">下一步</string>
 	<string name="finish">完成</string>
 	<string name="previous">上一步</string>
-	<string name="sorts_posts_by">帖子排序</string>
+	<string name="sorts_posts_by">贴文排序</string>
 	<string name="change_your_username">修改你的用户名</string>
 	<string name="new_username">新用户名</string>
 	<string name="confirm">确认</string>
@@ -128,7 +128,7 @@
 	<string name="welcome">欢迎</string>
 	<string name="sign_out">注销</string>
 	<string name="no_collections">无收藏</string>
-	<string name="post">帖子</string>
+	<string name="post">贴文</string>
 	<string name="loading">加载中</string>
 	<string name="no_followers">无关注者</string>
 	<string name="end_row_text_1">已经到底啦</string>
@@ -146,20 +146,20 @@
 	<string name="edit">编辑</string>
 	<string name="top">跳转顶部</string>
 	<string name="save_as_draft">保存为草稿</string>
-	<string name="send_post">发送帖子</string>
+	<string name="send_post">发送贴文</string>
 	<string name="send">发送</string>
 	<string name="sending_post">发送中…</string>
 	<string name="no">否</string>
 	<string name="yes">是</string>
-	<string name="send_post_confirm_text">确认要发送当前帖子吗？</string>
-	<string name="save_draft_confirm_text">确认要保存当前帖子为草稿吗?</string>
+	<string name="send_post_confirm_text">确认要发送当前贴文吗？</string>
+	<string name="save_draft_confirm_text">确认要保存当前贴文为草稿吗?</string>
 	<string name="least_5_characters_are_needed">至少需要5个字符</string>
 	<string name="no_special_character_allowed">禁止出现特殊字符</string>
 	<string name="tag_cannot_be_empty">标签不能为空</string>
 	<string name="max_length_is_20">最大长度为20</string>
 	<string name="already_exists">已经存在</string>
 	<string name="are_you_sure_to_remove_this_image">你确定要移除这个图片吗？</string>
-	<string name="new_post">新帖子</string>
+	<string name="new_post">新贴文</string>
 	<string name="saved_draft">保存的草稿</string>
 	<string name="update_username_failed">更新用户名失败</string>
 	<string name="no_comments_yet">还没有评论</string>
@@ -182,6 +182,8 @@
 	<string name="confirm_password_is_not_matched">确认密码不匹配</string>
 	<string name="you_have_empty_fields_to_fill">有输入项为空</string>
 	<string name="you_have_error_fields_to_fix">有输入项错误</string>
+	<string name="delete_success">删除成功</string>
+	<string name="are_you_sure_to_delete_post">你确认要删除此贴文吗</string>
 
 
 </resources>

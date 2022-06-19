@@ -205,4 +205,6 @@
 	<string name="confirm_password_is_not_matched">Confirm password is not matched</string>
 	<string name="you_have_empty_fields_to_fill">You have empty field(s) to fill</string>
 	<string name="you_have_error_fields_to_fix">You have error field(s) to fix</string>
+	<string name="delete_success">Delete Successful</string>
+	<string name="are_you_sure_to_delete_post">Are you sure to delete this post?</string>
 </resources>
