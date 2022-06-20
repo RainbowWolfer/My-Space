@@ -35,7 +35,7 @@ class MySpaceApplication : Application() {
 	
 	init {
 		instance = this
-		println(DateTime.now())
+		println("STARTING NOW : " + DateTime.now())
 	}
 	
 	val applicationScope = CoroutineScope(SupervisorJob())

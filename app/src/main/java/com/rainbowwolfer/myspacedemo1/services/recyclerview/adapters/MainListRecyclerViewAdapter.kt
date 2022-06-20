@@ -386,9 +386,9 @@ class MainListRecyclerViewAdapter(
 		this.setMetas(p.readID())
 		this.setPublisher(p.readUser())
 		this.setButtons(p.readID())//inlcude writes
-		this.loadImages(if (p.isRepost) p.getOriginPost()!! else p)
 		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, p.readVoted())
 		updateRepostButton(this.rowImageRepostButtonIcon, p.hasReposted)
+		this.loadImages(if (p.isRepost) p.getOriginPost()!! else p)
 	}
 	
 	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {

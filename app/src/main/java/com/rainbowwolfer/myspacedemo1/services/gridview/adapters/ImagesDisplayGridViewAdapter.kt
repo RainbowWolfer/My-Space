@@ -72,7 +72,7 @@ class ImagesDisplayGridViewAdapter(
 			if (adapter !is ImagesDisplayGridViewAdapter) {
 				return
 			}
-			lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+			application.applicationScope.launch(Dispatchers.Main) {
 				try {
 					for (index in 0 until post.imagesCount) {
 						val list = adapter.list.toMutableList()
@@ -94,7 +94,7 @@ class ImagesDisplayGridViewAdapter(
 				} finally {
 					doneAction.invoke(hasNewLoaded)
 				}
-			}.ensureActive()
+			}
 		}
 	}
 	
