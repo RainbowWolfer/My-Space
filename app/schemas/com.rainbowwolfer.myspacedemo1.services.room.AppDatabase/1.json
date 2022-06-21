@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0b6bcc31fd4a957bf2349f338bdb75f1",
+    "identityHash": "2b8b09f2a652c310d37dc63957028108",
     "entities": [
       {
         "tableName": "drafts",
@@ -117,7 +117,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "message_contactc",
+        "tableName": "message_contacts",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`senderID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `text_content` TEXT NOT NULL, `datetime` TEXT NOT NULL, `has_unread` INTEGER NOT NULL)",
         "fields": [
           {
@@ -164,7 +164,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b6bcc31fd4a957bf2349f338bdb75f1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2b8b09f2a652c310d37dc63957028108')"
     ]
   }
 }

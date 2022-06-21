@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MessageContactsDao {
-	@Query("select * from message_contactc")
+	@Query("select * from message_contacts")
 	fun getAll(): Flow<List<MessageContact>>
 }

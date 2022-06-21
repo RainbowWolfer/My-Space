@@ -9,7 +9,7 @@ import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "message_contactc")
+@Entity(tableName = "message_contacts")
 data class MessageContact(
 	@SerializedName("SenderID") @PrimaryKey(autoGenerate = true) val senderID: Long,
 	@SerializedName("Username") @ColumnInfo("username") val username: String,

@@ -1,8 +1,12 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.message
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,6 +43,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		setHasOptionsMenu(true)
 		contact = arguments?.getParcelable(ARG_CONTACT)!!
 	}
 	
@@ -92,6 +97,20 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				
 				}
 			}
+		}
+	}
+	
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.message_detail_menu, menu)
+	}
+	
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.item_info -> {
+				Toast.makeText(requireContext(), contact.toString(), Toast.LENGTH_SHORT).show()
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
 		}
 	}
 }
