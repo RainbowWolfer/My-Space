@@ -7,6 +7,7 @@ import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import kotlinx.parcelize.Parcelize
 
+@Deprecated("")
 @Parcelize
 data class MessageSet(
 	val id: String,

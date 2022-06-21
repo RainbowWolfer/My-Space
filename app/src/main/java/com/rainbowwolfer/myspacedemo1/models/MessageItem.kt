@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.random.Random
 
+@Deprecated("")
 @Parcelize
 data class MessageItem(
 	val id: String,

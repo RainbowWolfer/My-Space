@@ -7,7 +7,7 @@
 	<dimen name="fab_margin">16dp</dimen>
 	<dimen name="list_item_spacing">16dp</dimen>
 	<dimen name="list_item_spacing_half">8dp</dimen>
-	<dimen name="my_corner_radius">20dp</dimen>
+	<dimen name="my_corner_radius">15dp</dimen>
 	
 	<dimen name="none">0dp</dimen>
 	<dimen name="chip_add_padding">16dp</dimen>

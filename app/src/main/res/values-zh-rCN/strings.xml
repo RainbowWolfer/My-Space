@@ -184,6 +184,9 @@
 	<string name="you_have_error_fields_to_fix">有输入项错误</string>
 	<string name="delete_success">删除成功</string>
 	<string name="are_you_sure_to_delete_post">你确认要删除此贴文吗</string>
+	<string name="select">选择</string>
+	<string name="no_messages">没有消息</string>
+	<string name="chat">聊天</string>
 
 
 </resources>

@@ -503,7 +503,11 @@ class PostActivity : AppCompatActivity() {
 						Draft.convertImagesURI(viewModel.getNotNullURIs())
 					)
 					lifecycleScope.launch(Dispatchers.IO) {
-						application.roomRepository.update(new)
+						if (new.id == 0L) {
+							application.roomRepository.insertDraft(new)
+						} else {
+							application.roomRepository.updateDraft(new)
+						}
 					}
 				}
 				

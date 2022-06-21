@@ -15,8 +15,8 @@ class DraftsFragmentViewModel : ViewModel() {
 	
 	val allDrafts: LiveData<List<Draft>> by lazy { repository.allDrafts.asLiveData() }
 	
-	fun insert(word: Draft) = viewModelScope.launch {
-		repository.insert(word)
+	fun insert(draft: Draft) = viewModelScope.launch {
+		repository.insertDraft(draft)
 	}
 	
 	fun getSearched(content: String): List<Draft> {

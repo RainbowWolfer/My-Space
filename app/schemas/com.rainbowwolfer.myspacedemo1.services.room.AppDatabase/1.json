@@ -1,76 +1,170 @@
 {
-	"formatVersion": 1,
-	"database": {
-		"version": 1,
-		"identityHash": "a058e6c15a05cf2626032d3d97ebcfc9",
-		"entities": [
-			{
-				"tableName": "drafts",
-				"createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` TEXT NOT NULL, `added_datetime` TEXT NOT NULL, `text_content` TEXT NOT NULL, `post_visibility` TEXT NOT NULL, `reply_limit` TEXT NOT NULL, `tags` TEXT NOT NULL, `images_uri` TEXT NOT NULL)",
-				"fields": [
-					{
-						"fieldPath": "id",
-						"columnName": "id",
-						"affinity": "INTEGER",
-						"notNull": true
-					},
-					{
-						"fieldPath": "userID",
-						"columnName": "user_id",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "addedDateTime",
-						"columnName": "added_datetime",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "textContent",
-						"columnName": "text_content",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "postVisibility",
-						"columnName": "post_visibility",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "replyLimit",
-						"columnName": "reply_limit",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "tags",
-						"columnName": "tags",
-						"affinity": "TEXT",
-						"notNull": true
-					},
-					{
-						"fieldPath": "imagesURI",
-						"columnName": "images_uri",
-						"affinity": "TEXT",
-						"notNull": true
-					}
-				],
-				"primaryKey": {
-					"columnNames": [
-						"id"
-					],
-					"autoGenerate": true
-				},
-				"indices": [],
-				"foreignKeys": []
-			}
-		],
-		"views": [],
-		"setupQueries": [
-			"CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-			"INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a058e6c15a05cf2626032d3d97ebcfc9')"
-		]
-	}
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "0b6bcc31fd4a957bf2349f338bdb75f1",
+    "entities": [
+      {
+        "tableName": "drafts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` TEXT NOT NULL, `added_datetime` TEXT NOT NULL, `text_content` TEXT NOT NULL, `post_visibility` TEXT NOT NULL, `reply_limit` TEXT NOT NULL, `tags` TEXT NOT NULL, `images_uri` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userID",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedDateTime",
+            "columnName": "added_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textContent",
+            "columnName": "text_content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postVisibility",
+            "columnName": "post_visibility",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "replyLimit",
+            "columnName": "reply_limit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imagesURI",
+            "columnName": "images_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "messages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sender_id` TEXT NOT NULL, `receiver_id` TEXT NOT NULL, `datetime` TEXT NOT NULL, `text_content` TEXT NOT NULL, `has_received` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "senderID",
+            "columnName": "sender_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "receiverID",
+            "columnName": "receiver_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTime",
+            "columnName": "datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textContent",
+            "columnName": "text_content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasReceived",
+            "columnName": "has_received",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "message_contactc",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`senderID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `text_content` TEXT NOT NULL, `datetime` TEXT NOT NULL, `has_unread` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "senderID",
+            "columnName": "senderID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textContent",
+            "columnName": "text_content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTime",
+            "columnName": "datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasUnread",
+            "columnName": "has_unread",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "senderID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b6bcc31fd4a957bf2349f338bdb75f1')"
+    ]
+  }
 }

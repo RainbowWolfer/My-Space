@@ -4,34 +4,43 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rainbowwolfer.myspacedemo1.models.Draft
+import com.rainbowwolfer.myspacedemo1.models.Message
+import com.rainbowwolfer.myspacedemo1.models.MessageContact
 import com.rainbowwolfer.myspacedemo1.services.room.dao.DraftsDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.rainbowwolfer.myspacedemo1.services.room.dao.MessageContactsDao
+import com.rainbowwolfer.myspacedemo1.services.room.dao.MessagesDao
 
-@Database(entities = [Draft::class], version = 1, exportSchema = true)
+@Database(
+	entities = [
+		Draft::class,
+		Message::class,
+		MessageContact::class
+	], version = 1, exportSchema = true
+)
 abstract class AppDatabase : RoomDatabase() {
 	abstract fun draftsDao(): DraftsDao
-	
-	private class WordDatabaseCallback(
-		private val scope: CoroutineScope
-	) : RoomDatabase.Callback() {
-		
-		override fun onCreate(db: SupportSQLiteDatabase) {
-			super.onCreate(db)
-			instance?.let { database ->
-				scope.launch {
-					val dao = database.draftsDao()
-					
-					dao.deleteAll()
-					
-					val draft = Draft.generateDefault()
-					dao.insertAll(draft)
-				}
-			}
-		}
-	}
+	abstract fun messagesDao(): MessagesDao
+	abstract fun messagesContactDao(): MessageContactsDao
+
+//	private class WordDatabaseCallback(
+//		private val scope: CoroutineScope
+//	) : RoomDatabase.Callback() {
+//
+//		override fun onCreate(db: SupportSQLiteDatabase) {
+//			super.onCreate(db)
+//			instance?.let { database ->
+//				scope.launch {
+//					val dao = database.draftsDao()
+//
+//					dao.deleteAll()
+//
+//					val draft = Draft.generateDefault()
+//					dao.insertAll(draft)
+//				}
+//			}
+//		}
+//	}
 	
 	companion object {
 		@Volatile

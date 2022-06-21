@@ -405,7 +405,6 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	@SuppressLint("SetTextI18n")
 	private fun MainRowLayoutBinding.setContent(post: Post) {
 		if (post.isRepost) {
 			val origin = post.getOriginPost()!!
@@ -413,6 +412,7 @@ class MainListRecyclerViewAdapter(
 			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = origin.textContent
 			this.mainTextRepost.text = post.textContent
+			@SuppressLint("SetTextI18n")
 			this.rowTextRepostInfo.text = context.getString(R.string.repost_from) + " @${post.publisherUsername}"
 			//avatar
 			application.findOrGetAvatar(post.getPublisher().id) {

@@ -12,12 +12,10 @@ import com.google.android.material.shape.CornerFamily
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.MessageDetailRowLayoutLeftBinding
 import com.rainbowwolfer.myspacedemo1.databinding.MessageDetailRowLayoutRightBinding
-import com.rainbowwolfer.myspacedemo1.models.MessageItem
-import com.rainbowwolfer.myspacedemo1.models.MessageSet
+import com.rainbowwolfer.myspacedemo1.models.Message
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlin.random.Random
 
 class MessageDetailRecyclerViewAdapter(
 	private val context: Context,
@@ -27,6 +25,8 @@ class MessageDetailRecyclerViewAdapter(
 		private const val TYPEID_MESSAGE_SENDER = 0
 		private const val TYPEID_MESSAGE_RECEIVER = 1
 	}
+	
+	private val application = MySpaceApplication.instance
 	
 	abstract class ViewHolder(
 		protected val parentBinding: ViewBinding,
@@ -58,14 +58,13 @@ class MessageDetailRecyclerViewAdapter(
 		override val avatarImage: CircleImageView = binding.messageDetailRightImageAvatar
 	}
 	
-	private var list = emptyList<MessageItem>()
-	private lateinit var set: MessageSet
+	private var list = emptyList<Message>()
 	
 	override fun getItemViewType(position: Int): Int {
-		return if (list[position].isSelf) {
-			TYPEID_MESSAGE_RECEIVER
-		} else {
+		return if (list[position].senderID == application.getCurrentID()) {
 			TYPEID_MESSAGE_SENDER
+		} else {
+			TYPEID_MESSAGE_RECEIVER
 		}
 	}
 	
@@ -78,6 +77,7 @@ class MessageDetailRecyclerViewAdapter(
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+		val data = list[position]
 		val radius = context.resources.getDimension(R.dimen.my_corner_radius)
 		
 		holder.cardView.shapeAppearanceModel = holder.cardView.shapeAppearanceModel
@@ -88,16 +88,17 @@ class MessageDetailRecyclerViewAdapter(
 			.setBottomLeftCorner(CornerFamily.ROUNDED, radius)
 			.build()
 		
-		holder.contentText.text = EasyFunctions.generateRandomString(Random.nextInt(5, 50))
+		holder.contentText.text = data.textContent
+		application.findOrGetAvatar(data.senderID) {
+			holder.avatarImage.setImageBitmap(it)
+		}
 	}
 	
 	override fun getItemCount(): Int = list.size
 	
-	fun setData(set: MessageSet) {
-		this.set = set
-		val diffUtil = DatabaseIdDiffUtil(list, set.messages)
-		val diffResult = DiffUtil.calculateDiff(diffUtil)
-		list = set.messages
-		diffResult.dispatchUpdatesTo(this)
+	fun setData(new: List<Message>) {
+		val diffUtil = DatabaseIdDiffUtil(list, new)
+		list = new
+		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

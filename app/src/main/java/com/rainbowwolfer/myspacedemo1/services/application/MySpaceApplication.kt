@@ -41,7 +41,13 @@ class MySpaceApplication : Application() {
 	val applicationScope = CoroutineScope(SupervisorJob())
 	
 	private val room by lazy { AppDatabase.getDatabase(this) }
-	val roomRepository by lazy { AppRoomRepository(room.draftsDao()) }
+	val roomRepository by lazy {
+		AppRoomRepository(
+			room.draftsDao(),
+			room.messagesDao(),
+			room.messagesContactDao(),
+		)
+	}
 	
 	val userPreferencesRepository = UserPreferencesRepository(this)
 	

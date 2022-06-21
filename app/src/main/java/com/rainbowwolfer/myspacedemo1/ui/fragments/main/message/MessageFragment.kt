@@ -3,48 +3,120 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.message
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageBinding
-import com.rainbowwolfer.myspacedemo1.models.MessageSet
+import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.chat.ChatSocket
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MessageRecyclerViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.viewmodel.MessageFragmentViewModel
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class MessageFragment : Fragment(R.layout.fragment_message) {
 	private val binding: FragmentMessageBinding by viewBinding()
+	private val viewModel: MessageFragmentViewModel by viewModels()
+	private val adapter by lazy { MessageRecyclerViewAdapter(requireContext(), viewLifecycleOwner) }
+	private val application = MySpaceApplication.instance
+	
+	override fun onResume() {
+		super.onResume()
+		ChatSocket.connect()
+	}
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setHasOptionsMenu(true)
+	}
+	
+	private var isLoading = false
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
+		binding.messageRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+		binding.messageRecyclerView.adapter = adapter
+		
+//		ChatSocket.read.observe(viewLifecycleOwner) {
+//			println(it)
+//		}
+		
+		viewModel.contacts.observe(viewLifecycleOwner) {
+			adapter.setData(it)
+		}
+		
 		binding.messageSwipeRefreshLayout.setOnRefreshListener {
-			Handler(Looper.getMainLooper()).postDelayed({
-				binding.messageSwipeRefreshLayout.isRefreshing = false
-			}, 2000)
+			loadFromServer()
 		}
 		
 		binding.messageFabAdd.setOnClickListener {
-			Snackbar.make(view, "You have not signed in", Snackbar.LENGTH_LONG).setAction("Sign in") {
-			
-			}.show()
+			HomeFragment.popupNotLoggedInHint(requireView())
 		}
 		
-		binding.messageRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-		val messageRecyclerViewAdapter = MessageRecyclerViewAdapter()
-		binding.messageRecyclerView.adapter = messageRecyclerViewAdapter
-		messageRecyclerViewAdapter.setData(
-			listOf(
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-				MessageSet.generateDefault(),
-			)
-		)
+		loadFromServer()
 	}
+	
+	private fun loadFromServer() {
+		lifecycleScope.launch(Dispatchers.Main) {
+			try {
+				if (isLoading) {
+					return@launch
+				}
+				isLoading = true
+				binding.messageSwipeRefreshLayout.isRefreshing = true
+				val list = withContext(Dispatchers.IO) {
+					val response = RetrofitInstance.api.getMessageContacts(
+						email = application.getCurrentEmail(),
+						password = application.getCurrentPassword(),
+					)
+					if (response.isSuccessful) {
+						response.body() ?: emptyList()
+					} else {
+						throw ResponseException(response.getHttpResponse())
+					}
+				}
+				viewModel.contacts.value = list
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+				if (ex is ResponseException) {
+					ex.printResponseException()
+				}
+			} finally {
+				try {
+					isLoading = false
+					binding.messageSwipeRefreshLayout.isRefreshing = false
+				} catch (ex: Exception) {
+				}
+			}
+		}
+	}
+	
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.messages_menu, menu)
+	}
+	
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.item_selection -> {
+				ChatSocket.console("/nick ${MySpaceApplication.instance.getCurrentID()}\n")
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
+	
 }

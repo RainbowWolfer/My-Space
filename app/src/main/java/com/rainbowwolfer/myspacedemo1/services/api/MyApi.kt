@@ -1,9 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
-import com.rainbowwolfer.myspacedemo1.models.Comment
-import com.rainbowwolfer.myspacedemo1.models.Post
-import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.UserCollection
+import com.rainbowwolfer.myspacedemo1.models.*
 import com.rainbowwolfer.myspacedemo1.models.api.*
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
 import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
@@ -189,4 +186,18 @@ interface MyApi {
 	suspend fun postDelete(
 		@Body body: DeletePost
 	): ResponseBody
+	
+	@GET("message/contacts")
+	suspend fun getMessageContacts(
+		@Query("email") email: String,
+		@Query("password") password: String,
+	): Response<List<MessageContact>>
+	
+	@GET("message/get")
+	suspend fun getMessages(
+		@Query("email") email: String,
+		@Query("password") password: String,
+		@Query("offset") offset: Int,
+		@Query("limit") limit: Int = 15,
+	): Response<List<Message>>
 }

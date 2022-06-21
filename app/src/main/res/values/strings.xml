@@ -207,4 +207,7 @@
 	<string name="you_have_error_fields_to_fix">You have error field(s) to fix</string>
 	<string name="delete_success">Delete Successful</string>
 	<string name="are_you_sure_to_delete_post">Are you sure to delete this post?</string>
+	<string name="select">Select</string>
+	<string name="no_messages">No Messages</string>
+	<string name="chat">Chat</string>
 </resources>

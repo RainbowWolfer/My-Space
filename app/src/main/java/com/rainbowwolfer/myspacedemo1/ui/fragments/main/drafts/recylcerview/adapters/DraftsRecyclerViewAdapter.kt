@@ -49,7 +49,7 @@ class DraftsRecyclerViewAdapter(
 							setNegativeButton(context.getString(R.string.no), null)
 							setPositiveButton(context.getString(R.string.yes)) { _, _ ->
 								lifecycleCoroutineScope.launch(Dispatchers.IO) {
-									application.roomRepository.delete(data)
+									application.roomRepository.deleteDraft(data)
 								}
 							}
 							create()
