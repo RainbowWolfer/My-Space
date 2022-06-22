@@ -6,62 +6,38 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.permissionx.guolindev.PermissionMediator
 import com.permissionx.guolindev.PermissionX
 import com.permissionx.guolindev.callback.RequestCallback
 
 object PermissionUtils {
-    var REQUEST_CODE = 2022 //任意标识
-
-    /**
-     * 请求权限
-     * @param ct 当前Activity
-     * @param permissions 需要检查的权限
-     * @return boolean
-     */
-    fun requestPermissions(ct: Context, permissions: List<String>): Boolean {
-        for (permission in permissions) {
-            if (ContextCompat.checkSelfPermission(
-                    ct,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                //申请权限 参数分别是 上下文、权限集合(String)、请求码
-                ActivityCompat.requestPermissions(
-                    (ct as Activity),
-                    permissions.toTypedArray(), REQUEST_CODE
-                )
-            }
-        }
-        return true
-    }
-
-    /**
-     * Is get permissions
-     * 是否获取 某权限
-     * @param ct 当前Activity
-     * @param permissions 需要检查的权限
-     */
-    fun isGetPermissions(ct: Context, permissions: List<String>): Boolean {
-        var flag = false
-        for (i in permissions) {
-            flag = PermissionX.isGranted(ct, i)
-        }
-        return flag
-    }
-
-    /**
-     * Request permissions x
-     * 请求权限
-     * @param activity
-     * @param permissions
-     * @param callback
-     */
-    fun requestPermissionsX(
-        activity: FragmentActivity,
-        permissions: List<String>,
-        callback: RequestCallback? = null
-    ) {
-        PermissionX.init(activity).permissions(permissions).request(callback)
-    }
+	private const val REQUEST_CODE = 2022
+	
+	fun requestPermissions(context: Context, permissions: List<String>): Boolean {
+		for (permission in permissions) {
+			if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+				//申请权限 参数分别是 上下文、权限集合(String)、请求码
+				ActivityCompat.requestPermissions(
+					(context as Activity),
+					permissions.toTypedArray(), REQUEST_CODE
+				)
+			}
+		}
+		return true
+	}
+	
+	fun checkPermissions(context: Context, permissions: List<String>): Boolean {
+		var flag = false
+		for (i in permissions) {
+			flag = PermissionX.isGranted(context, i)
+		}
+		return flag
+	}
+	
+	fun requestPermissionsX(
+		activity: FragmentActivity,
+		permissions: List<String>,
+		callback: RequestCallback? = null
+	) {
+		PermissionX.init(activity).permissions(permissions).request(callback)
+	}
 }

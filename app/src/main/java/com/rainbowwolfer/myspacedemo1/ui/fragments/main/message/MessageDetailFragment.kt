@@ -98,7 +98,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				ChatSocket.handle(it) { message ->
 					message.hasReceived = true
 					//add to adapter
-					adapter.setData(listOf(message))
+					adapter.addData(message)
 					//add to room
 					lifecycleScope.launch(Dispatchers.IO) {
 						application.roomRepository.insertMessages(message)
@@ -120,7 +120,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		
 		binding.messageButtonSend.setOnClickListener {
 			//send message
-			val content = binding.messageEditContent.text.toString()
+			val content = binding.messageEditContent.text.toString().trim()
 			if (content.isBlank()) {
 				return@setOnClickListener
 			}
@@ -136,7 +136,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				hasReceived = false,
 			)
 			// add to adapter
-			adapter.setData(listOf(message))
+			adapter.addData(message)
 			binding.messageEditContent.setText("")
 			
 			// add to room

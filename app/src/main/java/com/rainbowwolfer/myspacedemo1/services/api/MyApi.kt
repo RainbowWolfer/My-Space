@@ -207,4 +207,13 @@ interface MyApi {
 	suspend fun flagReceived(
 		@Body body: FlagMessage,
 	): ResponseBody
+	
+	@GET("post/search")
+	suspend fun getPostsBySearch(
+		@Query("email") email: String,
+		@Query("password") password: String,
+		@Query("search") search: String,
+		@Query("offset") offset: Int,
+		@Query("limit") limit: Int = 5,
+	): Response<List<Post>>
 }

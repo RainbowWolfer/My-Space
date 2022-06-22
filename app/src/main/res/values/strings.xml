@@ -211,4 +211,5 @@
 	<string name="no_messages">No Messages</string>
 	<string name="chat">Chat</string>
 	<string name="info">Info</string>
+	<string name="picture_saved">Picture Saved</string>
 </resources>

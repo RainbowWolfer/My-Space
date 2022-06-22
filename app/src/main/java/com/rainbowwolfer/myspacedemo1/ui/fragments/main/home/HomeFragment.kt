@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.viewbinding.library.fragment.viewBinding
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -27,21 +28,17 @@ import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivity
 import com.rainbowwolfer.myspacedemo1.ui.activities.main.MainActivityViewModel
 import com.rainbowwolfer.myspacedemo1.ui.activities.post.PostActivity
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.EOFException
-import java.net.SocketTimeoutException
 import kotlin.random.Random
+
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	companion object {
 		var instance: HomeFragment? = null
 		const val RELOAD_THRESHOLD = 3
 		var updateScrollPosition: Boolean = false
-		
 		
 		fun popupNotLoggedInHint(view: View? = null) {
 			var v: View? = view
@@ -184,10 +181,64 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				}
 			}
 		}
+		
+		binding.mainEditSearch.setOnEditorActionListener { _, actionId, _ ->
+			if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+				performSearch(binding.mainEditSearch.text.toString().trim())
+				binding.mainEditSearch.setText("")
+			}
+			false
+		}
+	}
+	
+	private fun performSearch(content: String) {
+		println(content)
+		viewModel.searchContent.value = content
+		updateList(true)
+//		lifecycleScope.launch(Dispatchers.Main) {
+//			try {
+//				viewModel.listOffset.value = 0
+//				viewModel.lastViewPosiiton.value = 0
+//				val list = withContext(Dispatchers.IO) {
+//					val response = RetrofitInstance.api.getPostsBySearch(
+//						email = application.getCurrentEmail(),
+//						password = application.getCurrentPassword(),
+//						search = content,
+//						offset = viewModel.listOffset.value!!
+//					)
+//					if (response.isSuccessful) {
+//						response.body() ?: emptyList()
+//					} else {
+//						throw ResponseException(response.getHttpResponse())
+//					}
+//				}
+//			} catch (ex: Exception) {
+//				ex.printStackTrace()
+//				Snackbar.make(binding.root, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG).setAction(getString(R.string.dismiss)) {}.show()
+//				if (ex is ResponseException) {
+//					ex.printResponseException()
+//				}
+//			} finally {
+//				try {
+//
+//				} catch (ex: Exception) {
+//				}
+//			}
+//		}
+		
+		lifecycleScope.launch(Dispatchers.Main) {
+			try {
+				delay(100)
+				binding.mainEditSearch.clearFocus()
+			} catch (ex: Exception) {
+				ex.printStackTrace()
+			}
+		}
 	}
 	
 	private fun BottomSheetDialog.delayToHideAndUpdate() {
 		val dismissDelay = 50L
+		viewModel.searchContent.value = ""
 		lifecycleScope.launch(Dispatchers.Main) {
 			delay(dismissDelay)
 			dismiss()
@@ -216,69 +267,40 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				}
 				
 				EasyFunctions.stackLoading(refresh, viewModel.posts, viewModel.listOffset) {
-					RetrofitInstance.api.getPosts(
-						email = application.currentUser.value?.email ?: "",
-						password = application.currentUser.value?.password ?: "",
-						offset = viewModel.listOffset.value!!,
-						postsLimit = viewModel.postsLimit.value!!,
-						seed = viewModel.randomSeed.value!!,
-					)
+					if (viewModel.searchContent.value?.isBlank() == false) {//search
+						RetrofitInstance.api.getPostsBySearch(
+							email = application.getCurrentEmail(),
+							password = application.getCurrentPassword(),
+							search = viewModel.searchContent.value!!,
+							offset = viewModel.listOffset.value!!
+						)
+					} else {
+						RetrofitInstance.api.getPosts(
+							email = application.currentUser.value?.email ?: "",
+							password = application.currentUser.value?.password ?: "",
+							offset = viewModel.listOffset.value!!,
+							postsLimit = viewModel.postsLimit.value!!,
+							seed = viewModel.randomSeed.value!!,
+						)
+					}
 				}
-//
-//				var list: List<Post> = if (refresh) emptyList() else viewModel.posts.value!!
-//
-//				var triedCount = 0
-//				do {
-//					println("tried $triedCount")
-//					val new: List<Post> = withContext(Dispatchers.IO) {
-//						val response = RetrofitInstance.api.getPosts(
-//							email = application.currentUser.value?.email ?: "",
-//							password = application.currentUser.value?.password ?: "",
-//							offset = viewModel.listOffset.value!!,
-//							postsLimit = viewModel.postsLimit.value!!,
-//							seed = viewModel.randomSeed.value!!,
-//						)
-//						if (response.isSuccessful) {
-//							response.body() ?: emptyList()
-//						} else {
-//							throw ResponseException(response.getHttpResponse())
-//						}
-//					}
-//					var count = 0
-//					if (new.isNotEmpty()) {
-//						for (item in new) {
-//							if (list.any { it.id == item.id }) {
-//								continue
-//							}
-//							list = list.plus(item)
-//							count++
-//						}
-//						viewModel.listOffset.value = viewModel.listOffset.value!!.plus(count)
-//					}
-//					viewModel.posts.value = list
-//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				success = false
 				Snackbar.make(binding.root, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG).setAction(getString(R.string.dismiss)) {}.show()
 				ex.printStackTrace()
-				when (ex) {
-					is HttpException -> {
-						println(ex.response()?.getHttpResponse())
-					}
-					is ResponseException -> {
-						println(ex.response)
-					}
-					is EOFException -> {
-						println("http json is wrong")
-					}
-					is SocketTimeoutException -> {
-						println("Time out")
-					}
+				if (ex is ResponseException) {
+					ex.printResponseException()
 				}
 			} finally {
 				try {
-					if (scrollToTop) {
-						binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+					lifecycleScope.launch {
+						try {
+							delay(100)
+							if (scrollToTop) {
+								binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+							}
+						} catch (ex: Exception) {
+						}
 					}
 					if (showSwipeRefreshing) {
 						binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up

@@ -14,5 +14,5 @@ class MainActivityViewModel : ViewModel() {
 	val listOffset: MutableLiveData<Int> by lazy { MutableLiveData(0) }
 	val randomSeed: MutableLiveData<Int> by lazy { MutableLiveData(1) }
 	
-	
+	val searchContent: MutableLiveData<String> by lazy { MutableLiveData("") }
 }

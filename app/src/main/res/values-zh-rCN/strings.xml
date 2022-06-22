@@ -187,6 +187,8 @@
 	<string name="select">选择</string>
 	<string name="no_messages">没有消息</string>
 	<string name="chat">聊天</string>
+	<string name="picture_saved">图标已保存</string>
+	<string name="info">信息</string>
 
 
 </resources>

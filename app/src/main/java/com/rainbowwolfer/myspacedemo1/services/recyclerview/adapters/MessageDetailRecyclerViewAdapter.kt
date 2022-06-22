@@ -100,28 +100,48 @@ class MessageDetailRecyclerViewAdapter(
 		list = emptyList()
 	}
 	
-	fun setData(new: List<Message>) {
-		try {
-			val result = list.toMutableList()
-			for (i in new) {
-				var found: Message? = null
-				for (j in result) {
-					if (i.id == j.id) {
-						found = j
-					}
-				}
-				if (found != null) {
-					found.hasReceived = i.hasReceived
-				} else {
-					result.add(i)
-				}
+	fun addData(new: Message) {
+		val newList = list.toMutableList()
+		var found = false
+		for (item in newList) {
+			if (item.id == new.id) {
+				found = true
 			}
-			result.sortByDescending { it.dateTime }
-			val diffUtil = DatabaseIdDiffUtil(list, result)
-			list = result
-			DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
-		} catch (ex: Exception) {
-			ex.printStackTrace()
 		}
+		if (!found) {
+			newList.add(new)
+		}
+		val diffUtil = DatabaseIdDiffUtil(list, newList)
+		list = newList
+		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+	}
+	
+	fun setData(new: List<Message>) {
+		val diffUtil = DatabaseIdDiffUtil(list, new)
+		list = new
+		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+
+//		try {
+//			val result = list.toMutableList()
+//			for (i in new) {
+//				var found: Message? = null
+//				for (j in result) {
+//					if (i.id == j.id) {
+//						found = j
+//					}
+//				}
+//				if (found != null) {
+//					found.hasReceived = i.hasReceived
+//				} else {
+//					result.add(i)
+//				}
+//			}
+//			result.sortByDescending { it.dateTime }
+//			val diffUtil = DatabaseIdDiffUtil(list, result)
+//			list = result
+//			DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+//		} catch (ex: Exception) {
+//			ex.printStackTrace()
+//		}
 	}
 }
