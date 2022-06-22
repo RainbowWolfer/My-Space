@@ -35,7 +35,6 @@ object ChatSocket {
 				BufferedReader(client!!.getInputStream().reader()).use { r ->
 					r.lineSequence().forEach {
 						withContext(Dispatchers.Main) {
-//							println(it)
 							read.value = it
 						}
 					}
@@ -73,13 +72,13 @@ object ChatSocket {
 				line.startsWith(COMMAND_RECEIVE) -> {
 					val args = line.split(' ')
 					val senderID = args[1]
-					val content = args.takeLast(2).joinToString(" ")
+					val content = args.slice(2 until args.size).joinToString(" ")
 					val message = Message(
 						id = 0,
 						senderID = senderID,
 						receiverID = application.getCurrentID(),
 						dateTime = DateTime.now().getDateTime(),
-						textContent = content,
+						textContent = content.trim(),
 						hasReceived = false,
 					)
 					onReceivedMessage.invoke(message)

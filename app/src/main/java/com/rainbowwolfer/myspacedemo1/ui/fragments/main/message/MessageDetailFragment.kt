@@ -67,6 +67,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		class WrapContentLinearLayoutManager : LinearLayoutManager(requireContext()) {
 			override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
 				try {
+					binding.messageDetailRecyclerView.scrollToPosition(0)
 					super.onLayoutChildren(recycler, state)
 				} catch (ex: IndexOutOfBoundsException) {
 					//java.lang.IndexOutOfBoundsException: Inconsistency detected
@@ -98,10 +99,18 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 					message.hasReceived = true
 					//add to adapter
 					adapter.setData(listOf(message))
-					binding.messageDetailRecyclerView.smoothScrollToPosition(0)//maybe not
 					//add to room
 					lifecycleScope.launch(Dispatchers.IO) {
 						application.roomRepository.insertMessages(message)
+					}
+//					(binding.messageDetailRecyclerView.layoutManager as LinearLayoutManager).
+					lifecycleScope.launch(Dispatchers.Main) {
+						try {
+//							delay(100)
+//							binding.messageDetailRecyclerView.scrollToPosition(0)
+						} catch (ex: Exception) {
+							ex.printStackTrace()
+						}
 					}
 				}
 			}
@@ -115,7 +124,6 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 			if (content.isBlank()) {
 				return@setOnClickListener
 			}
-			
 			ChatSocket.console("/sign ${application.getCurrentID()}")
 			ChatSocket.console("/msg ${contact.senderID} $content")
 			
@@ -209,7 +217,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_info -> {
-				findNavController().navigate(R.id.nav_profile, Bundle().apply {
+				findNavController().navigate(R.id.sub_nav_profile, Bundle().apply {
 					putString("user_id", contact.senderID.toString())
 					putBoolean(UserFragment.ARG_ENABLE_MESSAGE, false)
 				}, defaultTransitionNavOption())

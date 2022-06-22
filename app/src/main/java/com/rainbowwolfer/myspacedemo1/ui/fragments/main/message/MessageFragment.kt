@@ -64,10 +64,16 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 							contact = c
 						}
 					}
+					println(contact)
 					if (contact != null) {
 						contact.textContent = message.textContent
 						contact.dateTime = message.dateTime
 						contact.unreadCount += 1
+						println(contact)
+						adapter.setData(listOf(contact))
+						lifecycleScope.launch(Dispatchers.IO) {
+							application.roomRepository.updateContact(contact)
+						}
 					} else {
 						val new = MessageContact(
 							senderID = message.senderID.toLong(),
@@ -78,7 +84,6 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 						)
 						lifecycleScope.launch(Dispatchers.Main) {
 							try {
-								viewModel.contacts.value = viewModel.contacts.value!!.plus(new)
 								withContext(Dispatchers.IO) {
 									val response = RetrofitInstance.api.getUser(message.senderID)
 									if (response.isSuccessful) {
@@ -86,6 +91,7 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 									} else {
 										throw ResponseException(response.getHttpResponse())
 									}
+									viewModel.contacts.value = viewModel.contacts.value!!.plus(new)
 									application.roomRepository.insertContacts(new)
 								}
 							} catch (ex: Exception) {
@@ -105,6 +111,7 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		}
 		
 		viewModel.contacts.observe(viewLifecycleOwner) {
+			println("update")
 			adapter.setData(it)
 		}
 		
@@ -169,7 +176,7 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_selection -> {
-				ChatSocket.console("/nick ${MySpaceApplication.instance.getCurrentID()}\n")
+				
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

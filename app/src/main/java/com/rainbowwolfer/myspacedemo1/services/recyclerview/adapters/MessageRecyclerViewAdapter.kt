@@ -62,14 +62,13 @@ class MessageRecyclerViewAdapter(
 		}
 	}
 	
-	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
 			val data = list[position]
 			
 			holder.binding.messageRowTextUsername.text = data.username
 			holder.binding.messageRowTextDatetime.text = data.dateTime.convertToRecentFormat(context)
-			holder.binding.messageRowTextContent.text = (if (data.senderID.toString() == application.getCurrentID()) ">> " else "<< ") + data.textContent
+			holder.binding.messageRowTextContent.text = /*(if (data.senderID.toString() == application.getCurrentID()) ">> " else "<< ") + */data.textContent
 			holder.binding.messageRowTextUnreadCount.text = if (data.unreadCount >= 100) "99+" else "${data.unreadCount}"
 			holder.binding.messageRowTextUnreadCount.visibility = if (data.unreadCount == 0) View.GONE else View.VISIBLE
 			
@@ -82,19 +81,20 @@ class MessageRecyclerViewAdapter(
 					putParcelable(MessageDetailFragment.ARG_CONTACT, data)
 				})
 			}
-			
-			holder.binding.messageRowTextUnreadCount.textSize = context.resources.getDimension(
-				when (data.unreadCount) {
-					in 0..9 -> R.dimen.font_size_14sp
-					in 10..99 -> R.dimen.font_size_12sp
-					else -> R.dimen.font_size_10sp //99+
-				}
-			)
+
+//			holder.binding.messageRowTextUnreadCount.textSize = context.resources.getDimension(
+//				when (data.unreadCount) {
+//					in 0..9 -> R.dimen.font_size_14sp
+//					in 10..99 -> R.dimen.font_size_12sp
+//					else -> R.dimen.font_size_10sp //99+
+//				}
+//			)
 		}
 	}
 	
 	override fun getItemCount(): Int = list.size + 1
 	
+	@SuppressLint("NotifyDataSetChanged")
 	fun setData(new: List<MessageContact>) {
 		val result = list.toMutableList()
 		for (i in new) {
@@ -113,8 +113,11 @@ class MessageRecyclerViewAdapter(
 				result.add(i)
 			}
 		}
-		val diffUtil = DatabaseIdDiffUtil(list, result)
+//		val diffUtil = DatabaseIdDiffUtil(list, result)
+		println(list)
+		println(result)
 		list = result
-		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+		notifyDataSetChanged()
+//		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

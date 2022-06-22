@@ -28,6 +28,7 @@ import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.chat.ChatSocket
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasUserValue
 import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
@@ -101,6 +102,8 @@ class MainActivity : AppCompatActivity() {
 						withContext(Dispatchers.Main) {
 							application.currentUser.value = user
 						}
+						ChatSocket.connect(true)
+						ChatSocket.console("/sign ${user.id}")
 					} catch (ex: Exception) {
 						ex.printStackTrace()
 					}
