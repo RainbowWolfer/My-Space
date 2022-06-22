@@ -32,6 +32,7 @@ import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOpt
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.DateTime
@@ -93,22 +94,8 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		}
 		try {
 			ChatSocket.read.observe(viewLifecycleOwner) {
-//				try {
-				val line = it.trim().trim('\n', '\r')
-				println(line)
-				if (line.startsWith("/receive")) {
-					val args = line.split(' ')
-					val senderID = args[1]
-					val content = args.takeLast(2).joinToString(" ")
-					val message = Message(
-						id = 0,
-						senderID = senderID,
-						receiverID = application.getCurrentID(),
-						dateTime = DateTime.now().getDateTime(),
-						textContent = content,
-						hasReceived = true,
-					)
-					
+				ChatSocket.handle(it) { message ->
+					message.hasReceived = true
 					//add to adapter
 					adapter.setData(listOf(message))
 					binding.messageDetailRecyclerView.smoothScrollToPosition(0)//maybe not
@@ -116,23 +103,46 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 					lifecycleScope.launch(Dispatchers.IO) {
 						application.roomRepository.insertMessages(message)
 					}
-					println(message)
 				}
-//				} catch (ex: Exception) {
-//					ex.printStackTrace()
-//				}
 			}
 		} catch (ex: Exception) {
 			ex.printStackTrace()
 		}
 		
 		binding.messageButtonSend.setOnClickListener {
+			//send message
 			val content = binding.messageEditContent.text.toString()
 			if (content.isBlank()) {
 				return@setOnClickListener
 			}
+			
 			ChatSocket.console("/sign ${application.getCurrentID()}")
 			ChatSocket.console("/msg ${contact.senderID} $content")
+			
+			val message = Message(
+				id = 0,
+				senderID = application.getCurrentID(),
+				receiverID = contact.senderID.toString(),
+				dateTime = DateTime.now().getDateTime(),
+				textContent = content,
+				hasReceived = false,
+			)
+			// add to adapter
+			adapter.setData(listOf(message))
+			binding.messageEditContent.setText("")
+			
+			// add to room
+			lifecycleScope.launch(Dispatchers.IO) {
+				application.roomRepository.insertMessages(message)
+			}
+			lifecycleScope.launch(Dispatchers.Main) {
+				try {
+					delay(100)
+					binding.messageDetailRecyclerView.smoothScrollToPosition(0)
+				} catch (ex: Exception) {
+					ex.printStackTrace()
+				}
+			}
 		}
 		
 		loadMessages(true)

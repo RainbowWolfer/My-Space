@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageBinding
 import com.rainbowwolfer.myspacedemo1.models.MessageContact
+import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUser
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -53,7 +54,46 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		
 		try {
 			ChatSocket.read.observe(viewLifecycleOwner) {
-				println(it)
+				ChatSocket.handle(it) { message ->
+					//check contact exists
+					message.hasReceived = false
+					
+					var contact: MessageContact? = null
+					for (c in viewModel.contacts.value!!) {
+						if (c.senderID.toString() == message.senderID) {
+							contact = c
+						}
+					}
+					if (contact != null) {
+						contact.textContent = message.textContent
+						contact.dateTime = message.dateTime
+						contact.unreadCount += 1
+					} else {
+						val new = MessageContact(
+							senderID = message.senderID.toLong(),
+							username = application.usersPool.findUser(message.senderID)?.username ?: getString(R.string.not_found),
+							textContent = message.textContent,
+							dateTime = message.dateTime,
+							unreadCount = 1,
+						)
+						lifecycleScope.launch(Dispatchers.Main) {
+							try {
+								viewModel.contacts.value = viewModel.contacts.value!!.plus(new)
+								withContext(Dispatchers.IO) {
+									val response = RetrofitInstance.api.getUser(message.senderID)
+									if (response.isSuccessful) {
+										new.username = response.body()?.username ?: getString(R.string.not_found)
+									} else {
+										throw ResponseException(response.getHttpResponse())
+									}
+									application.roomRepository.insertContacts(new)
+								}
+							} catch (ex: Exception) {
+								ex.printStackTrace()
+							}
+						}
+					}
+				}
 			}
 		} catch (ex: Exception) {
 			ex.printStackTrace()
