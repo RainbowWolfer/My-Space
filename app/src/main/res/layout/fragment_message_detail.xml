@@ -30,7 +30,7 @@
 		app:layout_constraintStart_toStartOf="parent">
 		
 		<androidx.appcompat.widget.AppCompatImageButton
-			android:id="@+id/button"
+			android:id="@+id/message_button_send"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
@@ -48,6 +48,7 @@
 			app:layout_constraintTop_toTopOf="parent"/>
 		
 		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/message_input_content"
 			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
@@ -57,17 +58,18 @@
 			android:layout_marginBottom="8dp"
 			android:minHeight="48dp"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toStartOf="@+id/button"
+			app:layout_constraintEnd_toStartOf="@+id/message_button_send"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent">
 			
 			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/message_edit_content"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:maxLines="1"
 				android:paddingTop="10dp"
 				android:paddingBottom="10dp"
-				android:text="Hello World"/>
+				tools:text="Hello World"/>
 		</com.google.android.material.textfield.TextInputLayout>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,10 +51,6 @@ class ImagesDisplayActivity : AppCompatActivity() {
 		post = application.postsPool.findPostInfo(postID)?.post ?: return
 		current = intent.getIntExtra(ARG_CURRENT, -1)
 		
-		println(postID)
-		println(post)
-		println(current)
-		
 		setMetas(postID)
 		updateVoteButtons(binding.imagesDisplayButtonUp, binding.imagesDisplayButtonDown, post.readVoted())
 		

@@ -1,13 +1,13 @@
 package com.rainbowwolfer.myspacedemo1.services.chat
 
 import androidx.lifecycle.MutableLiveData
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.net.Socket
+import java.net.SocketException
 
 object ChatSocket {
 	private const val host = "www.cqtest.top"
@@ -25,7 +25,7 @@ object ChatSocket {
 				BufferedReader(client!!.getInputStream().reader()).use { r ->
 					r.lineSequence().forEach {
 						withContext(Dispatchers.Main) {
-							println(it)
+//							println(it)
 							read.value = it
 						}
 					}
@@ -40,11 +40,14 @@ object ChatSocket {
 	fun console(string: String) {
 		CoroutineScope(Dispatchers.IO).launch {
 			val result = kotlin.runCatching {
-				println(client!!.isConnected)
-				client!!.outputStream.write("/nick ${MySpaceApplication.instance.getCurrentID()}\n".toByteArray())
+				println("Sending : $string")
+				client!!.outputStream.write((string + "\n").toByteArray())
 			}.exceptionOrNull()
 			if (result is Throwable) {
 				result.printStackTrace()
+				if (result is SocketException) {
+					connect(true)
+				}
 			}
 		}
 	}

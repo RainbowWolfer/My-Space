@@ -101,23 +101,27 @@ class MessageDetailRecyclerViewAdapter(
 	}
 	
 	fun setData(new: List<Message>) {
-		val result = list.toMutableList()
-		for (i in new) {
-			var found: Message? = null
-			for (j in result) {
-				if (i.id == j.id) {
-					found = j
+		try {
+			val result = list.toMutableList()
+			for (i in new) {
+				var found: Message? = null
+				for (j in result) {
+					if (i.id == j.id) {
+						found = j
+					}
+				}
+				if (found != null) {
+					found.hasReceived = i.hasReceived
+				} else {
+					result.add(i)
 				}
 			}
-			if (found != null) {
-				found.hasReceived = i.hasReceived
-			} else {
-				result.add(i)
-			}
+			result.sortByDescending { it.dateTime }
+			val diffUtil = DatabaseIdDiffUtil(list, result)
+			list = result
+			DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+		} catch (ex: Exception) {
+			ex.printStackTrace()
 		}
-		result.sortByDescending { it.dateTime }
-		val diffUtil = DatabaseIdDiffUtil(list, result)
-		list = result
-		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

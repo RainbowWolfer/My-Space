@@ -13,6 +13,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageDetailBinding
 import com.rainbowwolfer.myspacedemo1.models.Message
@@ -21,15 +23,18 @@ import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.models.flag.FlagMessage
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.chat.ChatSocket
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MessageDetailRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.viewmodel.MessageFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOption
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.joda.time.DateTime
 
 
 class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
@@ -58,7 +63,17 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		
 		(requireActivity() as AppCompatActivity).supportActionBar?.title = requireContext().getString(R.string.chat) + " " + contact.username
 		
-		binding.messageDetailRecyclerView.layoutManager = LinearLayoutManager(requireContext()).apply {
+		class WrapContentLinearLayoutManager : LinearLayoutManager(requireContext()) {
+			override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
+				try {
+					super.onLayoutChildren(recycler, state)
+				} catch (ex: IndexOutOfBoundsException) {
+					//java.lang.IndexOutOfBoundsException: Inconsistency detected
+					ex.printStackTrace()
+				}
+			}
+		}
+		binding.messageDetailRecyclerView.layoutManager = WrapContentLinearLayoutManager().apply {
 			reverseLayout = true
 		}
 		binding.messageDetailRecyclerView.adapter = adapter
@@ -75,6 +90,49 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		binding.messageDetailRecyclerView.scrollToUpdate {
 			loadMessages(false)
 //			println("SCROLL UPDATE")
+		}
+		try {
+			ChatSocket.read.observe(viewLifecycleOwner) {
+//				try {
+				val line = it.trim().trim('\n', '\r')
+				println(line)
+				if (line.startsWith("/receive")) {
+					val args = line.split(' ')
+					val senderID = args[1]
+					val content = args.takeLast(2).joinToString(" ")
+					val message = Message(
+						id = 0,
+						senderID = senderID,
+						receiverID = application.getCurrentID(),
+						dateTime = DateTime.now().getDateTime(),
+						textContent = content,
+						hasReceived = true,
+					)
+					
+					//add to adapter
+					adapter.setData(listOf(message))
+					binding.messageDetailRecyclerView.smoothScrollToPosition(0)//maybe not
+					//add to room
+					lifecycleScope.launch(Dispatchers.IO) {
+						application.roomRepository.insertMessages(message)
+					}
+					println(message)
+				}
+//				} catch (ex: Exception) {
+//					ex.printStackTrace()
+//				}
+			}
+		} catch (ex: Exception) {
+			ex.printStackTrace()
+		}
+		
+		binding.messageButtonSend.setOnClickListener {
+			val content = binding.messageEditContent.text.toString()
+			if (content.isBlank()) {
+				return@setOnClickListener
+			}
+			ChatSocket.console("/sign ${application.getCurrentID()}")
+			ChatSocket.console("/msg ${contact.senderID} $content")
 		}
 		
 		loadMessages(true)
