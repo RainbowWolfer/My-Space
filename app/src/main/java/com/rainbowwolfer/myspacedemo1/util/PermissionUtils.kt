@@ -14,7 +14,7 @@ object PermissionUtils {
     var REQUEST_CODE = 2022 //任意标识
 
     /**
-     * 权限检查
+     * 请求权限
      * @param ct 当前Activity
      * @param permissions 需要检查的权限
      * @return boolean
@@ -27,8 +27,10 @@ object PermissionUtils {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 //申请权限 参数分别是 上下文、权限集合(String)、请求码
-                ActivityCompat.requestPermissions((ct as Activity),
-                    permissions.toTypedArray(), REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    (ct as Activity),
+                    permissions.toTypedArray(), REQUEST_CODE
+                )
             }
         }
         return true
@@ -48,10 +50,17 @@ object PermissionUtils {
         return flag
     }
 
+    /**
+     * Request permissions x
+     * 请求权限
+     * @param activity
+     * @param permissions
+     * @param callback
+     */
     fun requestPermissionsX(
         activity: FragmentActivity,
         permissions: List<String>,
-        callback: RequestCallback?
+        callback: RequestCallback? = null
     ) {
         PermissionX.init(activity).permissions(permissions).request(callback)
     }

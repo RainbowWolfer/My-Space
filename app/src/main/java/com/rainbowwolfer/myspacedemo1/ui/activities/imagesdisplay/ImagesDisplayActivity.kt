@@ -236,8 +236,8 @@ class ImagesDisplayActivity : AppCompatActivity() {
                         )
                     ) {
                         if (PermissionUtils.requestPermissions(this, permissionList)) {
-                            ImageUtils.saveBitmap(bitmap!!.bitmap.value!!)
-                            Toast.makeText(this, "Create!!", Toast.LENGTH_SHORT).show()
+                            ImageUtils.saveBitmap(bitmap!!.bitmap.value!!,"AAA/BB","Img")
+                            Toast.makeText(this, "已保存!!", Toast.LENGTH_SHORT).show()
                         }
                     }
 
