@@ -7,18 +7,21 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.viewbinding.library.activity.viewBinding
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityImagesDisplayBinding
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
+import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.getImage
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateRepostButton
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.imagesdisplay.adapters.ImagesPoolViewPagerAdapter
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
+import com.rainbowwolfer.myspacedemo1.util.ImageUtils
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
 
@@ -62,7 +65,7 @@ class ImagesDisplayActivity : AppCompatActivity() {
 			this.currentItem = current
 			this.setCurrentItem(currentItem, false)
 		}
-
+		
 		binding.imagesDisplayButtonUp.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
 			if (post.readVoted() != Post.VOTE_UP) {
@@ -77,10 +80,10 @@ class ImagesDisplayActivity : AppCompatActivity() {
 				post.updateVoted(Post.VOTE_NONE)
 				post.updateUpvotes(-1)
 			}
-
+			
 			updateVoteButtons(binding.imagesDisplayButtonUp, binding.imagesDisplayButtonDown, post.readVoted())
 			setMetas(postID)
-
+			
 			with(application.postsPool.findRelativePosts(post.readID())) {
 				this.forEach {
 					if (it.isRepost) {
@@ -95,7 +98,7 @@ class ImagesDisplayActivity : AppCompatActivity() {
 				}
 			}
 		}
-
+		
 		binding.imagesDisplayButtonDown.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
 			if (post.readVoted() != Post.VOTE_DOWN) {
@@ -110,10 +113,10 @@ class ImagesDisplayActivity : AppCompatActivity() {
 				post.updateVoted(Post.VOTE_NONE)
 				post.updateDownvotes(-1)
 			}
-
+			
 			updateVoteButtons(binding.imagesDisplayButtonUp, binding.imagesDisplayButtonDown, post.readVoted())
 			setMetas(postID)
-
+			
 			with(application.postsPool.findRelativePosts(post.readID())) {
 				this.forEach {
 					if (it.isRepost) {
@@ -127,15 +130,15 @@ class ImagesDisplayActivity : AppCompatActivity() {
 					}
 				}
 			}
-
+			
 		}
-
+		
 		binding.imagesDisplayButtonComment.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
 			SheetDialogUtil.showCommentDialog(this, post.readID()) {
 				post.updateComments(1)
 				setMetas(post.readID())
-
+				
 				with(application.postsPool.findRelativePosts(post.readID())) {
 					this.forEach {
 						if (it.isRepost) {
@@ -147,13 +150,13 @@ class ImagesDisplayActivity : AppCompatActivity() {
 				}
 			}
 		}
-
+		
 		binding.imagesDisplayButtonRepost.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
 			SheetDialogUtil.showRepostDialog(this, post.readID()) {
 				post.updateReposts(1)
 				setMetas(post.readID())
-
+				
 				with(application.postsPool.findRelativePosts(post.readID())) {
 					this.forEach {
 						if (it.isRepost) {
@@ -199,7 +202,14 @@ class ImagesDisplayActivity : AppCompatActivity() {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_download -> {
-				
+				try {
+					val position = binding.imagesDisplayViewPager2.currentItem
+					val bitmap = MySpaceApplication.instance.postsPool.getImage(postID, position)
+					Toast.makeText(this, "$position ${bitmap?.bitmap}", Toast.LENGTH_SHORT).show()
+					ImageUtils.saveBitmap(bitmap!!.bitmap.value!!)
+				} catch (ex: Exception) {
+					ex.printStackTrace()
+				}
 				true
 			}
 			android.R.id.home -> {

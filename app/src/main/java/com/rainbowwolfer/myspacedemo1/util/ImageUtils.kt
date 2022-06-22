@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-object ImgUtils {
+object ImageUtils {
     val picasso: Picasso by lazy {
         Picasso.get()
     }
