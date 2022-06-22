@@ -60,8 +60,6 @@ object ImgDownload {
             .error(R.drawable.ic_img_error)
             .get()
     }
-
-
     /*
        load(Uri?)
        load(File)
