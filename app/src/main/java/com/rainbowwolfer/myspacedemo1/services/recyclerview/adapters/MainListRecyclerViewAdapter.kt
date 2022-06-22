@@ -388,7 +388,7 @@ class MainListRecyclerViewAdapter(
 		this.setButtons(p.readID())//inlcude writes
 		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, p.readVoted())
 		updateRepostButton(this.rowImageRepostButtonIcon, p.hasReposted)
-		this.loadImages(if (p.isRepost) p.getOriginPost()!! else p)
+		this.setImages(if (p.isRepost) p.getOriginPost()!! else p)
 	}
 	
 	private fun MainRowLayoutBinding.setRepostView(isRepost: Boolean) {
@@ -451,7 +451,7 @@ class MainListRecyclerViewAdapter(
 		}
 	}
 	
-	private fun MainRowLayoutBinding.loadImages(post: Post) {
+	private fun MainRowLayoutBinding.setImages(post: Post) {
 		this.rowGridviewImages.presetGridViewHeight(post.imagesCount)
 		if (post.imagesCount == 0) {
 			return
@@ -461,13 +461,7 @@ class MainListRecyclerViewAdapter(
 		this.rowGridviewImages.adapter = ImagesDisplayGridViewAdapter(context, post).also {
 			it.list = colors
 		}
-		loadImages(this.rowGridviewImages, post, lifecycleOwner) {
-//			if (it) {
-//				application.postsPool.findRelativePosts(post.id).apply {
-//					updatePositions(this)
-//				}
-//			}
-		}
+		loadImages(rowGridviewImages, post, lifecycleOwner)
 	}
 	
 	private fun updatePositions(changes: List<Post>, onlyCompareID: Boolean = true) {

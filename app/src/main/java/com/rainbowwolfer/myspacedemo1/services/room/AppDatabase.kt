@@ -15,8 +15,8 @@ import com.rainbowwolfer.myspacedemo1.services.room.dao.MessagesDao
 	entities = [
 		Draft::class,
 		Message::class,
-		MessageContact::class
-	], version = 1, exportSchema = true
+		MessageContact::class,
+	], version = 2, exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 	abstract fun draftsDao(): DraftsDao
@@ -47,12 +47,13 @@ abstract class AppDatabase : RoomDatabase() {
 		private var instance: AppDatabase? = null
 		
 		fun getDatabase(context: Context): AppDatabase {
+			println("new one!")
 			return instance ?: synchronized(this) {
 				val buildInstance = Room.databaseBuilder(
-					context.applicationContext,
+					context,
 					AppDatabase::class.java,
 					"myspace_app_database"
-				).build()
+				).fallbackToDestructiveMigration().build()
 				this.instance = buildInstance
 				buildInstance
 			}

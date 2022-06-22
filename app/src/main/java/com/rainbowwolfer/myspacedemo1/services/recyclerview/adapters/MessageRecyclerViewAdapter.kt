@@ -1,5 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -61,13 +62,16 @@ class MessageRecyclerViewAdapter(
 		}
 	}
 	
+	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowViewHolder) {
 			val data = list[position]
 			
 			holder.binding.messageRowTextUsername.text = data.username
 			holder.binding.messageRowTextDatetime.text = data.dateTime.convertToRecentFormat(context)
-			holder.binding.messageRowTextContent.text = data.textContent
+			holder.binding.messageRowTextContent.text = (if (data.senderID.toString() == application.getCurrentID()) ">> " else "<< ") + data.textContent
+			holder.binding.messageRowTextUnreadCount.text = if (data.unreadCount >= 100) "99+" else "${data.unreadCount}"
+			holder.binding.messageRowTextUnreadCount.visibility = if (data.unreadCount == 0) View.GONE else View.VISIBLE
 			
 			application.findOrGetAvatar(data.senderID.toString()) {
 				holder.binding.messageRowImageAvatar.setImageBitmap(it)
@@ -78,14 +82,39 @@ class MessageRecyclerViewAdapter(
 					putParcelable(MessageDetailFragment.ARG_CONTACT, data)
 				})
 			}
+			
+			holder.binding.messageRowTextUnreadCount.textSize = context.resources.getDimension(
+				when (data.unreadCount) {
+					in 0..9 -> R.dimen.font_size_14sp
+					in 10..99 -> R.dimen.font_size_12sp
+					else -> R.dimen.font_size_10sp //99+
+				}
+			)
 		}
 	}
 	
 	override fun getItemCount(): Int = list.size + 1
 	
 	fun setData(new: List<MessageContact>) {
-		val diffUtil = DatabaseIdDiffUtil(list, new)
-		list = new
+		val result = list.toMutableList()
+		for (i in new) {
+			var found: MessageContact? = null
+			for (j in result) {
+				if (i.senderID == j.senderID) {
+					found = j
+				}
+			}
+			if (found != null) {
+				found.username = i.username
+				found.dateTime = i.dateTime
+				found.textContent = i.textContent
+				found.unreadCount = i.unreadCount
+			} else {
+				result.add(i)
+			}
+		}
+		val diffUtil = DatabaseIdDiffUtil(list, result)
+		list = result
 		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

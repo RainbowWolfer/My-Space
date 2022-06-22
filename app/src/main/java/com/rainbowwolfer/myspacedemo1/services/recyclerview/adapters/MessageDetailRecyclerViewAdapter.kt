@@ -97,8 +97,23 @@ class MessageDetailRecyclerViewAdapter(
 	override fun getItemCount(): Int = list.size
 	
 	fun setData(new: List<Message>) {
-		val diffUtil = DatabaseIdDiffUtil(list, new)
-		list = new
+		val result = list.toMutableList()
+		for (i in new) {
+			var found: Message? = null
+			for (j in result) {
+				if (i.id == j.id) {
+					found = j
+				}
+			}
+			if (found != null) {
+				found.hasReceived = i.hasReceived
+			} else {
+				result.add(i)
+			}
+		}
+		result.sortByDescending { it.dateTime }
+		val diffUtil = DatabaseIdDiffUtil(list, result)
+		list = result
 		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

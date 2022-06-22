@@ -3,6 +3,7 @@ package com.rainbowwolfer.myspacedemo1.services.api
 import com.rainbowwolfer.myspacedemo1.models.*
 import com.rainbowwolfer.myspacedemo1.models.api.*
 import com.rainbowwolfer.myspacedemo1.models.enums.PostsLimit
+import com.rainbowwolfer.myspacedemo1.models.flag.FlagMessage
 import com.rainbowwolfer.myspacedemo1.models.records.RepostRecord
 import com.rainbowwolfer.myspacedemo1.models.records.ScoreRecord
 import okhttp3.MultipartBody
@@ -184,7 +185,7 @@ interface MyApi {
 	
 	@POST("post/delete")
 	suspend fun postDelete(
-		@Body body: DeletePost
+		@Body body: DeletePost,
 	): ResponseBody
 	
 	@GET("message/contacts")
@@ -197,7 +198,13 @@ interface MyApi {
 	suspend fun getMessages(
 		@Query("email") email: String,
 		@Query("password") password: String,
+		@Query("contact_id") contactID: String,
 		@Query("offset") offset: Int,
 		@Query("limit") limit: Int = 15,
 	): Response<List<Message>>
+	
+	@POST("message/flagReceived")
+	suspend fun flagReceived(
+		@Body body: FlagMessage,
+	): ResponseBody
 }

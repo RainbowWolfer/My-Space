@@ -15,4 +15,8 @@
 	<dimen name="image_preview_row_1">100dp</dimen>
 	<dimen name="image_preview_row_2">200dp</dimen>
 	<dimen name="image_preview_row_3">300dp</dimen>
+	
+	<dimen name="font_size_14sp">14sp</dimen>
+	<dimen name="font_size_12sp">12sp</dimen>
+	<dimen name="font_size_10sp">10sp</dimen>
 </resources>

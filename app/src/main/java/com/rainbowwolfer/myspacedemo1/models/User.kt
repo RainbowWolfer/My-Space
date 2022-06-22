@@ -9,11 +9,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
-	@SerializedName("ID") var id: String,
+	@SerializedName("ID") val id: String,
 	@SerializedName("Username") var username: String,
 	@SerializedName("Password") var password: String = "",
 	@SerializedName("Email") var email: String,
-	@SerializedName("ProfileDescription") val profileDescription: String,
+	@SerializedName("ProfileDescription") var profileDescription: String,
 	@SerializedName("IsFollowing") var isFollowing: Boolean,
 ) : Parcelable, DatabaseID<String> {
 	companion object : GenerateDefault<User> {

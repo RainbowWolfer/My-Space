@@ -19,8 +19,30 @@ class AppRoomRepository(
 	val allContacts: Flow<List<MessageContact>> = dao_contact.getAll()
 	
 	//message
+	fun getMessagesBySenderID(user_id: String): Flow<List<Message>> {
+		return dao_message.getBySender(user_id)
+	}
+	
+	@WorkerThread
+	suspend fun insertMessages(vararg message: Message) {
+		dao_message.insertAll(*message)
+	}
+	
+	@WorkerThread
+	suspend fun updateMessage(message: Message) {
+		dao_message.update(message)
+	}
 	
 	//message contacts
+	@WorkerThread
+	suspend fun insertContacts(vararg contacts: MessageContact) {
+		dao_contact.insertAll(*contacts)
+	}
+	
+	@WorkerThread
+	suspend fun updateContact(contact: MessageContact) {
+		dao_contact.update(contact)
+	}
 	
 	//draft
 	@WorkerThread

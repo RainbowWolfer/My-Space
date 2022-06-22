@@ -16,7 +16,7 @@ data class Message(
 	@SerializedName("ReceiverID") @ColumnInfo(name = "receiver_id") val receiverID: String,
 	@SerializedName("DateTime") @ColumnInfo(name = "datetime") val dateTime: String,
 	@SerializedName("TextContent") @ColumnInfo(name = "text_content") val textContent: String,
-	@SerializedName("HasReceived") @ColumnInfo(name = "has_received") val hasReceived: Boolean,
+	@SerializedName("HasReceived") @ColumnInfo(name = "has_received") var hasReceived: Boolean,
 ) : Parcelable, DatabaseID<Long> {
 	override fun getDatabaseID(): Long = id
 }

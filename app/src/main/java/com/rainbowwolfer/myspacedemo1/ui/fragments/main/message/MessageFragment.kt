@@ -1,8 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.message
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -10,10 +8,12 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageBinding
+import com.rainbowwolfer.myspacedemo1.models.MessageContact
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -50,10 +50,16 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		
 		binding.messageRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		binding.messageRecyclerView.adapter = adapter
+
+		ChatSocket.read.observe(viewLifecycleOwner) {
+			println(it)
+		}
 		
-//		ChatSocket.read.observe(viewLifecycleOwner) {
-//			println(it)
-//		}
+		
+		val all = application.roomRepository.allContacts
+		all.asLiveData().observe(viewLifecycleOwner) {
+			viewModel.contacts.value = it
+		}
 		
 		viewModel.contacts.observe(viewLifecycleOwner) {
 			adapter.setData(it)
@@ -68,6 +74,10 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		}
 		
 		loadFromServer()
+	}
+	
+	private suspend fun saveLocal(contacts: Array<MessageContact>) {
+		application.roomRepository.insertContacts(*contacts)
 	}
 	
 	private fun loadFromServer() {
@@ -90,6 +100,9 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 					}
 				}
 				viewModel.contacts.value = list
+				withContext(Dispatchers.IO) {
+					saveLocal(list.toTypedArray())
+				}
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is ResponseException) {
@@ -100,6 +113,7 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 					isLoading = false
 					binding.messageSwipeRefreshLayout.isRefreshing = false
 				} catch (ex: Exception) {
+					ex.printStackTrace()
 				}
 			}
 		}

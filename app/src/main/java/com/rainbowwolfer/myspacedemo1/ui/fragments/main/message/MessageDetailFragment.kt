@@ -10,12 +10,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageDetailBinding
+import com.rainbowwolfer.myspacedemo1.models.Message
 import com.rainbowwolfer.myspacedemo1.models.MessageContact
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
+import com.rainbowwolfer.myspacedemo1.models.flag.FlagMessage
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MessageDetailRecyclerViewAdapter
@@ -24,6 +27,7 @@ import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
@@ -57,16 +61,23 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		}
 		binding.messageDetailRecyclerView.adapter = adapter
 		
+		application.roomRepository.getMessagesBySenderID(contact.senderID.toString()).asLiveData().observe(viewLifecycleOwner) {
+			viewModel.messages.value = it
+		}
+		
 		viewModel.messages.observe(viewLifecycleOwner) {
-			adapter.setData(it.filter { message ->
-				message.senderID == contact.senderID.toString()
-			})
+			println(it)
+			adapter.setData(it)
 		}
 		binding.messageDetailRecyclerView.scrollToUpdate {
 			loadMessages(false)
 		}
 		
 		loadMessages(true)
+	}
+	
+	private suspend fun saveLocal(messages: Array<Message>) {
+		application.roomRepository.insertMessages(*messages)
 	}
 	
 	private fun loadMessages(refresh: Boolean) {
@@ -76,15 +87,31 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 					return@launch
 				}
 				isLoading = true
+				if (refresh) {
+					viewModel.messages.value = emptyList()
+					viewModel.offset.value = 0
+				}
 				
 				EasyFunctions.stackLoading(refresh, viewModel.messages, viewModel.offset) {
 					RetrofitInstance.api.getMessages(
 						email = application.getCurrentEmail(),
 						password = application.getCurrentPassword(),
+						contactID = contact.senderID.toString(),
 						offset = viewModel.offset.value ?: 0,
 					)
 				}
 				
+				withContext(Dispatchers.IO) {
+					saveLocal(viewModel.messages.value!!.toTypedArray())
+					RetrofitInstance.api.flagReceived(
+						FlagMessage(
+							email = application.getCurrentEmail(),
+							password = application.getCurrentPassword(),
+							senderID = contact.senderID.toString(),
+							flagHasReceived = true,
+						)
+					)
+				}
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is ResponseException) {

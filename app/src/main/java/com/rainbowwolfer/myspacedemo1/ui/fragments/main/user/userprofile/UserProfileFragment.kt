@@ -196,6 +196,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 									} else {
 										throw Exception()
 									}
+									application.currentUser.value = application.currentUser.value?.apply {
+										username = obj
+									}
 								}
 							} catch (ex: HttpException) {
 								ex.printStackTrace()

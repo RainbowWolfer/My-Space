@@ -12,10 +12,10 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "message_contacts")
 data class MessageContact(
 	@SerializedName("SenderID") @PrimaryKey(autoGenerate = true) val senderID: Long,
-	@SerializedName("Username") @ColumnInfo("username") val username: String,
-	@SerializedName("TextContent") @ColumnInfo("text_content") val textContent: String,
-	@SerializedName("DateTime") @ColumnInfo("datetime") val dateTime: String,
-	@SerializedName("HasUnread") @ColumnInfo("has_unread") val hasUnread: Boolean,
+	@SerializedName("Username") @ColumnInfo("username") var username: String,
+	@SerializedName("TextContent") @ColumnInfo("text_content") var textContent: String,
+	@SerializedName("DateTime") @ColumnInfo("datetime") var dateTime: String,
+	@SerializedName("UnreadCount") @ColumnInfo("unread_count") var unreadCount: Int,
 ) : Parcelable, DatabaseID<Long> {
 	override fun getDatabaseID(): Long = senderID
 }

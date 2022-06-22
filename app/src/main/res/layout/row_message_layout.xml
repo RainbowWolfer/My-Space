@@ -3,6 +3,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/messageRow_cardView_root"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -10,7 +11,7 @@
 	android:background="@drawable/round_background"
 	android:clickable="true"
 	android:focusable="true"
-	android:foreground="@drawable/ripple_small_corners_10dp"> 
+	android:foreground="@drawable/ripple_small_corners_10dp">
 	
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/messageRow_image_avatar"
@@ -35,32 +36,48 @@
 		android:layout_marginEnd="8dp"
 		android:ellipsize="end"
 		android:maxLines="1"
-		android:text="RainbowWolfer"
 		android:textColor="?android:textColorPrimary"
-		android:textSize="18dp"
+		android:textSize="18sp"
 		app:layout_constraintEnd_toStartOf="@+id/messageRow_text_datetime"
 		app:layout_constraintStart_toEndOf="@+id/messageRow_image_avatar"
-		app:layout_constraintTop_toTopOf="@+id/messageRow_image_avatar"/>
+		app:layout_constraintTop_toTopOf="@+id/messageRow_image_avatar"
+		tools:text="RainbowWolfer"/>
 	
 	<TextView
 		android:id="@+id/messageRow_text_content"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
-		android:layout_marginEnd="16dp"
+		android:layout_marginEnd="8dp"
 		android:ellipsize="end"
 		android:maxLines="1"
-		android:text="[Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture]"
 		app:layout_constraintBottom_toBottomOf="@+id/messageRow_image_avatar"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@+id/messageRow_image_avatar"/>
+		app:layout_constraintEnd_toStartOf="@+id/messageRow_text_unreadCount"
+		app:layout_constraintStart_toEndOf="@+id/messageRow_image_avatar"
+		tools:text="[Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture] [Picture]"/>
 	
 	<TextView
 		android:id="@+id/messageRow_text_datetime"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="16dp"
-		android:text="2022-04-22"
 		app:layout_constraintBottom_toBottomOf="@+id/messageRow_text_username"
-		app:layout_constraintEnd_toEndOf="parent"/>
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:text="2022-04-22"/>
+	
+	<TextView
+		android:id="@+id/messageRow_text_unreadCount"
+		android:layout_width="20dp"
+		android:layout_height="20dp"
+		android:layout_marginEnd="16dp"
+		android:background="@drawable/background_red_round"
+		android:gravity="center"
+		android:paddingStart="2dp"
+		android:paddingEnd="1dp"
+		android:textAlignment="center"
+		android:textColor="@color/white"
+		android:textSize="12sp"
+		app:layout_constraintBottom_toBottomOf="@+id/messageRow_image_avatar"
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:text="99"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

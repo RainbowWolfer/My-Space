@@ -19,6 +19,7 @@ class Welcome2Fragment : Fragment(R.layout.fragment_welcome2) {
 			viewPager?.currentItem = 0
 		}
 		binding.welcome2ButtonFinish.setOnClickListener {
+			binding.welcome2ButtonFinish.isEnabled = false
 			SplashFragment.jumpToMainActivity(this)
 		}
 	}

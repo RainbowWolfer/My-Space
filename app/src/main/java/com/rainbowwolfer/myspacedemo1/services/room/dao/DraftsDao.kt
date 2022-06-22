@@ -13,13 +13,13 @@ interface DraftsDao {
 	fun getAllByUser(user_id: String): Flow<List<Draft>>
 	
 	@Insert
-	suspend fun insertAll(vararg users: Draft)
+	suspend fun insertAll(vararg drafts: Draft)
 	
 	@Update(entity = Draft::class)
 	suspend fun update(draft: Draft)
 	
 	@Delete
-	suspend fun delete(user: Draft)
+	suspend fun delete(draft: Draft)
 	
 	@Query("DELETE FROM drafts")
 	suspend fun deleteAll()
