@@ -125,9 +125,6 @@ class FollowersRecyclerViewAdapter(
 				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
 			}
 			
-//			lifecycleOwner.loadAvatar(data.id) {
-//				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
-//			}
 		}
 	}
 	

@@ -79,7 +79,7 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
 				success = false
 				ex.printStackTrace()
 				if (ex is ResponseException) {
-					println(ex.response)
+					ex.printResponseException()
 				}
 			} finally {
 				try {

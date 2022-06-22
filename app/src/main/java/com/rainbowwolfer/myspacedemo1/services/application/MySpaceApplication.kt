@@ -4,7 +4,8 @@ import android.app.Application
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.MutableLiveData
 import com.rainbowwolfer.myspacedemo1.models.PostInfo
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
@@ -38,6 +39,7 @@ class MySpaceApplication : Application() {
 	}
 	
 	val applicationScope = CoroutineScope(SupervisorJob())
+	val appVersion = AppVersion(1, 0, 0, 0)
 	
 	private val room by lazy { AppDatabase.getDatabase(this) }
 	val roomRepository by lazy {
@@ -67,9 +69,6 @@ class MySpaceApplication : Application() {
 		Locale.setDefault(locale)
 		LocaleUtils.notifyLanguageChanged(this)
 	}
-
-
-//	val scoresPool: HashMap<String, Int> = hashMapOf()
 	
 	fun hasLoggedIn() = currentUser.value != null
 	fun getCurrentID(): String = currentUser.value?.id ?: ""
@@ -80,14 +79,6 @@ class MySpaceApplication : Application() {
 		currentUser.value = null
 		currentAvatar.value = null
 	}
-
-//	fun updateVote(postID: String, score: Int) {
-//		scoresPool[postID] = score
-//	}
-//
-//	fun findVote(postID: String): Int {
-//		return scoresPool[postID] ?: 0
-//	}
 	
 	fun updateAvatar() {
 		if (currentUser.value == null) {
@@ -130,7 +121,6 @@ class MySpaceApplication : Application() {
 				onLoadAvatar.invoke(avatarBitmap!!)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
-//				onException.invoke(ex)
 			}
 		}
 	}
@@ -176,7 +166,6 @@ class MySpaceApplication : Application() {
 				onLoadAvatar.invoke(avatarBitmap!!)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
-//				onException.invoke(ex)
 			}
 		}
 	}

@@ -48,13 +48,20 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_small_corners"
+		android:paddingStart="10dp"
+		android:paddingTop="5dp"
+		android:paddingEnd="10dp"
+		android:paddingBottom="5dp"
 		android:text="@string/made_by_rainbowwolfer"
 		app:layout_constraintBottom_toTopOf="@+id/about_text_version"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"/>
 	
 	<com.google.android.material.button.MaterialButton
-		android:id="@+id/button3"
+		android:id="@+id/about_button_update"
 		android:layout_width="260dp"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="24dp"
@@ -65,13 +72,13 @@
 		app:layout_constraintStart_toStartOf="parent"/>
 	
 	<com.google.android.material.button.MaterialButton
-		android:id="@+id/button4"
+		android:id="@+id/about_button_rate"
 		android:layout_width="260dp"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
 		android:text="@string/rate_us_in_appstore"
 		app:icon="@drawable/ic_baseline_rate_review_24"
-		app:layout_constraintBottom_toTopOf="@+id/button3"
+		app:layout_constraintBottom_toTopOf="@+id/about_button_update"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.503"
 		app:layout_constraintStart_toStartOf="parent"/>

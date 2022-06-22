@@ -1,5 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.message
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -64,12 +65,10 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 							contact = c
 						}
 					}
-					println(contact)
 					if (contact != null) {
 						contact.textContent = message.textContent
 						contact.dateTime = message.dateTime
 						contact.unreadCount += 1
-						println(contact)
 						adapter.setData(listOf(contact))
 						lifecycleScope.launch(Dispatchers.IO) {
 							application.roomRepository.updateContact(contact)
@@ -111,7 +110,6 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		}
 		
 		viewModel.contacts.observe(viewLifecycleOwner) {
-			println("update")
 			adapter.setData(it)
 		}
 		
@@ -171,12 +169,19 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 	
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 		inflater.inflate(R.menu.messages_menu, menu)
+		
 	}
 	
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_selection -> {
-				
+//				val contact = viewModel.contacts.value!!.firstOrNull()
+//				if (contact != null) {
+//					contact.unreadCount += 5
+//					adapter.setData(viewModel.contacts.value!!)
+//					println(viewModel.contacts.value!!)
+//					adapter.notifyDataSetChanged()
+//				}
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

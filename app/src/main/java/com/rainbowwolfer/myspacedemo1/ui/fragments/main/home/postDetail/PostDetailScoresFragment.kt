@@ -64,7 +64,6 @@ class PostDetailScoresFragment : Fragment(R.layout.fragment_post_detail_scores) 
 	}
 	
 	private fun enableLoading(boolean: Boolean) {
-		println("enable: $boolean")
 		binding.postDetailScoresRecyclerView.visibility = if (boolean) View.GONE else View.VISIBLE
 		binding.postDetailScoresLoadingBar.visibility = if (!boolean) View.GONE else View.VISIBLE
 	}
@@ -82,32 +81,6 @@ class PostDetailScoresFragment : Fragment(R.layout.fragment_post_detail_scores) 
 				EasyFunctions.stackLoading(refresh, viewModel.scoreRecords, viewModel.scoreRecordsOffset) {
 					RetrofitInstance.api.getScoreRecords(postID, viewModel.scoreRecordsOffset.value ?: 0)
 				}
-//				var triedCount = 0
-//				var list: List<ScoreRecord> = if (refresh) emptyList() else viewModel.scoreRecords.value!!
-//				do {
-//					val new: List<ScoreRecord> = withContext(Dispatchers.IO) {
-//						val response = RetrofitInstance.api.getScoreRecords(postID, viewModel.scoreRecordsOffset.value ?: 0)
-//						if (response.isSuccessful) {
-//							response.body() ?: emptyList()
-//						} else {
-//							throw ResponseException(response.getHttpResponse())
-//						}
-//					}
-//
-//					var count = 0
-//					if (new.isNotEmpty()) {
-//						for (item in new) {
-//							if (list.any { it.likeID == item.likeID }) {
-//								continue
-//							}
-//							list = list.plus(item)
-//							count++
-//						}
-//						viewModel.scoreRecordsOffset.value = viewModel.scoreRecordsOffset.value!!.plus(count)
-//					}
-//
-//					viewModel.scoreRecords.value = list
-//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 			} finally {

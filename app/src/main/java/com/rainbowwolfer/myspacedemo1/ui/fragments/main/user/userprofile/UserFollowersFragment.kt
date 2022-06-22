@@ -81,7 +81,7 @@ class UserFollowersFragment : Fragment(R.layout.fragment_user_followers) {
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is ResponseException) {
-					println(ex.response)
+					ex.printResponseException()
 				}
 			} finally {
 				try {

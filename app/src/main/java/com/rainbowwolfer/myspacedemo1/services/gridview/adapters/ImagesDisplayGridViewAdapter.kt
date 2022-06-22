@@ -27,7 +27,6 @@ class ImagesDisplayGridViewAdapter(
 	context, R.layout.layout_image_display_gridview_item
 ) {
 	companion object {
-		
 		fun GridView.presetGridViewHeight(count: Int) {
 			this.layoutParams.height = context.resources.getDimension(
 				when (count) {
@@ -38,7 +37,6 @@ class ImagesDisplayGridViewAdapter(
 				}
 			).toInt()
 		}
-		
 		
 		fun getShuffledColorLists(context: Context, count: Int): MutableList<Pair<Bitmap?, Int?>> {
 			val colors = arrayListOf(
@@ -119,7 +117,6 @@ class ImagesDisplayGridViewAdapter(
 		} else if (list[position].second != null) {
 			val color = ColorDrawable(list[position].second!!)
 			holder.binding.gridViewItemImageDisplay.setImageDrawable(color)
-//			println("$position : ${color.alpha}")
 			if (color.alpha < 200) {
 				holder.binding.gridViewItemImageDisplay.visibility = View.INVISIBLE
 			}

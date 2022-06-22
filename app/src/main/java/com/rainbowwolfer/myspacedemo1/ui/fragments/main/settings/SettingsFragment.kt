@@ -16,26 +16,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 		list.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
 			val index: Int = list.findIndexOfValue(newValue.toString())
 			if (index != -1) {
-//				val value = list.entryValues[index].toString()
-//				Toast.makeText(
-//					requireContext(),
-//					"" + when (value) {
-//						"cn" -> ""
-//						"en" -> ""
-//						else -> ""
-//					}, Toast.LENGTH_LONG
-//				).show()
 				MainActivity.Instance?.switchAppLanguage()
-//				when (value) {
-//					"cn" -> {
-//						switchAppLanguage(LocaleUtils.Language.Chinese)
-////						changeLanguage(requireContext(), Locale.SIMPLIFIED_CHINESE)
-//					}
-//					"en" -> {
-//						switchAppLanguage(LocaleUtils.Language.English)
-////						changeLanguage(requireContext(), Locale.ENGLISH)
-//					}
-//				}
 			}
 			true
 		}

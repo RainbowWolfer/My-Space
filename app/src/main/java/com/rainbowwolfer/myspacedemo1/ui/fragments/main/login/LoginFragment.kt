@@ -45,10 +45,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 							val email = binding.loginEditTextEmail.text.toString()
 							val password = binding.loginEditTextPassword.text.toString()
 							response = RetrofitInstance.api.tryLogin(email, password)
-//							println(response)
 							if (response!!.isSuccessful) {
 								user = response!!.body()
-//								println(user)
 								if (user != null) {
 									dialog.hideDialog()
 									LoginActivity.Instance?.getBack(user!!)
@@ -56,7 +54,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 							}
 						}
 						if (jobLogin == null || response?.isSuccessful != true || user == null) {
-//							println("result $jobLogin - ${response?.isSuccessful} - $user")
 							val r = response?.getHttpResponse()
 							val errorMessage = when (r?.errorCode) {
 								1 -> getString(R.string.your_registration_has_not_been_validated_through_email)

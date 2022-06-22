@@ -27,7 +27,6 @@ class PostInfo(
 	}
 	
 	companion object {
-		
 		fun ArrayList<PostInfo>.findPostInfo(id: String): PostInfo? {
 			return this.find { it.id == id }
 		}
@@ -52,16 +51,6 @@ class PostInfo(
 			}
 		}
 
-//		
-//		fun ArrayList<PostInfo>.updateImage(id: String, bitmap: Bitmap?, index: Int) {
-//			val found = this.findPostInfo(id) ?: return
-//			if (index !in found.images.indices) {
-//				return
-//			}
-//			found.images[index]?. = bitmap
-//		}
-		
-		
 		fun ArrayList<PostInfo>.getImage(id: String, index: Int): BitmapLoader? {
 			val found = this.findPostInfo(id) ?: return null
 			if (index !in found.images.indices) {

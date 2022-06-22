@@ -51,14 +51,12 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-//		println("Start Here $postID")
 		binding.postDetailRepostsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		binding.postDetailRepostsRecyclerView.adapter = adapter
 		
 		loadRepostRecords(true)
 		
 		viewModel.repostRecords.observe(viewLifecycleOwner) {
-//			println("SET ${it.size}")
 			adapter.setData(it)
 		}
 		
@@ -73,7 +71,6 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 	}
 	
 	private fun loadRepostRecords(refresh: Boolean) {
-//		println("LOADING: refresh:$refresh loading:$isLoading")
 		if (isLoading) {
 			return
 		}
@@ -86,36 +83,10 @@ class PostDetailRepostsFragment : Fragment(R.layout.fragment_post_detail_reposts
 				EasyFunctions.stackLoading(refresh, viewModel.repostRecords, viewModel.repostRecordsOffset) {
 					RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
 				}
-//				var triedCount = 0
-//				var list: List<RepostRecord> = if (refresh) emptyList() else viewModel.repostRecords.value!!
-//				do {
-//					val new: List<RepostRecord> = withContext(Dispatchers.IO) {
-//						val response = RetrofitInstance.api.getRepostRecords(postID, viewModel.repostRecordsOffset.value ?: 0)
-//						if (response.isSuccessful) {
-//							response.body() ?: emptyList()
-//						} else {
-//							throw ResponseException(response.getHttpResponse())
-//						}
-//					}
-//
-//					var count = 0
-//					if (new.isNotEmpty()) {
-//						for (item in new) {
-//							if (list.any { it.postID == item.postID }) {
-//								continue
-//							}
-//							list = list.plus(item)
-//							count++
-//						}
-//						viewModel.repostRecordsOffset.value = viewModel.repostRecordsOffset.value!!.plus(count)
-//					}
-//
-//					viewModel.repostRecords.value = list
-//				} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= 5)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
 				if (ex is ResponseException) {
-					println(ex.response)
+					ex.printResponseException()
 				}
 			} finally {
 				kotlin.runCatching {

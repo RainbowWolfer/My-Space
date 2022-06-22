@@ -175,7 +175,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 				intentLauncher.launch(intent)
 			}
 			binding.userButtonEditUsername.setOnClickListener {
-				if (application.currentUser.value == null) {
+				if (!application.hasLoggedIn()) {
 					return@setOnClickListener
 				}
 				val user = application.currentUser.value!!

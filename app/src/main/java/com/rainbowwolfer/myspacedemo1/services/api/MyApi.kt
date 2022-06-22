@@ -216,4 +216,7 @@ interface MyApi {
 		@Query("offset") offset: Int,
 		@Query("limit") limit: Int = 5,
 	): Response<List<Post>>
+	
+	@GET("myspace/version")
+	suspend fun getAppVersion(): Response<GetAppVersion>
 }

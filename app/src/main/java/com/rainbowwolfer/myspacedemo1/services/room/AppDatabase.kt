@@ -23,31 +23,11 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun messagesDao(): MessagesDao
 	abstract fun messagesContactDao(): MessageContactsDao
 
-//	private class WordDatabaseCallback(
-//		private val scope: CoroutineScope
-//	) : RoomDatabase.Callback() {
-//
-//		override fun onCreate(db: SupportSQLiteDatabase) {
-//			super.onCreate(db)
-//			instance?.let { database ->
-//				scope.launch {
-//					val dao = database.draftsDao()
-//
-//					dao.deleteAll()
-//
-//					val draft = Draft.generateDefault()
-//					dao.insertAll(draft)
-//				}
-//			}
-//		}
-//	}
-	
 	companion object {
 		@Volatile
 		private var instance: AppDatabase? = null
 		
 		fun getDatabase(context: Context): AppDatabase {
-			println("new one!")
 			return instance ?: synchronized(this) {
 				val buildInstance = Room.databaseBuilder(
 					context,

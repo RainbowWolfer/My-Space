@@ -81,17 +81,14 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		binding.messageDetailRecyclerView.adapter = adapter
 		
 		application.roomRepository.getMessagesBySenderID(contact.senderID.toString()).asLiveData().observe(viewLifecycleOwner) {
-//			println("read local : $it")
 			viewModel.messages.value = it
 		}
 		
 		viewModel.messages.observe(viewLifecycleOwner) {
-//			println("set: -> $it")
 			adapter.setData(it)
 		}
 		binding.messageDetailRecyclerView.scrollToUpdate {
 			loadMessages(false)
-//			println("SCROLL UPDATE")
 		}
 		try {
 			ChatSocket.read.observe(viewLifecycleOwner) {
@@ -102,15 +99,6 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 					//add to room
 					lifecycleScope.launch(Dispatchers.IO) {
 						application.roomRepository.insertMessages(message)
-					}
-//					(binding.messageDetailRecyclerView.layoutManager as LinearLayoutManager).
-					lifecycleScope.launch(Dispatchers.Main) {
-						try {
-//							delay(100)
-//							binding.messageDetailRecyclerView.scrollToPosition(0)
-						} catch (ex: Exception) {
-							ex.printStackTrace()
-						}
 					}
 				}
 			}
@@ -161,7 +149,6 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 	}
 	
 	private fun loadMessages(refresh: Boolean) {
-//		println("loading with : $refresh ${contact.username}")
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				if (isLoading) {
@@ -169,7 +156,6 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				}
 				isLoading = true
 				if (refresh) {
-//					println("EMPTYING!")
 					adapter.clearData()
 					viewModel.messages.value = emptyList()
 					viewModel.offset.value = 0

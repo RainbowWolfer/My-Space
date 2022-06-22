@@ -20,7 +20,6 @@ object DateTimeUtils {
 		val hour = kotlin.runCatching { str.substring(11, 13).toInt() }.getOrNull() ?: return null
 		val minute = kotlin.runCatching { str.substring(14, 16).toInt() }.getOrNull() ?: return null
 		val second = kotlin.runCatching { str.substring(17, 19).toInt() }.getOrNull() ?: return null
-		println("$str $year $month $day $hour $minute $second")
 		return DateTime(year, month, day, hour, minute, second)
 	}
 	

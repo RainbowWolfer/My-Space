@@ -22,8 +22,7 @@ import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.models.interfaces.DatabaseID
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ArgsCallBack
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
@@ -94,9 +93,16 @@ object EasyFunctions {
 				val outRect = Rect()
 				v.getGlobalVisibleRect(outRect)
 				if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-					v.clearFocus()
-					val imm = getSystemService(InputMethodManager::class.java)
-					imm.hideSoftInputFromWindow(v.windowToken, 0)
+					CoroutineScope(Dispatchers.Main).launch {
+						try {
+							delay(200)
+							v.clearFocus()
+							val imm = getSystemService(InputMethodManager::class.java)
+							imm.hideSoftInputFromWindow(v.windowToken, 0)
+						} catch (ex: Exception) {
+							ex.printStackTrace()
+						}
+					}
 				}
 			}
 		}
@@ -112,7 +118,6 @@ object EasyFunctions {
 					super.onScrolled(recyclerView, dx, dy)
 					
 					val lastPosition = (this@scrollToUpdate.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-//						val firstPosition = (this@scrollToUpdate.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 					
 					if (lastPosition >= adapter!!.itemCount - threshold) {
 						updateAction.invoke()

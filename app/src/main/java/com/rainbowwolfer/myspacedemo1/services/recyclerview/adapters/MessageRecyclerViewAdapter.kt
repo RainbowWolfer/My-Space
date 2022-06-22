@@ -3,6 +3,7 @@ package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,14 +80,16 @@ class MessageRecyclerViewAdapter(
 					putParcelable(MessageDetailFragment.ARG_CONTACT, data)
 				})
 			}
-
-//			holder.binding.messageRowTextUnreadCount.textSize = context.resources.getDimension(
-//				when (data.unreadCount) {
-//					in 0..9 -> R.dimen.font_size_14sp
-//					in 10..99 -> R.dimen.font_size_12sp
-//					else -> R.dimen.font_size_10sp //99+
-//				}
-//			)
+			
+			holder.binding.messageRowTextUnreadCount.setTextSize(
+				TypedValue.COMPLEX_UNIT_SP,
+				when (data.unreadCount) {
+					in 0..9 -> 14
+					in 10..99 -> 12
+					else -> 10
+				}.toFloat()
+			)
+			
 		}
 	}
 	
@@ -111,11 +114,7 @@ class MessageRecyclerViewAdapter(
 				result.add(i)
 			}
 		}
-//		val diffUtil = DatabaseIdDiffUtil(list, result)
-		println(list)
-		println(result)
 		list = result
 		notifyDataSetChanged()
-//		DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
 	}
 }

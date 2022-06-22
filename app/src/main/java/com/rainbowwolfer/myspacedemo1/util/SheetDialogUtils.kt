@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Suppress("MemberVisibilityCanBePrivate")
 object SheetDialogUtils {
 	fun showRepostDialog(context: Context, postID: String, successAction: () -> Unit) {
 		val application = MySpaceApplication.instance
@@ -63,13 +62,10 @@ object SheetDialogUtils {
 			}
 			
 			binding.bottomSheetRepostDialogButtonSend.setOnClickListener {
-				println("clicked")
 				application.applicationScope.launch(Dispatchers.Main) {
-					println("launched")
 					val dialog = LoadingDialog(context).apply {
 						showDialog("Reposting")
 					}
-					println("showing")
 					try {
 						withContext(Dispatchers.IO) {
 							RetrofitInstance.api.repost(
@@ -85,7 +81,6 @@ object SheetDialogUtils {
 								)
 							)
 						}
-						println("loaded")
 						
 						successAction()
 					} catch (ex: Exception) {
@@ -140,8 +135,7 @@ object SheetDialogUtils {
 						showDialog("Uploading Comment")
 					}
 					try {
-//						this@showCommentDialog.rowLayoutComment.isEnabled = false
-						val comment: Comment = withContext(Dispatchers.IO) {
+						withContext(Dispatchers.IO) {
 							val response = RetrofitInstance.api.postComment(
 								NewComment(
 									application.currentUser.value?.email ?: "",
@@ -160,7 +154,6 @@ object SheetDialogUtils {
 					} catch (ex: Exception) {
 						ex.printStackTrace()
 					} finally {
-//						this@showCommentDialog.rowLayoutComment.isEnabled = true
 						dialog.hideDialog()
 						dismiss()
 						hide()

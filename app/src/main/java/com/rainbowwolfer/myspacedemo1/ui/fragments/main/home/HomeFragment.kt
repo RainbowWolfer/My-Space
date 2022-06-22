@@ -86,16 +86,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding.mainRecyclerViewList.adapter = listAdapter
 		
 		application.currentUser.observe(viewLifecycleOwner) {
-//			println(viewModel.posts.value!!.size)
 			if (viewModel.posts.value?.size == 0) {
-//				println("user changed refresh ${it == null}")
 				updateList(true)
 			}
 			MainActivity.Instance?.drawerLayout?.closeDrawers()
 		}
 		
 		viewModel.posts.observe(viewLifecycleOwner) {
-//			println("posts changed ${it.size}")
 			if (it.isEmpty()) {
 				updateList(false)
 				binding.mainLayoutNothing.visibility = View.VISIBLE
@@ -105,8 +102,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				binding.mainRecyclerViewList.visibility = View.VISIBLE
 				listAdapter.setData(it)
 			}
-
-//			println("last position:  " + viewModel.lastViewPosiiton.value)
+			
 			if (viewModel.lastViewPosition.value != -1 && updateScrollPosition) {
 				binding.mainRecyclerViewList.scrollToPosition(viewModel.lastViewPosition.value!!)
 			}
@@ -118,7 +114,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		
 		//only works for manually pull down
 		binding.mainSwipeRefreshLayout.setOnRefreshListener {
-//			println("swipe refresh")
 			updateList(true)
 		}
 		
@@ -138,13 +133,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					super.onScrolled(recyclerView, dx, dy)
 					val up = binding.mainRecyclerViewList.canScrollVertically(-1)
 					binding.mainSwipeRefreshLayout.isEnabled = !up || binding.mainSwipeRefreshLayout.isRefreshing
-					
-					val lastPosition = (binding.mainRecyclerViewList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-					val firstPosition = (binding.mainRecyclerViewList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+					val layout = (binding.mainRecyclerViewList.layoutManager as LinearLayoutManager)
+					val lastPosition = layout.findLastVisibleItemPosition()
+					val firstPosition = layout.findFirstVisibleItemPosition()
 					viewModel.lastViewPosition.value = firstPosition
-//					println("$lastPosition - ${listAdapter.itemCount - 2}")
 					if (lastPosition >= listAdapter.itemCount - 2) {
-						//update
 						updateList(false, scrollToTop = false, showSwipeRefreshing = false)
 					}
 				}
@@ -185,7 +178,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding.mainEditSearch.setOnEditorActionListener { _, actionId, _ ->
 			if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 				performSearch(binding.mainEditSearch.text.toString().trim())
-//				binding.mainEditSearch.setText("")
 			}
 			false
 		}
@@ -221,7 +213,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 	
 	private fun updateList(refresh: Boolean, scrollToTop: Boolean = true, showSwipeRefreshing: Boolean = true) {
-//		println("Updating (Status: $isLoading) (IsRefreshing: $refresh)")
 		if (isLoading) {
 			return
 		}
@@ -426,7 +417,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			R.id.item_refresh -> {
-//				println("button refresh")
 				updateList(true)
 			}
 			R.id.item_top -> {

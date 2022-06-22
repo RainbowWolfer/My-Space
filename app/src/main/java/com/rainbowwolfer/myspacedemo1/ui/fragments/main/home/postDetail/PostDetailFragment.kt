@@ -44,13 +44,11 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		lateinit var instance: PostDetailFragment
 		const val ARG_Post_ID = "post_id"
 		
-		
 		fun newInstance(postID: String) = PostDetailFragment().apply {
 			arguments = Bundle().apply {
 				putString(ARG_Post_ID, postID)
 			}
 		}
-		
 		
 		fun updateVoteButtons(upButton: AppCompatImageButton, downButton: AppCompatImageButton, voted: Int) {
 			val application = MySpaceApplication.instance
@@ -134,7 +132,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 				} catch (ex: Exception) {
 					ex.printStackTrace()
 					if (ex is ResponseException) {
-						println(ex.response)
+						ex.printResponseException()
 					}
 				} finally {
 					updateAvatar()
@@ -359,14 +357,9 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			binding.postDetailButtonRepost.visibility = this
 			binding.postDetailTextRepost.visibility = this
 			binding.postDetailTextRepostsCount.visibility = this
-//			(binding.postDetailViewPager2.adapter as PostDetailViewPagerAdapter).
 		}
 	}
 
-//	fun setMeta(post: Post) {
-//
-//	}
-	
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 		inflater.inflate(R.menu.post_detail_menu, menu)
 	}

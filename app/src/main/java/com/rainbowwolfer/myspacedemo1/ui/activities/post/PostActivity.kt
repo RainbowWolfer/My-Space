@@ -79,7 +79,6 @@ class PostActivity : AppCompatActivity() {
 	}
 	
 	private fun loadImageFromURI(uri: Uri): PostActivityViewModel.ImageInfo? {
-//		println("URI: $uri")
 		return try {
 			val fileName = uri.pathSegments.last()
 			val ext = fileName.substring(fileName.lastIndexOf("."))
@@ -103,7 +102,6 @@ class PostActivity : AppCompatActivity() {
 		draft = intent.getParcelableExtra(ARGS_DRAFT)
 		if (draft != null) {
 			binding.initializeWithDraft(draft!!)
-//			println("Initialized with : $draft")
 		}
 		
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)

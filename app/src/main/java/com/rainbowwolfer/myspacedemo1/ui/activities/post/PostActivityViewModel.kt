@@ -89,14 +89,6 @@ class PostActivityViewModel : ViewModel() {
 		}
 	}
 
-//	fun sortImages() {
-//		val clone = getImages()
-//		clone.sortWith(compareBy(nullsFirst()) {
-//			it == null
-//		})
-//		setImages(clone)
-//	}
-	
 	private fun Array<ImageInfo?>.sortImages() {
 		this.sortWith(compareBy(nullsFirst()) {
 			it == null
