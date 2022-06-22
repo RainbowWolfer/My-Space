@@ -3,34 +3,14 @@ package com.rainbowwolfer.myspacedemo1.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.FrameLayout
+import android.util.Log
 import android.widget.ImageView
-import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rainbowwolfer.myspacedemo1.R
-import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetCommentInputBinding
-import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetRepostInputBinding
-import com.rainbowwolfer.myspacedemo1.models.Comment
-import com.rainbowwolfer.myspacedemo1.models.api.NewComment
-import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
-import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
-import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
-import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object ImgUtils {
@@ -43,9 +23,15 @@ object ImgUtils {
             .into(target)
     }
 
-    fun saveBitmap(filePath: String, bitmap: Bitmap) {
+    fun saveBitmap(bitmap: Bitmap, filePath: String? = null) {
+        var filename1: String =
+            SimpleDateFormat("yyyyMMddHHmmss").format(Date(System.currentTimeMillis()))
+
+        filePath?.let {
+            filename1 = it
+        }
         val file: File =
-            File(Environment.getExternalStorageDirectory(), "$filePath.png")
+            File(Environment.getExternalStorageDirectory(), "$filename1.png")
         saveBitmapFile(file, bitmap)
     }
 
@@ -56,4 +42,5 @@ object ImgUtils {
         bos.close();
 
     }
+
 }
