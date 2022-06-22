@@ -3,6 +3,7 @@ package com.rainbowwolfer.myspacedemo1.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
+import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.rainbowwolfer.myspacedemo1.R
@@ -25,20 +26,29 @@ object ImageUtils {
     }
 
     /**
-     * 判断是否拥有权限
-     * PermissionUtils.isGetPermissions(ct,"android.permission.WRITE_EXTERNAL_STORAGE" )
-
-     * 默认当期时间作 文件名
+     * Save bitmap
+     *
+     * @param bitmap
+     * @param filePath 默认 com.rainbowwolfer.myspacedemo1
+     * @param fileName 默认当前时间戳
      */
-    fun saveBitmap(bitmap: Bitmap, filePath: String? = null) {
+    fun saveBitmap(bitmap: Bitmap, filePath: String? = null, fileName: String? = null) {
+        //默认文件名
         var filename1: String =
             SimpleDateFormat("yyyyMMddHHmmss").format(Date(System.currentTimeMillis()))
+        //默认文件存储路径
 
-        filePath?.let {
+        var filePath1 = "com.rainbowwolfer.myspacedemo1"
+
+        fileName?.let {
             filename1 = it
         }
+        filePath?.let {
+            filePath1 = it
+        }
+
         val file: File =
-            File(Environment.getExternalStorageDirectory(), "$filename1.png")
+            File(setRootDir(filePath1), "$filename1.png")
         saveBitmapFile(bitmap, file)
     }
 
@@ -55,6 +65,34 @@ object ImageUtils {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         bos.flush();
         bos.close();
+    }
+
+    private fun setRootDir(filePath: String): String {
+
+        var filePath1 = filePath.replace("/", File.separator)
+        val rootPath =
+            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { //有SD卡
+                Environment.getExternalStorageDirectory().path + File.separator + filePath1
+            } else {
+                Environment.getDataDirectory().path + File.separator + filePath1
+            }
+
+        // 有存储权限，则创建文件夹
+        val createRootDir = createRootDir(rootPath)
+        Log.w("ImageUtils", "createRootDir:$createRootDir")
+
+        return rootPath // 返回文件夹绝对路径 //storage/emulated/0/$filePath/
+    }
+
+    /**
+     * 创建文件夹
+     */
+    private fun createRootDir(rootPath: String): Boolean {
+        val dirRoot = File(rootPath)
+        if (!dirRoot.exists() || !dirRoot.isDirectory) {
+            return dirRoot.mkdirs()
+        }
+        return true
     }
 
 }

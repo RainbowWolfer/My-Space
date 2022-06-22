@@ -19,7 +19,7 @@ object PermissionUtils {
      * @param permissions 需要检查的权限
      * @return boolean
      */
-    fun requestPermissions(ct: Context, permissions: Array<String>): Boolean {
+    fun requestPermissions(ct: Context, permissions: List<String>): Boolean {
         for (permission in permissions) {
             if (ContextCompat.checkSelfPermission(
                     ct,
@@ -27,8 +27,8 @@ object PermissionUtils {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 //申请权限 参数分别是 上下文、权限集合(String)、请求码
-                ActivityCompat.requestPermissions((ct as Activity), permissions, REQUEST_CODE)
-                return false
+                ActivityCompat.requestPermissions((ct as Activity),
+                    permissions.toTypedArray(), REQUEST_CODE)
             }
         }
         return true
@@ -40,7 +40,7 @@ object PermissionUtils {
      * @param ct 当前Activity
      * @param permissions 需要检查的权限
      */
-    fun isGetPermissions(ct: Context, permissions: Array<String>): Boolean {
+    fun isGetPermissions(ct: Context, permissions: List<String>): Boolean {
         var flag = false
         for (i in permissions) {
             flag = PermissionX.isGranted(ct, i)
@@ -48,7 +48,7 @@ object PermissionUtils {
         return flag
     }
 
-    fun requestPermissions(
+    fun requestPermissionsX(
         activity: FragmentActivity,
         permissions: List<String>,
         callback: RequestCallback?
