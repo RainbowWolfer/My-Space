@@ -81,6 +81,7 @@ data class Post(
 //		}
 //	}
 	fun readVoted(): Int = if (isRepost) originVoted!! else voted
+	fun readImagesCount(): Int = if (isRepost) originImagesCount!! else imagesCount
 	
 	fun updateVoted(type: Int) {
 		if (isRepost) {

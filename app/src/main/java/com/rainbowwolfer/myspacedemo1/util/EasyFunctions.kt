@@ -128,9 +128,9 @@ object EasyFunctions {
 	
 	
 	private const val RELOAD_THRESHOLD = 3
-	private const val MAX_TRY_COUNT = 5
+	private const val MAX_TRY_COUNT = 3
 	
-	suspend fun <T : DatabaseID<W>, W> stackLoading(refresh: Boolean, data: MutableLiveData<List<T>>, offset: MutableLiveData<Int>, callResponse: suspend () -> Response<List<T>>) {
+	suspend fun <T : DatabaseID<W>, W> stackLoading(refresh: Boolean, data: MutableLiveData<List<T>>, offset: MutableLiveData<Int>, maxTryCount: Int = MAX_TRY_COUNT, callResponse: suspend () -> Response<List<T>>) {
 		if (refresh) {
 			offset.value = 0
 		}
@@ -158,7 +158,7 @@ object EasyFunctions {
 				offset.value = offset.value!!.plus(count)
 			}
 			data.value = list
-		} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= MAX_TRY_COUNT)
+		} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= maxTryCount)
 	}
 	
 	fun LifecycleOwner.loadAvatar(userID: String, setAction: (Bitmap?) -> Unit) {

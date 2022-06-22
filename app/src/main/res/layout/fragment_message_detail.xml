@@ -17,7 +17,8 @@
 		app:layout_constraintBottom_toTopOf="@id/message_bottom_layout"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"/>
+		app:layout_constraintTop_toTopOf="parent"
+		tools:listitem="@layout/message_detail_row_layout_left"/>
 	
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:id="@+id/message_bottom_layout"

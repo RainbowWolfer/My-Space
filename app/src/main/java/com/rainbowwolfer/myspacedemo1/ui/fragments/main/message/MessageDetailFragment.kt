@@ -6,12 +6,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentMessageDetailBinding
@@ -23,7 +23,9 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MessageDetailRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.viewmodel.MessageFragmentViewModel
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOption
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,15 +64,17 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 		binding.messageDetailRecyclerView.adapter = adapter
 		
 		application.roomRepository.getMessagesBySenderID(contact.senderID.toString()).asLiveData().observe(viewLifecycleOwner) {
+//			println("read local : $it")
 			viewModel.messages.value = it
 		}
 		
 		viewModel.messages.observe(viewLifecycleOwner) {
-			println(it)
+//			println("set: -> $it")
 			adapter.setData(it)
 		}
 		binding.messageDetailRecyclerView.scrollToUpdate {
 			loadMessages(false)
+//			println("SCROLL UPDATE")
 		}
 		
 		loadMessages(true)
@@ -81,6 +85,7 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 	}
 	
 	private fun loadMessages(refresh: Boolean) {
+//		println("loading with : $refresh ${contact.username}")
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
 				if (isLoading) {
@@ -88,11 +93,13 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				}
 				isLoading = true
 				if (refresh) {
+//					println("EMPTYING!")
+					adapter.clearData()
 					viewModel.messages.value = emptyList()
 					viewModel.offset.value = 0
 				}
 				
-				EasyFunctions.stackLoading(refresh, viewModel.messages, viewModel.offset) {
+				EasyFunctions.stackLoading(refresh, viewModel.messages, viewModel.offset, 1) {
 					RetrofitInstance.api.getMessages(
 						email = application.getCurrentEmail(),
 						password = application.getCurrentPassword(),
@@ -134,7 +141,10 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_info -> {
-				Toast.makeText(requireContext(), contact.toString(), Toast.LENGTH_SHORT).show()
+				findNavController().navigate(R.id.nav_profile, Bundle().apply {
+					putString("user_id", contact.senderID.toString())
+					putBoolean(UserFragment.ARG_ENABLE_MESSAGE, false)
+				}, defaultTransitionNavOption())
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

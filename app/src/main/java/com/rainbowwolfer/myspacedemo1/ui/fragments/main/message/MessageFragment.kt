@@ -50,11 +50,14 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 		
 		binding.messageRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		binding.messageRecyclerView.adapter = adapter
-
-		ChatSocket.read.observe(viewLifecycleOwner) {
-			println(it)
-		}
 		
+		try {
+			ChatSocket.read.observe(viewLifecycleOwner) {
+				println(it)
+			}
+		} catch (ex: Exception) {
+			ex.printStackTrace()
+		}
 		
 		val all = application.roomRepository.allContacts
 		all.asLiveData().observe(viewLifecycleOwner) {

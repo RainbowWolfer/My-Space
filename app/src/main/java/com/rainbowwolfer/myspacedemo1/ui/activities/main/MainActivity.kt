@@ -13,6 +13,7 @@ import android.viewbinding.library.activity.viewBinding
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -25,13 +26,16 @@ import com.rainbowwolfer.myspacedemo1.databinding.ActivityMainBinding
 import com.rainbowwolfer.myspacedemo1.databinding.NavHeaderMainBinding
 import com.rainbowwolfer.myspacedemo1.models.PostResult
 import com.rainbowwolfer.myspacedemo1.models.User
+import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
+import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasUserValue
 import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -80,6 +84,29 @@ class MainActivity : AppCompatActivity() {
 			println("draft")
 		}
 		println(post)
+	}
+	
+	override fun onResume() {
+		super.onResume()
+		if (application.hasLoggedIn()) {
+			return
+		}
+		val data = application.userPreferencesRepository.getValue()
+		data.asLiveData().observe(this) {
+			if (it.hasUserValue()) {
+				lifecycleScope.launch(Dispatchers.IO) {
+					try {
+						val response = RetrofitInstance.api.tryLogin(it.email, it.password)
+						val user = response.body()!!
+						withContext(Dispatchers.Main) {
+							application.currentUser.value = user
+						}
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+				}
+			}
+		}
 	}
 	
 	override fun attachBaseContext(newBase: Context?) {

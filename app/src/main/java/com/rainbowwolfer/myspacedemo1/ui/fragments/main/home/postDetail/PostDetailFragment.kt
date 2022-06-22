@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rainbowwolfer.myspacedemo1.R
@@ -82,6 +83,10 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			button.imageTintList = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
 		}
 		
+		fun updateRepostButton(button: MaterialButton, hasReposted: Boolean) {
+			val application = MySpaceApplication.instance
+			button.iconTint = ContextCompat.getColorStateList(application, getHighlightedColorID(hasReposted))
+		}
 		
 		fun updateRepostButton(image: ImageView, hasReposted: Boolean) {
 			val application = MySpaceApplication.instance

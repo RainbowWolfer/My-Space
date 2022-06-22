@@ -21,7 +21,6 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.loadAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -122,9 +121,13 @@ class FollowersRecyclerViewAdapter(
 				holder.binding.rowFollowersButtonFollow.visibility = View.GONE
 			}
 			
-			lifecycleOwner.loadAvatar(data.id) {
+			application.findOrGetAvatar(data.id){
 				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
 			}
+			
+//			lifecycleOwner.loadAvatar(data.id) {
+//				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
+//			}
 		}
 	}
 	

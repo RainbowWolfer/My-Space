@@ -9,8 +9,13 @@ interface MessagesDao {
 	@Query("select * from messages")
 	fun getAll(): Flow<List<Message>>
 	
-	@Query("select * from messages where sender_id = :user_id order by datetime desc")
-	fun getBySender(user_id: String): Flow<List<Message>>
+	@Query(
+		"select * from messages " +
+				"where (sender_id = :user_id and receiver_id = :self_id)" +
+				"or (sender_id = :self_id and receiver_id = :user_id)" +
+				"order by datetime desc"
+	)
+	fun getBySender(self_id: String, user_id: String): Flow<List<Message>>
 	
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insertAll(vararg message: Message)

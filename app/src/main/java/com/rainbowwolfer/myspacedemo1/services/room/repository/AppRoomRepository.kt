@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import com.rainbowwolfer.myspacedemo1.models.Draft
 import com.rainbowwolfer.myspacedemo1.models.Message
 import com.rainbowwolfer.myspacedemo1.models.MessageContact
+import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.room.dao.DraftsDao
 import com.rainbowwolfer.myspacedemo1.services.room.dao.MessageContactsDao
 import com.rainbowwolfer.myspacedemo1.services.room.dao.MessagesDao
@@ -19,8 +20,9 @@ class AppRoomRepository(
 	val allContacts: Flow<List<MessageContact>> = dao_contact.getAll()
 	
 	//message
-	fun getMessagesBySenderID(user_id: String): Flow<List<Message>> {
-		return dao_message.getBySender(user_id)
+	fun getMessagesBySenderID(userID: String): Flow<List<Message>> {
+		val selfID = MySpaceApplication.instance.getCurrentID()
+		return dao_message.getBySender(selfID, userID)
 	}
 	
 	@WorkerThread

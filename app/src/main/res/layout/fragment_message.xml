@@ -16,7 +16,8 @@
 		android:layout_marginBottom="24dp"
 		android:clickable="true"
 		android:contentDescription=""
-		android:src="@drawable/ic_baseline_add_24"/>
+		android:src="@drawable/ic_baseline_add_24"
+		android:visibility="gone"/>
 	
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"

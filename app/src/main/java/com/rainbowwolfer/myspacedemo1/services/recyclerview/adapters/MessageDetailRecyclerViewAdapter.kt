@@ -96,6 +96,10 @@ class MessageDetailRecyclerViewAdapter(
 	
 	override fun getItemCount(): Int = list.size
 	
+	fun clearData() {
+		list = emptyList()
+	}
+	
 	fun setData(new: List<Message>) {
 		val result = list.toMutableList()
 		for (i in new) {

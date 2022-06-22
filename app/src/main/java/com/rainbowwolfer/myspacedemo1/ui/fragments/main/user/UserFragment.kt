@@ -25,14 +25,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserFragment : Fragment(R.layout.fragment_user) {
+	companion object {
+		const val ARG_ENABLE_MESSAGE = "enable_message"
+		var instance: UserFragment? = null
+	}
+	
 	private val binding: FragmentUserBinding by viewBinding()
 	
 	private val application = MySpaceApplication.instance
 	private val viewmodel: UserFragmentViewModel by viewModels()
-	
-	companion object {
-		var instance: UserFragment? = null
-	}
 	
 	init {
 		instance = this
@@ -41,9 +42,13 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 	var isSelf: Boolean = false
 		private set
 	
+	var enableMessage = true
+		private set
+	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
+		enableMessage = arguments?.getBoolean(ARG_ENABLE_MESSAGE, true) ?: true
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

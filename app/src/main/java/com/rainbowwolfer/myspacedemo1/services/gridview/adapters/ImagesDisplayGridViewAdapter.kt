@@ -129,7 +129,7 @@ class ImagesDisplayGridViewAdapter(
 		}
 		holder.binding.gridViewItemImageDisplay.setOnClickListener {
 			context.startActivity(Intent(context, ImagesDisplayActivity::class.java).apply {
-				putExtra(ImagesDisplayActivity.ARG_POST, post)
+				putExtra(ImagesDisplayActivity.ARG_POST_ID, post.id)
 				putExtra(ImagesDisplayActivity.ARG_CURRENT, position)
 			})
 		}

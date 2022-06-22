@@ -13,10 +13,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePickerActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.FragmentUserProfileBinding
+import com.rainbowwolfer.myspacedemo1.models.MessageContact
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.api.NewUserFollow
@@ -24,11 +26,14 @@ import com.rainbowwolfer.myspacedemo1.models.api.NewUsername
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.services.callbacks.ActionCallBack
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageDetailFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOption
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +41,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.joda.time.DateTime
 import retrofit2.HttpException
 import java.io.InputStream
 
@@ -223,6 +229,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 				dialog.showDialog(user.username)
 			}
 		} else {// not self
+			if (UserFragment.instance?.enableMessage == false) {
+				binding.userButtonMessage.visibility = View.GONE
+			}
 			binding.userFollowButton.setOnClickListener {
 				val user = viewModel.userInfo.value?.user ?: return@setOnClickListener
 				lifecycleScope.launch(Dispatchers.Main) {
@@ -248,7 +257,22 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 			}
 			
 			binding.userButtonMessage.setOnClickListener {
-			
+				val contact = MessageContact(
+					senderID = userID.toLong(),
+					username = application.usersPool.findUserInfo(userID)?.user?.username ?: getString(R.string.not_found),
+					textContent = "",
+					dateTime = DateTime.now().getDateTime(),
+					unreadCount = 0,
+				)
+				findNavController().navigate(R.id.nav_detailMessage, Bundle().apply {
+					putParcelable(
+						MessageDetailFragment.ARG_CONTACT, contact
+					)
+				}, defaultTransitionNavOption())
+				
+				lifecycleScope.launch(Dispatchers.IO) {
+					application.roomRepository.insertContacts(contact)
+				}
 			}
 		}
 	}

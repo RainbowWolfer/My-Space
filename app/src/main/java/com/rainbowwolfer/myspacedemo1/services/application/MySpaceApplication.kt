@@ -4,8 +4,7 @@ import android.app.Application
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.rainbowwolfer.myspacedemo1.models.PostInfo
 import com.rainbowwolfer.myspacedemo1.models.User
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
@@ -18,6 +17,7 @@ import com.rainbowwolfer.myspacedemo1.models.api.NewPostVote
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
+import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasUserValue
 import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
 import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
@@ -239,4 +239,5 @@ class MySpaceApplication : Application() {
 			}
 		}
 	}
+	
 }
