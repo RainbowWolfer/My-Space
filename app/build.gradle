@@ -97,12 +97,13 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:1.7.1'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    /*implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
     implementation("androidx.datastore:datastore:1.0.0")
-    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")*/
     implementation "com.google.protobuf:protobuf-javalite:3.18.0"
 
+/*
     //room
     def room_version = "2.4.2"
 
@@ -125,8 +126,46 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
+*/
 
 //    implementation "com.android.support:support-emoji:28.0.0"
+
+    def obj = ipp.createObj()
+//    obj.OneForImport(dep.lifecycle())
+
+    obj.ListOfListForImport([
+            dep.initProject(),
+            dep.lifecycle(),
+            dep.testing(),
+            dep.Kotlin(),
+            dep.room(),
+            dep.recyclerview(),
+            dep.work(),
+            dep.nav(),
+            dep.core(),
+            dep.ImgPicasso(),
+            dep.ImgGlide(),
+            dep.okHttp3(),
+            dep.jsonTools(),
+            dep.camerax(),
+            dep.datastore(),
+            dep.compose(),
+            dep.accompanist(),
+            dep.paging(),
+            dep.dagger(),
+    ])
+
+    implementation obj.implementationList
+    testImplementation obj.testImplementationList
+    api obj.apiList
+    kapt obj.kaptList
+    annotationProcessor obj.annotationProcessorList
+    androidTestImplementation obj.androidTestImplementationList
+    debugImplementation obj.debugImplementationList
+    compileOnly obj.compileList
+    runtimeOnly obj.runtimeOnlyList
+
+
 }
 
 

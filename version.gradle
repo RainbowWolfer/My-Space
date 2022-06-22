@@ -1,0 +1,682 @@
+/*add your code here*/
+
+class Depends {
+
+    /**
+     * 依赖标识
+     * */
+    static private def implementation_v = 0
+    static private def testImplementation_v = 1
+    static private def api_v = 2
+    static private def kapt_v = 3
+    static private def ksp_v = 4
+    static private def runtimeOnly_v = 5
+    static private def annotationProcessor_v = 6
+    static private def androidTestImplementation_v = 7
+    static private def debugImplementation_v = 8
+    static private def compile_v = 9
+
+/**
+ * use method save stringArray
+ * 方法发的返回值 是 依赖数组
+ */
+
+    /**
+     * initProject 新建项目必备组件
+     * @return
+     */
+    public ArrayList<String> initProject() {
+        def appcompat_version = "1.4.2"
+        return [
+                "$implementation_v androidx.constraintlayout:constraintlayout:2.1.4",
+                "$implementation_v androidx.appcompat:appcompat:$appcompat_version",
+                // For loading and tinting drawables on older versions of the platform,
+                "$implementation_v androidx.appcompat:appcompat-resources:$appcompat_version",
+                "$implementation_v com.google.android.material:material:1.6.1",
+                // https://mvnrepository.com/artifact/androidx.annotation/annotation
+                "$implementation_v androidx.annotation:annotation:1.3.0",
+//                https://github.com/guolindev/PermissionX 权限申请工具
+                "$implementation_v com.guolindev.permissionx:permissionx:1.6.4"
+
+        ]
+    }
+
+
+    public ArrayList<String> testing() {
+        def coreTestingVersion = '2.1.0'
+        def espressoVersion = '3.4.0'
+        def junitVersion = '4.13.2'
+        def truthVersion = '1.1.3'
+        def testExtJunit = '1.1.3'
+        def uiAutomatorVersion = '2.2.0'
+
+        return [
+                "$androidTestImplementation_v androidx.arch.core:core-testing:$coreTestingVersion",
+                "$androidTestImplementation_v androidx.test.espresso:espresso-contrib:$espressoVersion",
+                "$androidTestImplementation_v androidx.test.espresso:espresso-core:$espressoVersion",
+                "$androidTestImplementation_v androidx.test.espresso:espresso-intents:$espressoVersion",
+                "$androidTestImplementation_v androidx.test.ext:junit:$testExtJunit",
+                "$androidTestImplementation_v androidx.test.uiautomator:uiautomator:$uiAutomatorVersion",
+                "$androidTestImplementation_v com.google.truth:truth:$truthVersion",
+                "$implementation_v junit:junit:$junitVersion",
+
+        ]
+    }
+
+    public ArrayList<String> lifecycle() {
+        def lifecycle_version = "2.4.1"
+        def arch_version = "2.1.0"
+        def lifecycle = [
+                // ViewModel
+                "$implementation_v androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
+                // ViewModel utilities for Compose
+                "$implementation_v androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version",
+                // LiveData
+                "$implementation_v androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version",
+                // Lifecycles only (without ViewModel or LiveData)
+                "$implementation_v androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version",
+
+                // Saved state module for ViewModel
+                "$implementation_v androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version",
+
+                // Annotation processor
+                "$kapt_v androidx.lifecycle:lifecycle-compiler:$lifecycle_version",
+                // alternately - if using Java8, use the following instead of lifecycle-compiler
+                "$implementation_v androidx.lifecycle:lifecycle-common-java8:$lifecycle_version",
+
+                // optional - helpers for implementing LifecycleOwner in a Service
+                "$implementation_v androidx.lifecycle:lifecycle-service:$lifecycle_version",
+
+                // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+                "$implementation_v androidx.lifecycle:lifecycle-process:$lifecycle_version",
+
+                // optional - ReactiveStreams support for LiveData
+                "$implementation_v androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version",
+
+                // optional - Test helpers for LiveData
+                "$testImplementation_v androidx.arch.core:core-testing:$arch_version",
+        ]
+        return lifecycle
+    }
+
+    public ArrayList<String> camerax() {
+        // CameraX core library using the camera2 implementation
+        def camerax_version = "1.0.2"
+        def camerax = [
+                // The following line is optional, as the core library is included indirectly by camera-camera2
+                "$implementation_v androidx.camera:camera-core:${camerax_version}",
+                "$implementation_v androidx.camera:camera-camera2:${camerax_version}",
+                // If you want to additionally use the CameraX Lifecycle library,
+                "$implementation_v androidx.camera:camera-lifecycle:${camerax_version}",
+                // If you want to additionally use the CameraX VideoCapture library,
+                "$implementation_v androidx.camera:camera-video:1.1.0-rc02",
+                // If you want to additionally use the CameraX View class,
+                "$implementation_v androidx.camera:camera-view:1.1.0-rc02",
+                // If you want to additionally use the CameraX Extensions library,
+                "$implementation_v androidx.camera:camera-extensions:1.1.0-rc02",
+        ]
+        return camerax
+    }
+
+    public ArrayList<String> core() {
+        // CameraX core library using the camera2 implementation
+        def core_version = "1.8.0"
+        return [
+
+                // Java language implementation
+                "$implementation_v androidx.core:core:$core_version",
+                // Kotlin
+                "$implementation_v androidx.core:core-ktx:$core_version",
+
+                // To use RoleManagerCompat
+                "$implementation_v androidx.core:core-role:1.0.0",
+
+                // To use the Animator APIs
+                "$implementation_v androidx.core:core-animation:1.0.0-beta01",
+                // To test the Animator APIs
+                "$androidTestImplementation_v androidx.core:core-animation-testing:1.0.0-alpha02",
+
+                // Optional - To enable APIs that query the performance characteristics of GMS devices.
+                "$implementation_v androidx.core:core-performance:1.0.0-alpha02",
+
+                // Optional - to use ShortcutManagerCompat to donate shortcuts to be used by Google
+                "$implementation_v androidx.core:core-google-shortcuts:1.0.1",
+
+                // Optional - to support backwards compatibility of RemoteViews
+                "$implementation_v androidx.core:core-remoteviews:1.0.0-alpha03",
+
+                // Optional - APIs for SplashScreen, including compatiblity helpers on devices prior Android 12
+                "$implementation_v androidx.core:core-splashscreen:1.0.0-rc01"
+
+        ]
+    }
+
+    public ArrayList<String> fragment() {
+        def fragment_version = "1.4.1"
+        return [
+
+
+                // Java language implementation
+                "$implementation_v androidx.fragment:fragment:$fragment_version",
+                // Kotlin
+                "$implementation_v androidx.fragment:fragment-ktx:$fragment_version",
+                // Testing Fragments in Isolation
+                "$debugImplementation_v androidx.fragment:fragment-testing:$fragment_version"
+
+        ]
+    }
+    //https://developer.android.com/jetpack/androidx/releases/navigation
+    public ArrayList<String> nav() {
+        def nav_version = "2.4.2"
+        return [
+                // Java language implementation
+                "$implementation_v androidx.navigation:navigation-fragment:$nav_version",
+                "$implementation_v androidx.navigation:navigation-ui:$nav_version",
+
+                // Kotlin
+                "$implementation_v androidx.navigation:navigation-fragment-ktx:$nav_version",
+                "$implementation_v androidx.navigation:navigation-ui-ktx:$nav_version",
+
+                // Feature module Support
+                "$implementation_v androidx.navigation:navigation-dynamic-features-fragment:$nav_version",
+
+                // Testing Navigation
+                "$androidTestImplementation_v androidx.navigation:navigation-testing:$nav_version",
+
+                // Jetpack Compose Integration
+                "$implementation_v androidx.navigation:navigation-compose:$nav_version",
+
+//                "$implementation_v androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+
+        ]
+    }
+
+    public ArrayList<String> paging() {
+        def paging_version = "3.1.1"
+        return [
+
+                "$implementation_v androidx.paging:paging-runtime:$paging_version",
+
+                // alternatively - without Android dependencies for tests
+                "$testImplementation_v androidx.paging:paging-common:$paging_version",
+
+                // optional - RxJava2 support
+                "$implementation_v androidx.paging:paging-rxjava2:$paging_version",
+
+                // optional - RxJava3 support
+                "$implementation_v androidx.paging:paging-rxjava3:$paging_version",
+
+                // optional - Guava ListenableFuture support
+                "$implementation_v androidx.paging:paging-guava:$paging_version",
+
+                // optional - Jetpack Compose integration
+                "$implementation_v androidx.paging:paging-compose:1.0.0-alpha15"
+        ]
+    }
+
+/*
+注意：如果您将 datastore-preferences-core 工件与 Proguard 搭配使用，
+就必须手动将 Proguard 规则添加到 proguard-rules.pro 文件中，以免您的字段遭到删除。
+* */
+
+    public ArrayList<String> datastore() {
+        def data_version = "1.0.0"
+        return [
+                // https://mvnrepository.com/artifact/androidx.datastore/datastore-preferences
+                "$implementation_v androidx.datastore:datastore-preferences-core:$data_version",
+
+                "$implementation_v androidx.datastore:datastore-preferences:$data_version",
+
+                // optional - RxJava2 support
+                "$implementation_v androidx.datastore:datastore-preferences-rxjava2:$data_version",
+
+                // optional - RxJava3 support
+                "$implementation_v androidx.datastore:datastore-preferences-rxjava3:$data_version",
+                // Alternatively - use the following artifact without an Android dependency.
+                "$implementation_v androidx.datastore:datastore-preferences-core:$data_version",
+        ]
+
+    }
+
+    public ArrayList<String> recyclerview() {
+        return [
+                "$implementation_v androidx.viewpager2:viewpager2:1.0.0",
+                "$implementation_v androidx.recyclerview:recyclerview:1.2.1",
+                // For control over item selection of both touch and mouse driven selection
+                "$implementation_v androidx.recyclerview:recyclerview-selection:1.1.0"
+        ]
+    }
+
+    public ArrayList<String> room() {
+        def roomVersion = "2.4.2"
+
+        return [
+
+                "$implementation_v androidx.room:room-runtime:$roomVersion",
+                "$annotationProcessor_v androidx.room:room-compiler:$roomVersion",
+
+//                 To use Kotlin annotation processing tool (kapt)
+                "$kapt_v androidx.room:room-compiler:$roomVersion",
+
+                /**
+                 * 不能重复导入。。 不然报错：重复 实现类
+                 * */
+
+
+                // To use Kotlin Symbolic Processing (KSP)
+//                "$ksp_v androidx.room:room-compiler:$roomVersion",
+
+                // optional - Kotlin Extensions and Coroutines support for Room
+
+                "$implementation_v androidx.room:room-ktx:$roomVersion",
+
+                // optional - RxJava2 support for Room
+                "$implementation_v androidx.room:room-rxjava2:$roomVersion",
+
+                // optional - RxJava3 support for Room
+                "$implementation_v androidx.room:room-rxjava3:$roomVersion",
+
+                // optional - Guava support for Room, including Optional and ListenableFuture
+                "$implementation_v androidx.room:room-guava:$roomVersion",
+
+                // optional - Test helpers
+                "$testImplementation_v androidx.room:room-testing:$roomVersion",
+
+                // optional - Paging 3 Integration
+                "$implementation_v androidx.room:room-paging:2.5.0-alpha01"
+        ]
+    }
+
+    public ArrayList<String> work() {
+        def work_version = "2.7.1"
+
+        return [
+                // (Java only)
+                "$implementation_v androidx.work:work-runtime:$work_version",
+
+                // Kotlin + coroutines
+                "$implementation_v androidx.work:work-runtime-ktx:$work_version",
+
+                // optional - RxJava2 support
+                "$implementation_v androidx.work:work-rxjava2:$work_version",
+
+                // optional - GCMNetworkManager support
+                "$implementation_v androidx.work:work-gcm:$work_version",
+
+                // optional - Test helpers
+                "$androidTestImplementation_v androidx.work:work-testing:$work_version",
+
+                // optional - Multiprocess support
+                "$implementation_v androidx.work:work-multiprocess:$work_version",
+        ]
+    }
+
+    public ArrayList<String> concurrent() {
+        def concurrent_version = "1.1.0"
+
+        return [
+                "$implementation_v androidx.concurrent:concurrent-futures:$concurrent_version",
+                // Kotlin
+                "$implementation_v androidx.concurrent:concurrent-futures-ktx:$concurrent_version"
+        ]
+    }
+
+    public ArrayList<String> ktCoroutines() {
+        def kt_coroutines = "1.6.2"
+        //                "$implementation_v org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9", // older
+// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
+
+        return [
+                "$runtimeOnly_v org.jetbrains.kotlinx:kotlinx-coroutines-android:$kt_coroutines",
+// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+                "$implementation_v org.jetbrains.kotlinx:kotlinx-coroutines-core:$kt_coroutines",
+// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm
+                "$runtimeOnly_v org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kt_coroutines"
+
+
+        ]
+    }
+
+    /**
+     * kotlin 库
+     */
+    public ArrayList<String> Kotlin() {
+        def kt_version = "1.7.0"
+        return [
+                "$implementation_v org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kt_version",
+                // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+                "$runtimeOnly_v org.jetbrains.kotlin:kotlin-reflect:$kt_version",
+                // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
+                "$implementation_v org.jetbrains.kotlin:kotlin-stdlib:$kt_version",
+                "$implementation_v org.jetbrains.kotlin:kotlin-stdlib-common:$kt_version",
+// https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-android-extensions-runtime
+                "$runtimeOnly_v org.jetbrains.kotlin:kotlin-android-extensions-runtime:$kt_version"
+
+
+        ]
+    }
+
+
+    public ArrayList<String> ImgPicasso() {
+
+        return [
+                "$implementation_v com.squareup.picasso:picasso:2.8",
+        ]
+    }
+
+    public ArrayList<String> ImgGlide() {
+        def glide_version = "4.13.2"
+        return [
+                "$implementation_v com.github.bumptech.glide:glide:$glide_version",
+                "$kapt_v com.github.bumptech.glide:compiler:$glide_version",
+
+        ]
+    }
+
+    public ArrayList<String> rxJava() {
+//        Rx(Reactive Extensions)是一个库，用来处理事件和异步任务
+        def rxjava_version = "3.1.4"
+        return [
+                // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxandroid
+                "$implementation_v io.reactivex.rxjava3:rxandroid:3.0.0",
+                // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
+                "$implementation_v io.reactivex.rxjava3:rxjava:$rxjava_version",
+                // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxkotlin
+                "$implementation_v io.reactivex.rxjava3:rxkotlin:3.0.1"
+
+
+        ]
+    }
+
+    public ArrayList<String> okHttp3() {
+        def okhttp_version = "4.10.0"
+        def retrofit_version = "2.9.0"
+        return [
+                "$implementation_v com.squareup.retrofit2:retrofit:$retrofit_version",
+                // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
+                "$implementation_v com.squareup.retrofit2:converter-gson:$retrofit_version",
+                // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
+                "$implementation_v com.squareup.okhttp3:logging-interceptor:$okhttp_version",
+                // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+                "$implementation_v com.squareup.okhttp3:okhttp:$okhttp_version",
+                "$implementation_v com.squareup.okhttp3:okhttp-urlconnection:$okhttp_version"
+
+        ]
+    }
+
+
+    public ArrayList<String> jsonTools() {
+        return [
+//                "$implementation_v com.alibaba:fastjson:2.0.7",
+                "$implementation_v com.google.code.gson:gson:2.9.0"
+        ]
+    }
+
+
+    public ArrayList<String> compose() {
+        def compose_version = "1.1.1"
+        def accompanist_version = "0.23.1"
+        //implementation "androidx.constraintlayout:constraintlayout:2.1.3" --》init
+
+        return [
+                "$implementation_v androidx.activity:activity-compose:1.4.0",
+                // https://mvnrepository.com/artifact/com.google.android.material/material
+                "$runtimeOnly_v com.google.android.material:material:1.6.0",
+
+                "$implementation_v androidx.constraintlayout:constraintlayout-compose:1.0.0",
+
+                "$implementation_v androidx.compose.animation:animation:$compose_version",
+                "$implementation_v androidx.compose.animation:animation-graphics:$compose_version",
+                "$implementation_v androidx.compose.animation:animation-core:$compose_version",
+
+                "$implementation_v androidx.compose.material:material:$compose_version",
+                "$implementation_v androidx.compose.material:material-icons-core:$compose_version",
+                "$implementation_v androidx.compose.material:material-icons-extended:$compose_version",
+                "$implementation_v com.google.android.material:compose-theme-adapter:$compose_version",
+
+
+                "$implementation_v androidx.compose.compiler:compiler:$compose_version",
+
+
+
+                "$implementation_v androidx.compose.foundation:foundation:$compose_version",
+                "$implementation_v androidx.compose.foundation:foundation-layout:$compose_version",
+
+                "$implementation_v androidx.compose.runtime:runtime:$compose_version",
+                "$implementation_v androidx.compose.runtime:runtime-livedata:$compose_version",
+
+                "$implementation_v androidx.compose.ui:ui:$compose_version",
+                "$debugImplementation_v androidx.compose.ui:ui-tooling:$compose_version",
+                "$implementation_v androidx.compose.ui:ui-viewbinding:$compose_version",
+
+                "$implementation_v androidx.compose.ui:ui-tooling-preview:$compose_version",
+                "$androidTestImplementation_v androidx.compose.ui:ui-test-junit4:$compose_version",
+                "$debugImplementation_v androidx.compose.ui:ui-test-manifest:$compose_version",
+
+
+                /*An image loading library for Android backed by Kotlin Coroutines.*/
+                "$implementation_v io.coil-kt:coil-compose:2.1.0",
+
+
+        ]
+    }
+
+    public ArrayList<String> accompanist() {
+        // https://mvnrepository.com/artifact/org.robolectric/robolectric
+        def accompanist_version = "0.23.1"
+        return [
+                "$testImplementation_v org.robolectric:robolectric:4.8.1",
+
+// https://mvnrepository.com/artifact/com.google.accompanist/accompanist-insets
+                "$implementation_v com.google.accompanist:accompanist-insets:$accompanist_version",
+// https://mvnrepository.com/artifact/com.google.accompanist/accompanist-flowlayout
+                "$runtimeOnly_v com.google.accompanist:accompanist-flowlayout:$accompanist_version",
+                "$implementation_v com.google.accompanist:accompanist-swiperefresh:$accompanist_version",
+                "$implementation_v com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+        ]
+
+    }
+
+    public ArrayList<String> window() {
+        def window_version = "1.0.0"
+        return [
+                // https://mvnrepository.com/artifact/androidx.window/window
+                "$implementation_v androidx.window:window:$window_version",
+                // https://mvnrepository.com/artifact/androidx.window/window-rxjava3
+                "$implementation_v androidx.window:window-rxjava3:$window_version",
+                // https://mvnrepository.com/artifact/androidx.window/window-testing
+                "$implementation_v androidx.window:window-testing:$window_version"
+
+
+        ]
+    }
+
+    public ArrayList<String> dagger() {
+/*
+Hilt 是 Android 的依赖项注入库，可减少在项目中执行手动依赖项注入的样板代码。
+    执行手动依赖项注入要求您手动构造每个类及其依赖项，并借助容器重复使用和管理依赖项。
+
+    Hilt 通过为项目中的每个 Android 类提供容器并自动管理其生命周期，提供了一种在应用中使用 DI（依赖项注入）的标准方法。
+    Hilt 在热门 DI 库 Dagger 的基础上构建而成，因而能够受益于 Dagger 的编译时正确性、运行时性能、可伸缩性和 Android Studio 支持。如需了解详情，请参阅 Hilt 和 Dagger。
+*/
+        def hilt_version = "2.42"
+
+
+        return [
+                "$implementation_v com.google.dagger:hilt-android:$hilt_version",
+                // https://mvnrepository.com/artifact/com.google.dagger/hilt-android
+                "$runtimeOnly_v com.google.dagger:hilt-android:$hilt_version",
+                "$kapt_v com.google.dagger:hilt-android-compiler:$hilt_version",
+                // https://mvnrepository.com/artifact/com.google.dagger/dagger-android
+                "$implementation_v com.google.dagger:dagger-android:2.41",
+
+
+        ]
+    }
+
+    public ArrayList<String> pay() {
+
+        // https://mvnrepository.com/artifact/com.alipay.sdk/app
+
+        return [
+                "$api_v com.alipay.sdk:alipaysdk-android:+@aar",
+                //  https://pay.weixin.qq.com/wiki/doc/apiv3_partner/open/pay/chapter2_5_1.shtml
+                "$api_v com.tencent.mm.opensdk:wechat-sdk-android:+"
+
+        ]
+    }
+
+    public ArrayList<String> layouts() {
+        return [
+                // https://mvnrepository.com/artifact/com.readystatesoftware.systembartint/systembartint     //沉浸式
+                "$implementation_v com.readystatesoftware.systembartint:systembartint:1.0.4",
+                // https://mvnrepository.com/artifact/com.google.android/flexbox
+                "$implementation_v com.google.android:flexbox:2.0.1"
+
+        ]
+    }
+
+    public ArrayList<String> littleTools() {
+
+        return [
+                "$compile_v org.apache.commons:commons-lang3:3.12.0",
+                /*Android系统在2.0以后，媒体库加入操作图片Exif的类，Exif是可交换图像文件格式，是专门为数码相机的照片而设定的*/
+                // https://mvnrepository.com/artifact/androidx.exifinterface/exifinterface
+                "$runtimeOnly_v androidx.exifinterface:exifinterface:1.3.3",
+                // https://mvnrepository.com/artifact/androidx.exifinterface/exifinterface
+                "$implementation_v androidx.exifinterface:exifinterface:1.3.3",
+                // https://mvnrepository.com/artifact/org.greenrobot/greendao
+                "$implementation_v org.greenrobot:greendao:3.3.0",
+                // https://mvnrepository.com/artifact/com.google.guava/guava
+                "$implementation_v com.google.guava:guava:31.1-jre",
+                /*          // https://mvnrepository.com/artifact/com.orhanobut/logger
+                          "$implementation_v com.orhanobut:logger:2.2.0",*/
+                // https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j
+                "$implementation_v net.lingala.zip4j:zip4j:2.10.0",
+                // https://mvnrepository.com/artifact/joda-time/joda-time
+                "$implementation_v joda-time:joda-time:2.10.14",
+                // https://mvnrepository.com/artifact/com.lzy.okgo/okgo
+                "$implementation_v com.lzy.net:okgo:3.0.4",
+                "$implementation_v com.blankj:utilcode:1.30.7",
+                // https://mvnrepository.com/artifact/com.scwang.smart/refresh-header-classics
+                "$implementation_v com.scwang.smart:refresh-header-classics:2.0.3",
+                // https://mvnrepository.com/artifact/com.airbnb.android/lottie
+                "$implementation_v com.airbnb.android:lottie:5.1.1",
+
+
+        ]
+    }
+}
+
+
+/*add your code here*/
+
+class ImportPackages {
+
+
+    //对象 创建器
+    static ImportPackages createObj() {
+        return new ImportPackages()
+    }
+
+    static private def implementation = 0.toString()
+    static private def testImplementation = 1.toString()
+    static private def api = 2.toString()
+    static private def kapt = 3.toString()
+    static private def ksp = 4.toString()
+    static private def runtimeOnly = 5.toString()
+    static private def annotationProcessor = 6.toString()
+    static private def androidTestImplementation = 7.toString()
+    static private def debugImplementation = 8.toString()
+    static private def compile = 9.toString()
+
+
+/*add other type   here*/
+
+    def implementationList = [:] as ArrayList
+    def testImplementationList = [:] as ArrayList
+    def apiList = [:] as ArrayList
+    def kaptList = [:] as ArrayList
+    def runtimeOnlyList = [:] as ArrayList
+    def annotationProcessorList = [:] as ArrayList
+    def androidTestImplementationList = [:] as ArrayList
+    def debugImplementationList = [:] as ArrayList
+    def compileList = [:] as ArrayList
+    def kspList = [:] as ArrayList
+
+    @Deprecated
+    public void logShow(list) {
+        println("Current Addr：${Integer.toHexString(this.hashCode())}")
+        for (i in list) {
+            println i
+        }
+    }
+
+    @Deprecated
+    public List OneForALlTest(list) {
+        def listss = [:] as ArrayList
+        for (i in 0..<list.size()) {
+            println list.get(i).toString()[2..list.get(i).toString().length() - 1]
+            listss.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+        }
+        return listss
+    }
+/**
+ * 数组嵌套
+ * @param list
+ */
+    public void ListOfListForImport(list) {
+        for (i in 0..<list.size()) {
+            OneForImport(list[i])
+        }
+    }
+
+/*
+读取之后将其 分别加入对应数组，之后 直接引用
+* */
+
+    public void OneForImport(list) {
+        for (i in 0..<list.size()) {
+            switch (list.get(i).charAt(0)) {
+                case implementation:
+                    implementationList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case testImplementation:
+                    testImplementationList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case kapt:
+                    kaptList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case api:
+                    apiList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case annotationProcessor:
+                    annotationProcessorList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case runtimeOnly:
+                    runtimeOnlyList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case androidTestImplementation:
+                    androidTestImplementationList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case debugImplementation:
+                    debugImplementationList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case compile:
+                    compileList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+                case ksp:
+                    kspList.add(list.get(i).toString()[2..list.get(i).toString().length() - 1])
+                    break
+            }
+        }
+    }
+}
+
+
+ext.dep = new Depends()
+
+/**
+ * class to ipp
+ */
+ext.ipp = ImportPackages
