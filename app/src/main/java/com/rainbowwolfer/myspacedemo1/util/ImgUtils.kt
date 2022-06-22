@@ -13,7 +13,7 @@ import java.io.File
 /*
 * 采用 Glide 与 picasso
 */
-object ImgDownload {
+object ImgUtils {
     private val picasso: Picasso by lazy {
         Picasso.get()
     }
