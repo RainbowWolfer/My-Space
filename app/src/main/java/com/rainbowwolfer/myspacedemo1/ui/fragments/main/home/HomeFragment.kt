@@ -185,46 +185,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding.mainEditSearch.setOnEditorActionListener { _, actionId, _ ->
 			if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 				performSearch(binding.mainEditSearch.text.toString().trim())
-				binding.mainEditSearch.setText("")
+//				binding.mainEditSearch.setText("")
 			}
 			false
 		}
 	}
 	
 	private fun performSearch(content: String) {
-		println(content)
+		if (content.isBlank()) {
+			return
+		}
 		viewModel.searchContent.value = content
 		updateList(true)
-//		lifecycleScope.launch(Dispatchers.Main) {
-//			try {
-//				viewModel.listOffset.value = 0
-//				viewModel.lastViewPosiiton.value = 0
-//				val list = withContext(Dispatchers.IO) {
-//					val response = RetrofitInstance.api.getPostsBySearch(
-//						email = application.getCurrentEmail(),
-//						password = application.getCurrentPassword(),
-//						search = content,
-//						offset = viewModel.listOffset.value!!
-//					)
-//					if (response.isSuccessful) {
-//						response.body() ?: emptyList()
-//					} else {
-//						throw ResponseException(response.getHttpResponse())
-//					}
-//				}
-//			} catch (ex: Exception) {
-//				ex.printStackTrace()
-//				Snackbar.make(binding.root, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG).setAction(getString(R.string.dismiss)) {}.show()
-//				if (ex is ResponseException) {
-//					ex.printResponseException()
-//				}
-//			} finally {
-//				try {
-//
-//				} catch (ex: Exception) {
-//				}
-//			}
-//		}
 		
 		lifecycleScope.launch(Dispatchers.Main) {
 			try {
@@ -239,6 +211,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	private fun BottomSheetDialog.delayToHideAndUpdate() {
 		val dismissDelay = 50L
 		viewModel.searchContent.value = ""
+		binding.mainEditSearch.setText("")
 		lifecycleScope.launch(Dispatchers.Main) {
 			delay(dismissDelay)
 			dismiss()

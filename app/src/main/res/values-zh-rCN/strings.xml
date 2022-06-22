@@ -189,6 +189,7 @@
 	<string name="chat">聊天</string>
 	<string name="picture_saved">图标已保存</string>
 	<string name="info">信息</string>
+	<string name="picture_save_error">保存图片错误</string>
 
 
 </resources>

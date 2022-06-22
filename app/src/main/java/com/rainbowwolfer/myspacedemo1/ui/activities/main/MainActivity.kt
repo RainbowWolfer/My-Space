@@ -35,6 +35,7 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -103,6 +104,7 @@ class MainActivity : AppCompatActivity() {
 							application.currentUser.value = user
 						}
 						ChatSocket.connect(true)
+						delay(100)
 						ChatSocket.console("/sign ${user.id}")
 					} catch (ex: Exception) {
 						ex.printStackTrace()

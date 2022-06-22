@@ -11,6 +11,7 @@ object LocaleUtils {
 		English, Chinese
 	}
 	
+	@Suppress("DEPRECATION")
 	fun notifyLanguageChanged(context: Context) {
 		val metrics = context.resources.displayMetrics
 		val configuration = context.resources.configuration

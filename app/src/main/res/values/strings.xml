@@ -212,4 +212,5 @@
 	<string name="chat">Chat</string>
 	<string name="info">Info</string>
 	<string name="picture_saved">Picture Saved</string>
+	<string name="picture_save_error">Error Saving Picture</string>
 </resources>

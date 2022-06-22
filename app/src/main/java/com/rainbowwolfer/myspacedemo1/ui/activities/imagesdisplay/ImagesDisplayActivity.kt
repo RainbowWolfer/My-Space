@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityImagesDisplayBinding
+import com.rainbowwolfer.myspacedemo1.models.BitmapLoader
 import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
@@ -222,27 +223,24 @@ class ImagesDisplayActivity : AppCompatActivity() {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_download -> {
-				try {
-					val position = binding.imagesDisplayViewPager2.currentItem
-					val bitmap = MySpaceApplication.instance.postsPool.getImage(postID, position)
-					val permissionList = arrayListOf(
-						Manifest.permission.READ_EXTERNAL_STORAGE,
-						Manifest.permission.WRITE_EXTERNAL_STORAGE,
-					)
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-						permissionList.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-					}
-					
-					if (!PermissionUtils.checkPermissions(this, permissionList)) {
-						if (PermissionUtils.requestPermissions(this, permissionList)) {
-							ImageUtils.saveBitmap(bitmap!!.bitmap.value!!)
-							Toast.makeText(this, getString(R.string.picture_saved), Toast.LENGTH_SHORT).show()
-						}
-					}
-					
-				} catch (ex: Exception) {
-					ex.printStackTrace()
+				val position = binding.imagesDisplayViewPager2.currentItem
+				val bitmap = MySpaceApplication.instance.postsPool.getImage(postID, position)
+				val permissionList = arrayListOf(
+					Manifest.permission.READ_EXTERNAL_STORAGE,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE,
+				)
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+					permissionList.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
 				}
+				
+				if (!PermissionUtils.checkPermissions(this, permissionList)) {
+					if (PermissionUtils.requestPermissions(this, permissionList)) {
+						saveImage(bitmap!!)
+					}
+				} else {
+					saveImage(bitmap!!)
+				}
+				
 				true
 			}
 			android.R.id.home -> {
@@ -251,6 +249,20 @@ class ImagesDisplayActivity : AppCompatActivity() {
 			}
 			else -> super.onOptionsItemSelected(item)
 		}
+	}
+	
+	private fun saveImage(bitmap: BitmapLoader) {
+		val save = ImageUtils.saveBitmap(bitmap.bitmap.value!!)
+		Toast.makeText(
+			this, getString(
+				if (save) {
+					R.string.picture_saved
+				} else {
+					R.string.picture_save_error
+				}
+			), Toast.LENGTH_SHORT
+		).show()
+		
 	}
 	
 	override fun dispatchTouchEvent(event: MotionEvent): Boolean {
