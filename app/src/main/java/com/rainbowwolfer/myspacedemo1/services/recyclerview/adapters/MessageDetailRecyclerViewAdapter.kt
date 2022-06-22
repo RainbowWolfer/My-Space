@@ -20,10 +20,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 class MessageDetailRecyclerViewAdapter(
 	private val context: Context,
 ) : RecyclerView.Adapter<MessageDetailRecyclerViewAdapter.ViewHolder>() {
-	
 	companion object {
-		private const val TYPEID_MESSAGE_SENDER = 0
-		private const val TYPEID_MESSAGE_RECEIVER = 1
+		private const val TYPE_ID_MESSAGE_SENDER = 0
+		private const val TYPE_ID_MESSAGE_RECEIVER = 1
 	}
 	
 	private val application = MySpaceApplication.instance
@@ -42,7 +41,7 @@ class MessageDetailRecyclerViewAdapter(
 		MessageDetailRowLayoutLeftBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 	) {
 		val binding = super.parentBinding as MessageDetailRowLayoutLeftBinding
-		override val cardView: CircularRevealCardView = binding.messageDetailLeftCardviewContent
+		override val cardView: CircularRevealCardView = binding.messageDetailLeftCardViewContent
 		override val contentText: TextView = binding.messageDetailLeftTextContent
 		override val avatarImage: CircleImageView = binding.messageDetailLeftImageAvatar
 	}
@@ -53,7 +52,7 @@ class MessageDetailRecyclerViewAdapter(
 		MessageDetailRowLayoutRightBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 	) {
 		val binding = super.parentBinding as MessageDetailRowLayoutRightBinding
-		override val cardView: CircularRevealCardView = binding.messageDetailRightCardviewContent
+		override val cardView: CircularRevealCardView = binding.messageDetailRightCardViewContent
 		override val contentText: TextView = binding.messageDetailRightTextContent
 		override val avatarImage: CircleImageView = binding.messageDetailRightImageAvatar
 	}
@@ -62,16 +61,16 @@ class MessageDetailRecyclerViewAdapter(
 	
 	override fun getItemViewType(position: Int): Int {
 		return if (list[position].senderID == application.getCurrentID()) {
-			TYPEID_MESSAGE_SENDER
+			TYPE_ID_MESSAGE_SENDER
 		} else {
-			TYPEID_MESSAGE_RECEIVER
+			TYPE_ID_MESSAGE_RECEIVER
 		}
 	}
 	
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		return when (viewType) {
-			TYPEID_MESSAGE_SENDER -> RightViewHolder(parent)
-			TYPEID_MESSAGE_RECEIVER -> LeftViewHolder(parent)
+			TYPE_ID_MESSAGE_SENDER -> RightViewHolder(parent)
+			TYPE_ID_MESSAGE_RECEIVER -> LeftViewHolder(parent)
 			else -> LeftViewHolder(parent)
 		}
 	}

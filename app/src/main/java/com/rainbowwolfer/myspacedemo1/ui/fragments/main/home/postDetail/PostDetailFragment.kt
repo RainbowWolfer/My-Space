@@ -32,7 +32,7 @@ import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGr
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
-import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
+import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -95,7 +95,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		
 		
 		private fun getHighlightedColorID(boolean: Boolean): Int {
-			return if (boolean) R.color.purple_200 else R.color.colorControlNomal
+			return if (boolean) R.color.purple_200 else R.color.color_control_normal
 		}
 	}
 	
@@ -178,7 +178,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		}
 		
 		binding.postDetailButtonRepost.buttonAction {
-			SheetDialogUtil.showRepostDialog(requireContext(), viewModel.post.value!!.id) {
+			SheetDialogUtils.showRepostDialog(requireContext(), viewModel.post.value!!.id) {
 				val post = viewModel.post.value!!
 				post.updateReposts(1)
 				application.postsPool.findRelativePosts(post.readID()).forEach {

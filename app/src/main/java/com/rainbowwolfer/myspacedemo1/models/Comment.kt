@@ -28,25 +28,6 @@ data class Comment(
 		const val VOTE_NONE = -1
 	}
 
-//	fun isVoted(): Boolean? {
-//		return when (voted) {
-//			VOTE_NONE -> null
-//			VOTE_DOWN -> false
-//			VOTE_UP -> true
-//			else -> null
-//		}
-//	}
-	
-	fun getUesr(): User {//bad dont do this
-		return User(
-			id = userID,
-			username = username,
-			email = email,
-			profileDescription = profile,
-			isFollowing = false,
-		)
-	}
-	
 	fun getScore(): Int = upvotes - downvotes
 	
 	override fun getDatabaseID(): String = id

@@ -25,9 +25,9 @@ import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffU
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 
-class PostCommentsRecylverViewAdapter(
+class PostCommentsRecyclerViewAdapter(
 	private val fragment: Fragment,
-) : RecyclerView.Adapter<PostCommentsRecylverViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PostCommentsRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val ID_ROW = 1
 		const val ID_END = 2

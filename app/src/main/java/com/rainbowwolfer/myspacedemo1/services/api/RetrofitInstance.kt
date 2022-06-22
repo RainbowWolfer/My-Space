@@ -1,6 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services.api
 
-import com.rainbowwolfer.myspacedemo1.services.api.interceptors.MultiPartIntercepector
+import com.rainbowwolfer.myspacedemo1.services.api.interceptors.MultiPartInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,10 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 	
 	private val client = OkHttpClient.Builder().apply {
-		addInterceptor(MultiPartIntercepector())
+		addInterceptor(MultiPartInterceptor())
 	}.build()
 	
-	private val retrofit_post_mutilpart by lazy {
+	private val retrofit_post_multipart by lazy {
 		Retrofit.Builder()
 			.baseUrl(MyApi.BASE_URL)
 			.client(client)
@@ -27,7 +27,7 @@ object RetrofitInstance {
 	}
 	
 	val api_postMultipart: MyApi by lazy {
-		retrofit_post_mutilpart.create(MyApi::class.java)
+		retrofit_post_multipart.create(MyApi::class.java)
 	}
 	
 	val api: MyApi by lazy {

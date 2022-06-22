@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("MemberVisibilityCanBePrivate")
-object SheetDialogUtil {
+object SheetDialogUtils {
 	fun showRepostDialog(context: Context, postID: String, successAction: () -> Unit) {
 		val application = MySpaceApplication.instance
 		if (!application.hasLoggedIn()) {

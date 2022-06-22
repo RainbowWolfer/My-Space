@@ -10,7 +10,6 @@ import android.viewbinding.library.activity.viewBinding
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager2.widget.ViewPager2
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.ActivityLoginBinding
 import com.rainbowwolfer.myspacedemo1.models.User
@@ -61,13 +60,13 @@ class LoginActivity : AppCompatActivity() {
 		binding.materialButtonToggleGroup.check(R.id.button_login)
 		binding.loginViewPager.currentItem = 0
 		
-		val fragment = binding.loginViewPager.findFragmentAtPosition(supportFragmentManager, 0)
+		val fragment = findFragmentAtPosition(supportFragmentManager, 0)
 		if (fragment is LoginFragment) {
 			fragment.fill(email, password)
 		}
 	}
 	
-	fun ViewPager2.findFragmentAtPosition(
+	private fun findFragmentAtPosition(
 		fragmentManager: FragmentManager,
 		position: Int
 	): Fragment? {

@@ -23,7 +23,7 @@
 		app:layout_constraintTop_toTopOf="@+id/messageDetailLeft_image_avatar">
 		
 		<com.google.android.material.circularreveal.cardview.CircularRevealCardView
-			android:id="@+id/messageDetailLeft_cardview_content"
+			android:id="@+id/messageDetailLeft_cardView_content"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="8dp"

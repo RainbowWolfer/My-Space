@@ -31,9 +31,9 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.viewmodels.UserFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.ui.views.ChangeUsernameDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOption
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -185,12 +185,12 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 					override fun action(obj: String) {
 						lifecycleScope.launch(Dispatchers.IO) {
 							try {
-								val responde = RetrofitInstance.api.changeUsername(
+								val response = RetrofitInstance.api.changeUsername(
 									NewUsername(user.id, user.username, user.password, obj)
 								)
 								var success = false
 								kotlin.runCatching {
-									val str = responde.string().trim()
+									val str = response.string().trim()
 									val value = str.toInt()
 									success = value >= 1
 								}

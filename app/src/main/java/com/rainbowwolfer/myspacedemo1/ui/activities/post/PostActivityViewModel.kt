@@ -18,7 +18,7 @@ class PostActivityViewModel : ViewModel() {
 	val images: MutableLiveData<Array<ImageInfo?>> by lazy { MutableLiveData(arrayOfNulls(9)) }
 	
 	val postVisibility: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
-	val replyVisiblity: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
+	val replyVisibility: MutableLiveData<PostVisibility> by lazy { MutableLiveData(PostVisibility.All) }
 	
 	val tags: MutableLiveData<ArrayList<String>> by lazy { MutableLiveData(arrayListOf()) }
 	
@@ -49,7 +49,7 @@ class PostActivityViewModel : ViewModel() {
 	}
 	
 	fun getImages() = images.value!!
-	fun getContent() = content.value!!
+	fun getContent() = content.value!!.trim()
 	
 	fun getURIs(): List<Uri?> {
 		return images.value!!.map {

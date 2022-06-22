@@ -24,7 +24,7 @@ import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffU
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.interfaces.IRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.collections.CollectionFragmentDirections
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragmentDirections
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.convertToRecentFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -101,7 +101,7 @@ class CollectionsRecyclerViewAdapter(
 											)
 										)
 										withContext(Dispatchers.Main) {
-											Toast.makeText(context, "Succesffully Removed From Collections", Toast.LENGTH_SHORT).show()
+											Toast.makeText(context, context.getString(R.string.successfully_removed_from_collections), Toast.LENGTH_SHORT).show()
 											setData(list.filter { item ->
 												item.targetID != data.targetID
 											})

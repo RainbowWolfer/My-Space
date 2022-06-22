@@ -3,7 +3,7 @@ package com.rainbowwolfer.myspacedemo1.services.chat
 import androidx.lifecycle.MutableLiveData
 import com.rainbowwolfer.myspacedemo1.models.Message
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.getDateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

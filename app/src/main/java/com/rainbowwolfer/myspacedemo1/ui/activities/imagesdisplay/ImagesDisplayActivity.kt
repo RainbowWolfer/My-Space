@@ -27,7 +27,7 @@ import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFoc
 import com.rainbowwolfer.myspacedemo1.util.ImageUtils
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import com.rainbowwolfer.myspacedemo1.util.PermissionUtils
-import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
+import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 
 class ImagesDisplayActivity : AppCompatActivity() {
 	companion object {
@@ -156,7 +156,7 @@ class ImagesDisplayActivity : AppCompatActivity() {
 		
 		binding.imagesDisplayButtonComment.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
-			SheetDialogUtil.showCommentDialog(this, post.readID()) {
+			SheetDialogUtils.showCommentDialog(this, post.readID()) {
 				post.updateComments(1)
 				setMetas(post.readID())
 				
@@ -174,7 +174,7 @@ class ImagesDisplayActivity : AppCompatActivity() {
 		
 		binding.imagesDisplayButtonRepost.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
-			SheetDialogUtil.showRepostDialog(this, post.readID()) {
+			SheetDialogUtils.showRepostDialog(this, post.readID()) {
 				post.updateReposts(1)
 				setMetas(post.readID())
 				

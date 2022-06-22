@@ -12,14 +12,11 @@ class PostDetailViewModel : ViewModel() {
 	
 	val comments: MutableLiveData<List<Comment>> by lazy { MutableLiveData(emptyList()) }
 	val commentsOffset: MutableLiveData<Int> by lazy { MutableLiveData(0) }
-//	val commentslastViewPosiiton: MutableLiveData<Int> by lazy { MutableLiveData(0) }
 	
 	val repostRecords: MutableLiveData<List<RepostRecord>> by lazy { MutableLiveData(emptyList()) }
 	val repostRecordsOffset: MutableLiveData<Int> by lazy { MutableLiveData(0) }
-//	val repostRecordLastViewPosition: MutableLiveData<Int> by lazy { MutableLiveData(0) }
 	
 	val scoreRecords: MutableLiveData<List<ScoreRecord>> by lazy { MutableLiveData(emptyList()) }
 	val scoreRecordsOffset: MutableLiveData<Int> by lazy { MutableLiveData(0) }
-//	val scoreRecordLastViewPosition: MutableLiveData<Int> by lazy { MutableLiveData(0) }
 	
 }

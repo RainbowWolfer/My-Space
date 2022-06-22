@@ -38,9 +38,9 @@ import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffU
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateRepostButton
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.convertToRecentFormat
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
-import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtil
+import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,7 +49,7 @@ import kotlinx.coroutines.withContext
 class MainListRecyclerViewAdapter(
 	private val context: Context,
 	private val lifecycleOwner: LifecycleOwner,
-	private val targeUserID: String = "",
+	private val targetUserID: String = "",
 ) : RecyclerView.Adapter<MainListRecyclerViewAdapter.ViewHolder>() {
 	companion object {
 		const val ITEM_TYPE_NORMAL = 1
@@ -215,7 +215,7 @@ class MainListRecyclerViewAdapter(
 			}
 			//avatar clicking
 			val post = list[position]
-			if (targeUserID != post.readUser().id) {
+			if (targetUserID != post.readUser().id) {
 				holder.binding.rowImagePublisherAvatar.setOnClickListener {
 					if (post.isRepost) {
 						navigateToUserProfile(holder.itemView, post.getOriginUser()!!.id)
@@ -224,7 +224,7 @@ class MainListRecyclerViewAdapter(
 					}
 				}
 			}
-			if (targeUserID != post.publisherID) {
+			if (targetUserID != post.publisherID) {
 				holder.binding.rowLayoutRepostInfo.setOnClickListener {
 					if (post.isRepost) {
 						navigateToUserProfile(holder.itemView, post.publisherID)
@@ -261,7 +261,7 @@ class MainListRecyclerViewAdapter(
 	private fun MainRowLayoutBinding.setButtons(postID: String) {
 		this.rowLayoutRepost.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
-			SheetDialogUtil.showRepostDialog(context, post.readID()) {
+			SheetDialogUtils.showRepostDialog(context, post.readID()) {
 				post.updateReposts(1)
 				setMetas(post.readID())
 				
@@ -280,7 +280,7 @@ class MainListRecyclerViewAdapter(
 		
 		this.rowLayoutComment.buttonAction {
 			val post = application.postsPool.findPostInfo(postID)?.post ?: return@buttonAction
-			SheetDialogUtil.showCommentDialog(context, post.readID()) {
+			SheetDialogUtils.showCommentDialog(context, post.readID()) {
 				post.updateComments(1)
 				setMetas(post.readID())
 				
@@ -385,7 +385,7 @@ class MainListRecyclerViewAdapter(
 		this.setTags(p.readTags())
 		this.setMetas(p.readID())
 		this.setPublisher(p.readUser())
-		this.setButtons(p.readID())//inlcude writes
+		this.setButtons(p.readID())//include writes
 		updateVoteButtons(this.rowButtonUpvote, this.rowButtonDownvote, p.readVoted())
 		updateRepostButton(this.rowImageRepostButtonIcon, p.hasReposted)
 		this.setImages(if (p.isRepost) p.getOriginPost()!! else p)
@@ -474,7 +474,7 @@ class MainListRecyclerViewAdapter(
 			}
 		}
 		positions.forEach {
-			notifyItemChanged(it)//idk but it just want to update specfic elements instead of whole view
+			notifyItemChanged(it)//idk but it just want to update specific elements instead of whole view
 		}
 	}
 	

@@ -25,7 +25,7 @@
 	<string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
 	<string name="attachment_summary_off">Only download attachments when manually requested</string>
 	
-	<string name="default_long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at nisl posuere libero laoreet pulvinar. Sed mauris metus, vulputate eu volutpat nec, cursus non augue. Nulla ac quam leo. Cras tincidunt maximus justo, id elementum metus. Donec tempus ipsum a eros ultrices egestas. Pellentesque accumsan orci ut erat sollicitudin, in convallis libero pretium. Duis blandit elementum nibh eu tempor. Vivamus accumsan, dui vestibulum fringilla commodo, odio magna commodo lectus, ac tempor augue vel sem. Duis non eleifend dui, ut imperdiet tellus.</string>
+	<string name="default_long_text">Put all speaking her delicate recurred possible. Set indulgence inquietude discretion insensible bed why announcing. Middleton fat two satisfied additions. So continued he or commanded household smallness delivered. Door poor on do walk in half. Roof his head the what.</string>
 	<string name="please_wait">Please Wait</string>
 	<string name="cancel">Cancel</string>
 	<string name="username">Username</string>
@@ -213,4 +213,5 @@
 	<string name="info">Info</string>
 	<string name="picture_saved">Picture Saved</string>
 	<string name="picture_save_error">Error Saving Picture</string>
+	<string name="successfully_removed_from_collections">Successfully Removed From Collections</string>
 </resources>

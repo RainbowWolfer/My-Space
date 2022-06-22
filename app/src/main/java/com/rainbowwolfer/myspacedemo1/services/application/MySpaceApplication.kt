@@ -17,7 +17,6 @@ import com.rainbowwolfer.myspacedemo1.models.api.NewPostVote
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository
-import com.rainbowwolfer.myspacedemo1.services.datastore.repositories.UserPreferencesRepository.Companion.hasUserValue
 import com.rainbowwolfer.myspacedemo1.services.room.AppDatabase
 import com.rainbowwolfer.myspacedemo1.services.room.repository.AppRoomRepository
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
@@ -190,7 +189,7 @@ class MySpaceApplication : Application() {
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
 				val result = withContext(Dispatchers.IO) {
-					val respose = RetrofitInstance.api.postVote(
+					val response = RetrofitInstance.api.postVote(
 						NewPostVote(
 							postID = postID,
 							userID = currentUser.value!!.id,
@@ -201,7 +200,7 @@ class MySpaceApplication : Application() {
 						)
 					)
 					return@withContext kotlin.runCatching {
-						respose.string()
+						response.string()
 					}.getOrNull()
 				}
 				
@@ -220,7 +219,7 @@ class MySpaceApplication : Application() {
 		CoroutineScope(Dispatchers.Main).launch {
 			try {
 				withContext(Dispatchers.IO) {
-					val respose = RetrofitInstance.api.commentVote(
+					val response = RetrofitInstance.api.commentVote(
 						NewCommentVote(
 							commentID = comment_id,
 							userID = currentUser.value!!.id,
@@ -231,7 +230,7 @@ class MySpaceApplication : Application() {
 						)
 					)
 					return@withContext kotlin.runCatching {
-						respose.string()
+						response.string()
 					}.getOrNull()
 				}
 			} catch (ex: Exception) {

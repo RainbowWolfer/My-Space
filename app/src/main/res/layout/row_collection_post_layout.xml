@@ -28,7 +28,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
 		android:layout_marginTop="4dp"
-		android:text="\@RainboWolfer"
+		tools:text="\@RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
 		android:layout_marginTop="8dp"
-		android:text="2022-02-22 22:22:22"
+		tools:text="2022-02-22 22:22:22"
 		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_text_helper1"
 		app:layout_constraintTop_toTopOf="parent"/>
 	
@@ -92,7 +92,8 @@
 		app:layout_constraintBottom_toBottomOf="@+id/rowCollectionPost_text_username"
 		app:layout_constraintStart_toEndOf="@+id/rowCollectionPost_text_username"
 		app:layout_constraintTop_toTopOf="@+id/rowCollectionPost_text_username"
-		app:srcCompat="@drawable/ic_baseline_reply_all_24"/>
+		app:srcCompat="@drawable/ic_baseline_reply_all_24"
+		android:contentDescription=""/>
 	
 	<TextView
 		android:id="@+id/rowCollectionPost_text_title"

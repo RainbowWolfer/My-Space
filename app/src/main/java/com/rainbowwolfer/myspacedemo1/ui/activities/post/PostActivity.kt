@@ -40,8 +40,8 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.ui.views.SuccessBackDialog
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.setAutoClearEditTextFocus
 import com.rainbowwolfer.myspacedemo1.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
@@ -123,7 +123,7 @@ class PostActivity : AppCompatActivity() {
 			viewModel.postVisibility.value = PostVisibility.values()[position]
 		}
 		binding.postAutoTextReply.setOnItemClickListener { _, _, position, _ ->
-			viewModel.replyVisiblity.value = PostVisibility.values()[position]
+			viewModel.replyVisibility.value = PostVisibility.values()[position]
 		}
 		
 		application.currentAvatar.observe(this) {
@@ -266,7 +266,7 @@ class PostActivity : AppCompatActivity() {
 			content.value = draft.textContent
 			tags.value = ArrayList(draft.getTagsList())
 			postVisibility.value = draft.postVisibility
-			replyVisiblity.value = draft.replyLimit
+			replyVisibility.value = draft.replyLimit
 		}
 		
 		postEditTextContent.setText(draft.textContent)
@@ -459,7 +459,7 @@ class PostActivity : AppCompatActivity() {
 									viewModel.getByteArrays(),
 									viewModel.getExtensions(),
 									viewModel.postVisibility.value!!,
-									viewModel.replyVisiblity.value!!,
+									viewModel.replyVisibility.value!!,
 									viewModel.tags.value!!
 								)
 								val multipartTypedOutput = arrayListOf<MultipartBody.Part>()
@@ -498,7 +498,7 @@ class PostActivity : AppCompatActivity() {
 						DateTime.now().getDateTime(),
 						viewModel.getContent(),
 						viewModel.postVisibility.value!!,
-						viewModel.replyVisiblity.value!!,
+						viewModel.replyVisibility.value!!,
 						Draft.convertTags(viewModel.tags.value!!),
 						Draft.convertImagesURI(viewModel.getNotNullURIs())
 					)

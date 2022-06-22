@@ -151,7 +151,7 @@
 				</androidx.appcompat.widget.LinearLayoutCompat>
 				
 				<androidx.recyclerview.widget.RecyclerView
-					android:id="@+id/main_recyvlerView_list"
+					android:id="@+id/main_recyclerView_list"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
 					android:scrollbars="vertical"
@@ -172,6 +172,7 @@
 		android:layout_marginBottom="24dp"
 		android:clickable="true"
 		android:contentDescription="@string/app_name_space"
+		android:focusable="true"
 		android:src="@drawable/ic_baseline_add_24"
 		app:tint="@color/contrast_fab"
 		tools:ignore="ImageContrastCheck"/>

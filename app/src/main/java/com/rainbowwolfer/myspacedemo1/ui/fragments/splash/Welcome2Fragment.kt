@@ -15,7 +15,7 @@ class Welcome2Fragment : Fragment(R.layout.fragment_welcome2) {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		val viewPager = activity?.findViewById<ViewPager2>(R.id.welcome_viewPager)
-		binding.welcom2ButtonPrevious.setOnClickListener {
+		binding.welcome2ButtonPrevious.setOnClickListener {
 			viewPager?.currentItem = 0
 		}
 		binding.welcome2ButtonFinish.setOnClickListener {

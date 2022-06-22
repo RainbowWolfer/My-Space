@@ -82,8 +82,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.mainRecyvlerViewList.layoutManager = LinearLayoutManager(requireContext())
-		binding.mainRecyvlerViewList.adapter = listAdapter
+		binding.mainRecyclerViewList.layoutManager = LinearLayoutManager(requireContext())
+		binding.mainRecyclerViewList.adapter = listAdapter
 		
 		application.currentUser.observe(viewLifecycleOwner) {
 //			println(viewModel.posts.value!!.size)
@@ -99,16 +99,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			if (it.isEmpty()) {
 				updateList(false)
 				binding.mainLayoutNothing.visibility = View.VISIBLE
-				binding.mainRecyvlerViewList.visibility = View.GONE
+				binding.mainRecyclerViewList.visibility = View.GONE
 			} else {
 				binding.mainLayoutNothing.visibility = View.GONE
-				binding.mainRecyvlerViewList.visibility = View.VISIBLE
+				binding.mainRecyclerViewList.visibility = View.VISIBLE
 				listAdapter.setData(it)
 			}
 
 //			println("last position:  " + viewModel.lastViewPosiiton.value)
-			if (viewModel.lastViewPosiiton.value != -1 && updateScrollPosition) {
-				binding.mainRecyvlerViewList.scrollToPosition(viewModel.lastViewPosiiton.value!!)
+			if (viewModel.lastViewPosition.value != -1 && updateScrollPosition) {
+				binding.mainRecyclerViewList.scrollToPosition(viewModel.lastViewPosition.value!!)
 			}
 		}
 		
@@ -132,16 +132,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			}
 		}
 		
-		binding.mainRecyvlerViewList.addOnScrollListener(
+		binding.mainRecyclerViewList.addOnScrollListener(
 			object : RecyclerView.OnScrollListener() {
 				override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 					super.onScrolled(recyclerView, dx, dy)
-					val up = binding.mainRecyvlerViewList.canScrollVertically(-1)
+					val up = binding.mainRecyclerViewList.canScrollVertically(-1)
 					binding.mainSwipeRefreshLayout.isEnabled = !up || binding.mainSwipeRefreshLayout.isRefreshing
 					
-					val lastPosition = (binding.mainRecyvlerViewList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-					val firstPosition = (binding.mainRecyvlerViewList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-					viewModel.lastViewPosiiton.value = firstPosition
+					val lastPosition = (binding.mainRecyclerViewList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+					val firstPosition = (binding.mainRecyclerViewList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+					viewModel.lastViewPosition.value = firstPosition
 //					println("$lastPosition - ${listAdapter.itemCount - 2}")
 					if (lastPosition >= listAdapter.itemCount - 2) {
 						//update
@@ -235,7 +235,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				delay(200)//wait fot animation to pop up
 				if (refresh) {
 					viewModel.listOffset.value = 0
-					viewModel.lastViewPosiiton.value = 0
+					viewModel.lastViewPosition.value = 0
 					viewModel.randomSeed.value = Random.nextInt()
 				}
 				
@@ -270,7 +270,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 						try {
 							delay(100)
 							if (scrollToTop) {
-								binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+								binding.mainRecyclerViewList.smoothScrollToPosition(0)
 							}
 						} catch (ex: Exception) {
 						}
@@ -279,7 +279,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 						binding.mainSwipeRefreshLayout.isRefreshing = false//better get it sealed up
 					}
 					delay(100)
-					binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyvlerViewList.canScrollVertically(-1)
+					binding.mainSwipeRefreshLayout.isEnabled = !binding.mainRecyclerViewList.canScrollVertically(-1)
 					isLoading = false
 					if (refresh && success) {
 						Toast.makeText(requireContext(), getString(R.string.refresh_successful), Toast.LENGTH_SHORT).show()
@@ -430,7 +430,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				updateList(true)
 			}
 			R.id.item_top -> {
-				binding.mainRecyvlerViewList.smoothScrollToPosition(0)
+				binding.mainRecyclerViewList.smoothScrollToPosition(0)
 			}
 			android.R.id.home -> {
 				MainActivity.Instance?.drawerLayout?.openDrawer(GravityCompat.START)

@@ -18,7 +18,7 @@ import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
 import com.rainbowwolfer.myspacedemo1.ui.fragments.FragmentCustomBackPressed
-import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostCommentsRecylverViewAdapter
+import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview.PostCommentsRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
@@ -31,8 +31,6 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	companion object {
 		var instance: PostDetailCommentsFragment? = null
 		private const val ARG_POST_ID = "post_id"
-		const val RELOAD_THREASHOLD = 3
-		
 		
 		fun newInstance(postID: String) = PostDetailCommentsFragment().apply {
 			arguments = Bundle().apply {
@@ -53,7 +51,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	)
 	private val application = MySpaceApplication.instance
 	
-	private val adapter by lazy { PostCommentsRecylverViewAdapter(this) }
+	private val adapter by lazy { PostCommentsRecyclerViewAdapter(this) }
 	private var isLoading = false
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +63,9 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.postDetailCommentsRecylverView.isNestedScrollingEnabled = true
-		binding.postDetailCommentsRecylverView.layoutManager = LinearLayoutManager(requireContext())
-		binding.postDetailCommentsRecylverView.adapter = adapter
+		binding.postDetailCommentsRecyclerView.isNestedScrollingEnabled = true
+		binding.postDetailCommentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+		binding.postDetailCommentsRecyclerView.adapter = adapter
 		
 		loadComment(true, postID)
 		
@@ -103,7 +101,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 			}
 		}
 		
-		binding.postDetailCommentsRecylverView.scrollToUpdate {
+		binding.postDetailCommentsRecyclerView.scrollToUpdate {
 			loadComment(false, postID)
 		}
 	}
@@ -138,36 +136,6 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 							password = application.currentUser.value?.password ?: ""
 						)
 					}
-//					var triedCount = 0
-//					var list: List<Comment> = if (refresh) emptyList() else viewModel.comments.value!!
-//					do {
-//						val new: List<Comment> = withContext(Dispatchers.IO) {
-//							val response = RetrofitInstance.api.getPostComments(
-//								postID = postID,
-//								offset = viewModel.commentsOffset.value ?: 0,
-//								email = application.currentUser.value?.email ?: "",
-//								password = application.currentUser.value?.password ?: ""
-//							)
-//							if (response.isSuccessful) {
-//								response.body() ?: emptyList()
-//							} else {
-//								throw ResponseException(response.getHttpResponse())
-//							}
-//						}
-//						var count = 0
-//						if (new.isNotEmpty()) {
-//							for (item in new) {
-//								if (list.any { it.id == item.id }) {
-//									continue
-//								}
-//								list = list.plus(item)
-//								count++
-//							}
-//							viewModel.commentsOffset.value = viewModel.commentsOffset.value!!.plus(count)
-//						}
-//
-//						viewModel.comments.value = list
-//					} while (new.isNotEmpty() && count <= RELOAD_THREASHOLD && triedCount++ <= 5)
 				} catch (ex: Exception) {
 					ex.printStackTrace()
 				} finally {
@@ -175,7 +143,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 						hideLoading()
 						isLoading = false
 						if (refresh) {
-							binding.postDetailCommentsRecylverView.smoothScrollToPosition(0)
+							binding.postDetailCommentsRecyclerView.smoothScrollToPosition(0)
 						}
 					} catch (ex: Exception) {
 						//it's ok

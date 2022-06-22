@@ -27,9 +27,9 @@ import com.rainbowwolfer.myspacedemo1.services.chat.ChatSocket
 import com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters.MessageDetailRecyclerViewAdapter
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.viewmodel.MessageFragmentViewModel
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.user.UserFragment
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.defaultTransitionNavOption
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getDateTime
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.scrollToUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

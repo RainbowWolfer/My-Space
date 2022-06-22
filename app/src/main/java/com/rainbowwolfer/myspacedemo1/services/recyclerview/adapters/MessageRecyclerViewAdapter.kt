@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rainbowwolfer.myspacedemo1.R
 import com.rainbowwolfer.myspacedemo1.databinding.RowMessageEmptyLayoutBinding
 import com.rainbowwolfer.myspacedemo1.databinding.RowMessageLayoutBinding
 import com.rainbowwolfer.myspacedemo1.models.MessageContact
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
-import com.rainbowwolfer.myspacedemo1.services.recyclerview.diff.DatabaseIdDiffUtil
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.message.MessageDetailFragment
-import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.convertToRecentFormat
+import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.convertToRecentFormat
 
 class MessageRecyclerViewAdapter(
 	private val context: Context,

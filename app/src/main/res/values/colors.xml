@@ -36,5 +36,5 @@
 	<color name="color8">#9D9F78</color>
 	<color name="color9">#2DE7B5</color>
 	
-	<color name="colorControlNomal">#89000000</color>
+	<color name="color_control_normal">#89000000</color>
 </resources>

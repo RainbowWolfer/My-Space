@@ -33,7 +33,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 	private val binding: FragmentUserBinding by viewBinding()
 	
 	private val application = MySpaceApplication.instance
-	private val viewmodel: UserFragmentViewModel by viewModels()
+	private val viewModel: UserFragmentViewModel by viewModels()
 	
 	init {
 		instance = this
@@ -72,7 +72,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 		val adapter = UserViewPagerAdapter(this, userID)
 		binding.userViewPager2.adapter = adapter
 		
-		viewmodel.postsAndFollowersCount.observe(viewLifecycleOwner) {
+		viewModel.postsAndFollowersCount.observe(viewLifecycleOwner) {
 			TabLayoutMediator(binding.userTabLayout, binding.userViewPager2) { tab, position ->
 				tab.text = when (position) {
 					0 -> getString(R.string.profile)
@@ -93,7 +93,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 				}
 				if (value.size == 2) {
 					withContext(Dispatchers.Main) {
-						viewmodel.postsAndFollowersCount.value = Pair(value[0], value[1])
+						viewModel.postsAndFollowersCount.value = Pair(value[0], value[1])
 					}
 				} else {
 					throw Exception("value size is ${value.size} which is not expected as 2")

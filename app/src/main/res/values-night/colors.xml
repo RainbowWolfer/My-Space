@@ -10,5 +10,5 @@
 	
 	<color name="contrast_fab">#000</color>
 	
-	<color name="colorControlNomal">#B2FFFFFF</color>
+	<color name="color_control_normal">#B2FFFFFF</color>
 </resources>

@@ -68,7 +68,7 @@ class SignUpProcessDialog(
 						binding.signupTextCheckingUsername.text = context.getText(R.string.username_duplicate)
 						errorText(binding.signupTextCheckingUsername)
 					}
-					throw Exception("uesrname duplicate")
+					throw Exception("username duplicate")
 				}
 				
 				withContext(Dispatchers.Main) {
