@@ -1,5 +1,7 @@
 package com.rainbowwolfer.myspacedemo1.util
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.view.MotionEvent
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.rainbowwolfer.myspacedemo1.R
+import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.UserInfo
 import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.api.GoResponse
@@ -204,4 +207,19 @@ object EasyFunctions {
 		}
 	}
 	
+	fun share(context: Context, text: String) {
+		val sharedIntent = Intent().apply {
+			this.action = Intent.ACTION_SEND
+			this.putExtra(Intent.EXTRA_TEXT, text)
+			this.type = "text/plain"
+		}
+		context.startActivity(sharedIntent)
+	}
+	
+	fun postShareContent(context: Context, post: Post): String {
+		return context.getString(R.string.publisher) +
+				" :${post.publisherUsername}\n" +
+				context.getString(R.string.date) + " :${post.publishDateTime}\n" +
+				post.textContent
+	}
 }

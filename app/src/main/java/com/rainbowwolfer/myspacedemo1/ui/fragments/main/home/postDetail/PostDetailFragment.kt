@@ -2,9 +2,9 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import android.widget.ImageView
@@ -31,7 +31,9 @@ import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGr
 import com.rainbowwolfer.myspacedemo1.services.gridview.adapters.ImagesDisplayGridViewAdapter.Companion.presetGridViewHeight
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.HomeFragment
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.viewmodels.PostDetailViewModel
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.postShareContent
 import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -359,9 +361,21 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			binding.postDetailTextRepostsCount.visibility = this
 		}
 	}
-
+	
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 		inflater.inflate(R.menu.post_detail_menu, menu)
 	}
+	
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.item_share -> {
+				val post = application.postsPool.findPostInfo(postID)?.post ?: return true
+				EasyFunctions.share(requireContext(), postShareContent(requireContext(), post))
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
+	
 	
 }

@@ -222,7 +222,7 @@ interface MyApi {
 	
 	@POST("user/sendResetPasswordEmail")
 	suspend fun sendResetPasswordEmail(
-	
-	):ResponseBody
+		@Body body: SendResetPasswordEmail,
+	): ResponseBody
 	
 }

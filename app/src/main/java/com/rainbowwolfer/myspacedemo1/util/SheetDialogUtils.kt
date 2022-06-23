@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -17,6 +18,7 @@ import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetForgetPasswordBindi
 import com.rainbowwolfer.myspacedemo1.databinding.BottomSheetRepostInputBinding
 import com.rainbowwolfer.myspacedemo1.models.api.NewComment
 import com.rainbowwolfer.myspacedemo1.models.api.NewRepost
+import com.rainbowwolfer.myspacedemo1.models.api.SendResetPasswordEmail
 import com.rainbowwolfer.myspacedemo1.models.enums.PostVisibility
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -78,7 +80,7 @@ object SheetDialogUtils {
 									textContent = binding.bottomSheetRepostDialogEditText.text?.toString() ?: "",
 									postVisibility = PostVisibility.All,
 									replyLimit = PostVisibility.All,
-									tags = listOf("tag1", "tag2", "tag3"),
+									tags = emptyList(),
 									email = application.currentUser.value!!.email,
 									password = application.currentUser.value!!.password,
 								)
@@ -167,104 +169,117 @@ object SheetDialogUtils {
 	}
 	
 	
-	fun showForgetPasswordDialog() {
-		fun showRepostDialog(context: Context) {
-			val application = MySpaceApplication.instance
-			if (!application.hasLoggedIn()) {
-				return
-			}
-			BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
-				setOnShowListener {
-					Handler(Looper.getMainLooper()).post {
-						val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetPasswordDialog_root) as? FrameLayout?
-						bottomSheet?.let {
-							with(BottomSheetBehavior.from(it)) {
-								skipCollapsed = true
-								state = BottomSheetBehavior.STATE_EXPANDED
-							}
+	fun showForgetPasswordDialog(context: Context) {
+		BottomSheetDialog(context, R.style.CustomizedBottomDialogStyle).apply {
+			setOnShowListener {
+				Handler(Looper.getMainLooper()).post {
+					val bottomSheet = (this as? BottomSheetDialog)?.findViewById<View>(R.id.bottomSheetPasswordDialog_root) as? FrameLayout?
+					bottomSheet?.let {
+						with(BottomSheetBehavior.from(it)) {
+							skipCollapsed = true
+							state = BottomSheetBehavior.STATE_EXPANDED
 						}
 					}
 				}
-				setCanceledOnTouchOutside(true)
-				show()
-				
-				val binding = BottomSheetForgetPasswordBinding.inflate(LayoutInflater.from(context))
-				setContentView(binding.root)
-				
-				binding.forgetPasswordDialogEditEmail.doAfterTextChanged {
-					if (it.toString().isBlank()) {
-						binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.empty_email)
-						return@doAfterTextChanged
-					} else {
-						binding.forgetPasswordDialogInputEmail.error = null
-					}
-					val email = binding.forgetPasswordDialogEditEmail.text.toString()
-					val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
-					if (email == confirm || confirm.isEmpty()) {
-						binding.forgetPasswordDialogInputEmail.error = null
-					} else {
-						binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.confirm_email_is_not_matched)
-					}
+			}
+			setCanceledOnTouchOutside(true)
+			show()
+			
+			val binding = BottomSheetForgetPasswordBinding.inflate(LayoutInflater.from(context))
+			setContentView(binding.root)
+			
+			
+			//check email format
+			
+			binding.forgetPasswordDialogEditEmail.doAfterTextChanged {
+				val text = it.toString()
+				val emailValidation = Patterns.EMAIL_ADDRESS.matcher(text).matches()
+				if (emailValidation) {
+					binding.forgetPasswordDialogInputEmail.error = null
+				} else {
+					binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.please_enter_a_valid_email_address)
+					return@doAfterTextChanged
 				}
 				
-				binding.forgetPasswordDialogEditConfirmEmail.doAfterTextChanged {
-					if (it.toString().isBlank()) {
-						binding.forgetPasswordDialogEditConfirmEmail.error = context.getString(R.string.empty_confirm_email)
-						return@doAfterTextChanged
-					}
-					val email = binding.forgetPasswordDialogEditEmail.text.toString()
-					val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
-					if (email == confirm) {
-						binding.forgetPasswordDialogInputEmail.error = null
-					} else {
-						binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.confirm_email_is_not_matched)
-					}
+				if (text.isBlank()) {
+					binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.empty_email)
+					return@doAfterTextChanged
+				} else {
+					binding.forgetPasswordDialogInputEmail.error = null
+				}
+				val email = binding.forgetPasswordDialogEditEmail.text.toString()
+				val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
+				if (email == confirm || confirm.isEmpty()) {
+					binding.forgetPasswordDialogInputEmail.error = null
+				} else {
+					binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.confirm_email_is_not_matched)
+				}
+			}
+			
+			binding.forgetPasswordDialogEditConfirmEmail.doAfterTextChanged {
+				if (it.toString().isBlank()) {
+					binding.forgetPasswordDialogEditConfirmEmail.error = context.getString(R.string.empty_confirm_email)
+					return@doAfterTextChanged
+				}
+				val email = binding.forgetPasswordDialogEditEmail.text.toString()
+				val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
+				if (email == confirm) {
+					binding.forgetPasswordDialogEditConfirmEmail.error = null
+				} else {
+					binding.forgetPasswordDialogEditConfirmEmail.error = context.getString(R.string.confirm_email_is_not_matched)
+				}
+			}
+			
+			binding.forgetPasswordDialogButtonSubmit.setOnClickListener {
+				val email = binding.forgetPasswordDialogEditEmail.text.toString()
+				val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
+				
+				var error = false
+				if (email.isBlank()) {
+					binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.empty_email)
+					error = true
+				}
+				if (confirm.isBlank()) {
+					binding.forgetPasswordDialogEditConfirmEmail.error = context.getString(R.string.empty_confirm_email)
+					error = true
 				}
 				
-				binding.forgetPasswordDialogButtonSubmit.setOnClickListener {
-					val email = binding.forgetPasswordDialogEditEmail.text.toString()
-					val confirm = binding.forgetPasswordDialogEditConfirmEmail.text.toString()
-					
-					var error = false
-					if (email.isBlank()) {
-						binding.forgetPasswordDialogInputEmail.error = context.getString(R.string.empty_email)
-						error = true
-					}
-					if (confirm.isBlank()) {
-						binding.forgetPasswordDialogEditConfirmEmail.error = context.getString(R.string.empty_confirm_email)
-						error = true
-					}
-					
-					if (!error) {
-						var success = true
-						CoroutineScope(Dispatchers.Main).launch {
-							val loadingDialog = LoadingDialog(context)
+				if (!error) {
+					var success = true
+					CoroutineScope(Dispatchers.Main).launch {
+						val loadingDialog = LoadingDialog(context)
+						try {
+							loadingDialog.showDialog()
+							withContext(Dispatchers.IO) {
+								RetrofitInstance.api.sendResetPasswordEmail(
+									SendResetPasswordEmail(
+										email = email,
+									)
+								)
+							}
+						} catch (ex: Exception) {
+							ex.printStackTrace()
+							success = false
+						} finally {
 							try {
-								loadingDialog.showDialog()
-								withContext(Dispatchers.IO) {
-									RetrofitInstance.api.sendResetPasswordEmail()
+								loadingDialog.hideDialog()
+								if (success) {
+									val successDialog = SuccessBackDialog(context)
+									successDialog.showDialog(context.getString(R.string.successfully_send_reset_password_email)) {
+										successDialog.hideDialog()
+										this@apply.hide()
+									}
+								} else {
+									AlertDialog.Builder(context).apply {
+										setTitle(context.getString(R.string.error))
+										setMessage(context.getString(R.string.error_sending_email))
+										setNegativeButton(context.getString(R.string.back), null)
+										create()
+										show()
+									}
 								}
 							} catch (ex: Exception) {
 								ex.printStackTrace()
-								success = false
-							} finally {
-								try {
-									loadingDialog.hideDialog()
-									if (success) {
-										val successDialog = SuccessBackDialog(context)
-										successDialog.showDialog(context.getString(R.string.successfully_send_reset_password_email)){
-											successDialog.hideDialog()
-										}
-									} else {
-										AlertDialog.Builder(context).apply {
-											setTitle(context.getString(R.string.error))
-											setMessage(context.getString(R.string.error_sending_email))
-											setNegativeButton(context.getString(R.string.back), null)
-										}
-									}
-								} catch (ex: Exception) {
-									ex.printStackTrace()
-								}
 							}
 						}
 					}

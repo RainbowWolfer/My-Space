@@ -3,7 +3,6 @@ package com.rainbowwolfer.myspacedemo1.services.recyclerview.adapters
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,6 +38,7 @@ import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDeta
 import com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.PostDetailFragment.Companion.updateVoteButtons
 import com.rainbowwolfer.myspacedemo1.util.DateTimeUtils.convertToRecentFormat
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions
+import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.postShareContent
 import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -155,17 +155,7 @@ class MainListRecyclerViewAdapter(
 							}
 						}
 						R.id.item_share -> {
-							val sharedIntent = Intent().apply {
-								this.action = Intent.ACTION_SEND
-								this.putExtra(
-									Intent.EXTRA_TEXT,
-									context.getString(R.string.publisher) + " :${post.publisherUsername}\n" +
-											context.getString(R.string.date) + " :${post.publishDateTime}\n" +
-											post.textContent
-								)
-								this.type = "text/plain"
-							}
-							context.startActivity(sharedIntent)
+							EasyFunctions.share(context, postShareContent(context, post))
 						}
 						R.id.item_collection -> {
 							if (application.hasLoggedIn()) {

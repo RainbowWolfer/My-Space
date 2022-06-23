@@ -15,6 +15,7 @@ import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.ui.activities.login.LoginActivity
 import com.rainbowwolfer.myspacedemo1.ui.views.LoadingDialog
 import com.rainbowwolfer.myspacedemo1.util.EasyFunctions.getHttpResponse
+import com.rainbowwolfer.myspacedemo1.util.SheetDialogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,6 +76,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 					ex.printStackTrace()
 				}
 			}
+		}
+		
+		binding.loginButtonForgetPassword.setOnClickListener {
+			SheetDialogUtils.showForgetPasswordDialog(requireContext())
 		}
 		
 		binding.loginEditTextEmail.doAfterTextChanged {
