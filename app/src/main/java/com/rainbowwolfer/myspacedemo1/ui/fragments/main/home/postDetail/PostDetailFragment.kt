@@ -264,7 +264,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	}
 	
 	private fun updateAvatar() {
-		application.findOrGetAvatar(viewModel.post.value?.publisherID ?: return){
+		application.findOrGetAvatar(viewModel.post.value?.publisherID ?: return) {
 			binding.updateAvatar(it)
 		}
 	}

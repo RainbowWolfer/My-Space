@@ -50,7 +50,7 @@ class PostInfo(
 				this.add(PostInfo(post.id, post))
 			}
 		}
-
+		
 		fun ArrayList<PostInfo>.getImage(id: String, index: Int): BitmapLoader? {
 			val found = this.findPostInfo(id) ?: return null
 			if (index !in found.images.indices) {

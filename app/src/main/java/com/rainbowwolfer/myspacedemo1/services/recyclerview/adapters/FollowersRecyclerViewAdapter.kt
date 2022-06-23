@@ -121,7 +121,7 @@ class FollowersRecyclerViewAdapter(
 				holder.binding.rowFollowersButtonFollow.visibility = View.GONE
 			}
 			
-			application.findOrGetAvatar(data.id){
+			application.findOrGetAvatar(data.id) {
 				holder.binding.rowFollowersImageAvatar.setImageBitmap(it)
 			}
 			

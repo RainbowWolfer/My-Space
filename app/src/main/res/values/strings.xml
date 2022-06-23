@@ -173,7 +173,7 @@
 	<string name="sending_post">Posting…</string>
 	<string name="no">No</string>
 	<string name="yes">Yes</string>
-
+	
 	<string name="send_post_confirm_text">Are you sure to send this post?</string>
 	<string name="save_draft_confirm_text">Are you sure to save current post as a draft?</string>
 	<string name="least_5_characters_are_needed">Least 5 characters are needed</string>

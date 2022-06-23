@@ -190,11 +190,11 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="8dp"
-		tools:text="21"
 		android:textSize="18sp"
 		app:layout_constraintBottom_toBottomOf="@+id/row_button_upvote"
 		app:layout_constraintEnd_toStartOf="@+id/row_button_upvote"
-		app:layout_constraintTop_toTopOf="@+id/row_button_upvote"/>
+		app:layout_constraintTop_toTopOf="@+id/row_button_upvote"
+		tools:text="21"/>
 	
 	<LinearLayout
 		android:id="@+id/row_layout_comment"
@@ -216,8 +216,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="5dp"
-			android:src="@drawable/ic_baseline_comment_24"
-			android:contentDescription=""/>
+			android:contentDescription=""
+			android:src="@drawable/ic_baseline_comment_24"/>
 		
 		<TextView
 			android:id="@+id/row_comment_count"

@@ -11,14 +11,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/image_preview_row_1"
 		android:clickable="true"
+		android:contentDescription=""
 		android:focusable="true"
 		android:foreground="@drawable/ripple_small_corners"
 		android:scaleType="centerCrop"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		tools:srcCompat="@tools:sample/backgrounds/scenic"
-		android:contentDescription=""/>
+		tools:srcCompat="@tools:sample/backgrounds/scenic"/>
 	
 	<TextView
 		android:id="@+id/textView24"

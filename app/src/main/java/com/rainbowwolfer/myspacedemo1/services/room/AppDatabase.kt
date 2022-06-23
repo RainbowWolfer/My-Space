@@ -22,7 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun draftsDao(): DraftsDao
 	abstract fun messagesDao(): MessagesDao
 	abstract fun messagesContactDao(): MessageContactsDao
-
+	
 	companion object {
 		@Volatile
 		private var instance: AppDatabase? = null

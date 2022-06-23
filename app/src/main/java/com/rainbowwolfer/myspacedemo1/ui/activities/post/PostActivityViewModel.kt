@@ -88,7 +88,7 @@ class PostActivityViewModel : ViewModel() {
 			images.value!![i] = null
 		}
 	}
-
+	
 	private fun Array<ImageInfo?>.sortImages() {
 		this.sortWith(compareBy(nullsFirst()) {
 			it == null

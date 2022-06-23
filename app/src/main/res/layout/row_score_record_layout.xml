@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_margin="5dp"
 	android:background="@drawable/card_background"
 	android:padding="5dp">
@@ -32,20 +32,20 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
-		tools:text="RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintStart_toEndOf="@+id/rowScoreRecord_image_avatar"
-		app:layout_constraintTop_toTopOf="@+id/rowScoreRecord_image_avatar"/>
+		app:layout_constraintTop_toTopOf="@+id/rowScoreRecord_image_avatar"
+		tools:text="RainbowWolfer"/>
 	
 	<TextView
 		android:id="@+id/rowScoreRecord_text_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
-		tools:text="2022-02-22 22:22:22"
 		app:layout_constraintBottom_toBottomOf="@+id/rowScoreRecord_image_avatar"
-		app:layout_constraintStart_toEndOf="@+id/rowScoreRecord_image_avatar"/>
+		app:layout_constraintStart_toEndOf="@+id/rowScoreRecord_image_avatar"
+		tools:text="2022-02-22 22:22:22"/>
 	
 	<ImageView
 		android:id="@+id/rowScoreRecord_button_vote"

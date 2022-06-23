@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_marginTop="10dp"
 	android:paddingBottom="10dp">
 	
@@ -29,21 +29,21 @@
 		android:layout_marginEnd="16dp"
 		android:ellipsize="end"
 		android:maxLines="1"
-		tools:text="RainbowWolfer"
 		android:textSize="18sp"
 		android:textStyle="bold"
 		app:layout_constraintEnd_toStartOf="@+id/commentRow_button_more"
 		app:layout_constraintStart_toEndOf="@+id/commentRow_image_avatar"
-		app:layout_constraintTop_toTopOf="@+id/commentRow_image_avatar"/>
+		app:layout_constraintTop_toTopOf="@+id/commentRow_image_avatar"
+		tools:text="RainbowWolfer"/>
 	
 	<TextView
 		android:id="@+id/commentRow_text_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
-		tools:text="2022/11/11 11:11:11"
 		app:layout_constraintBottom_toBottomOf="@+id/commentRow_image_avatar"
-		app:layout_constraintStart_toEndOf="@+id/commentRow_image_avatar"/>
+		app:layout_constraintStart_toEndOf="@+id/commentRow_image_avatar"
+		tools:text="2022/11/11 11:11:11"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/commentRow_button_more"
@@ -64,10 +64,10 @@
 		android:layout_marginStart="24dp"
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="16dp"
-		tools:text="@string/welcome2_text"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/commentRow_image_avatar"/>
+		app:layout_constraintTop_toBottomOf="@+id/commentRow_image_avatar"
+		tools:text="@string/welcome2_text"/>
 	
 	<androidx.appcompat.widget.AppCompatImageButton
 		android:id="@+id/commentRow_button_upvote"
@@ -98,11 +98,11 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="8dp"
-		tools:text="21"
 		android:textSize="18sp"
 		app:layout_constraintBottom_toBottomOf="@+id/commentRow_button_upvote"
 		app:layout_constraintEnd_toStartOf="@+id/commentRow_button_upvote"
-		app:layout_constraintTop_toTopOf="@+id/commentRow_button_upvote"/>
+		app:layout_constraintTop_toTopOf="@+id/commentRow_button_upvote"
+		tools:text="21"/>
 	
 	<View
 		android:layout_width="0dp"

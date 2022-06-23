@@ -224,13 +224,13 @@
 			android:layout_marginTop="8dp"
 			android:layout_marginEnd="24dp"
 			android:layout_marginBottom="8dp"
+			android:contentDescription=""
 			android:visibility="gone"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:srcCompat="@drawable/ic_baseline_check_24"
-			app:tint="@color/green"
-			android:contentDescription=""/>
+			app:tint="@color/green"/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	<androidx.constraintlayout.widget.ConstraintLayout

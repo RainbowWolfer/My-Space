@@ -27,7 +27,7 @@ data class Comment(
 		const val VOTE_DOWN = 0
 		const val VOTE_NONE = -1
 	}
-
+	
 	fun getScore(): Int = upvotes - downvotes
 	
 	override fun getDatabaseID(): String = id
