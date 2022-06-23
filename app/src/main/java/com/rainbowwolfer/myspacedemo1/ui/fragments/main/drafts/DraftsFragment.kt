@@ -2,7 +2,6 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.drafts
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding

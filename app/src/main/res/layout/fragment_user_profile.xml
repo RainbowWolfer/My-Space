@@ -56,22 +56,22 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginTop="8dp"
-					tools:text="RainbowWolfer"
 					android:textSize="24sp"
 					android:textStyle="bold"
 					app:layout_constraintEnd_toEndOf="@+id/user_image_avatar"
 					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
-					app:layout_constraintTop_toBottomOf="@+id/user_image_avatar"/>
+					app:layout_constraintTop_toBottomOf="@+id/user_image_avatar"
+					tools:text="RainbowWolfer"/>
 				
 				<TextView
 					android:id="@+id/user_text_email"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					tools:text="RainbowWolfer@outlook.com"
 					android:textSize="16sp"
 					app:layout_constraintEnd_toEndOf="@+id/user_image_avatar"
 					app:layout_constraintStart_toStartOf="@+id/user_image_avatar"
-					app:layout_constraintTop_toBottomOf="@+id/user_text_username"/>
+					app:layout_constraintTop_toBottomOf="@+id/user_text_username"
+					tools:text="RainbowWolfer@outlook.com"/>
 				
 				<LinearLayout
 					android:id="@+id/user_layout_others"

@@ -23,7 +23,6 @@ import com.rainbowwolfer.myspacedemo1.models.Post
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findPostInfo
 import com.rainbowwolfer.myspacedemo1.models.PostInfo.Companion.findRelativePosts
 import com.rainbowwolfer.myspacedemo1.models.User
-import com.rainbowwolfer.myspacedemo1.models.UserInfo.Companion.findUserInfo
 import com.rainbowwolfer.myspacedemo1.models.exceptions.ResponseException
 import com.rainbowwolfer.myspacedemo1.services.api.RetrofitInstance
 import com.rainbowwolfer.myspacedemo1.services.application.MySpaceApplication
@@ -172,6 +171,17 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 			binding.updateUser(post.getPublisher())
 		}
 		
+		binding.postDetailImageAvatar.setOnClickListener {
+			//way more complex to fix
+//			val post = application.postsPool.findPostInfo(postID)?.post ?: return@setOnClickListener
+//			findNavController().navigate(
+//				R.id.sub_nav_profile, Bundle().apply {
+//					putString("user_id", post.publisherID)
+//					putBoolean(UserFragment.ARG_ENABLE_MESSAGE, post.publisherID != application.getCurrentID())
+//				}, defaultTransitionNavOption()
+//			)
+		}
+		
 		binding.postDetailButtonComment.buttonAction {
 			binding.postDetailViewPager2.currentItem = 0//make fragment is on comment
 			PostDetailCommentsFragment.instance?.focusCommentInput()
@@ -254,22 +264,8 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 	}
 	
 	private fun updateAvatar() {
-		val id = viewModel.post.value?.publisherID ?: return
-		if (application.currentUser.value?.id == id) {
-			application.currentAvatar.observe(viewLifecycleOwner) {
-				binding.updateAvatar(it)
-			}
-		} else {
-			val found = application.usersPool.findUserInfo(id)
-			if (found != null) {
-				binding.updateAvatar(found.avatar)
-			} else {
-				lifecycleScope.launch(Dispatchers.Main) {
-					application.findOrGetAvatar(id) {
-						binding.updateAvatar(it)
-					}
-				}
-			}
+		application.findOrGetAvatar(viewModel.post.value?.publisherID ?: return){
+			binding.updateAvatar(it)
 		}
 	}
 	

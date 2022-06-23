@@ -12,12 +12,12 @@ class AppVersion(
 			if (split.size != 4) {
 				return null
 			}
-			val marjor = split[0].toIntOrNull() ?: return null
+			val major = split[0].toIntOrNull() ?: return null
 			val minor = split[1].toIntOrNull() ?: return null
 			val build = split[2].toIntOrNull() ?: return null
 			val revision = split[3].toIntOrNull() ?: return null
 			
-			return AppVersion(marjor, minor, build, revision)
+			return AppVersion(major, minor, build, revision)
 		}
 	}
 	

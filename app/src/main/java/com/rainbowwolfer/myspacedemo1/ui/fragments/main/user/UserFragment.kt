@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.user
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem

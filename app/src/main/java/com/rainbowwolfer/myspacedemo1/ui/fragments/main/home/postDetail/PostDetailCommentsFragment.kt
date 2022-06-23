@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding

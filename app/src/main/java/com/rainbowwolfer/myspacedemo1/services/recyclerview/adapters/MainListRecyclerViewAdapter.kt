@@ -229,7 +229,6 @@ class MainListRecyclerViewAdapter(
 					context.getString(R.string.end_row_text_4),
 					context.getString(R.string.end_row_text_5),
 				)
-//				val array = context.resources.getStringArray(R.array.end_row_texts)
 				holder.binding.rowEndTextCenter.text = array[endTextIndex]
 				if (++endTextIndex >= array.size) {
 					endTextIndex = 0
@@ -240,8 +239,6 @@ class MainListRecyclerViewAdapter(
 	
 	private fun navigateToUserProfile(view: View, id: String) {
 		val navController = Navigation.findNavController(view)
-//		navController.graph.findNode(R.id.userFragment)?.label = "User $id"
-//		val action = HomeFragmentDirections.actionItemHomeToUserFragment(id)
 		navController.navigate(R.id.item_user_profile, Bundle().apply {
 			putString("user_id", id)
 		}, EasyFunctions.defaultTransitionNavOption())
@@ -370,7 +367,6 @@ class MainListRecyclerViewAdapter(
 		val p = application.postsPool.findPostInfo(postID)!!.post
 		this.setRepostView(p.isRepost)
 		this.setContent(p)
-//		val result = if (p.isRepost) p.getOriginPost()!! else p
 		this.setTags(p.readTags())
 		this.setMetas(p.readID())
 		this.setPublisher(p.readUser())
@@ -398,7 +394,6 @@ class MainListRecyclerViewAdapter(
 		if (post.isRepost) {
 			val origin = post.getOriginPost()!!
 			this.rowTextPublishDateTime.text = origin.publishDateTime.convertToRecentFormat(context)
-			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = origin.textContent
 			this.mainTextRepost.text = post.textContent
 			@SuppressLint("SetTextI18n")
@@ -409,7 +404,6 @@ class MainListRecyclerViewAdapter(
 			}
 		} else {
 			this.rowTextPublishDateTime.text = post.publishDateTime.convertToRecentFormat(context)
-			//"${post.id}_${post.originPostID}" +
 			this.rowTextContent.text = post.textContent
 		}
 	}

@@ -216,7 +216,7 @@
 	<string name="successfully_removed_from_collections">Successfully Removed From Collections</string>
 	<string name="you_need_to_update_the_app">You need to update the app</string>
 	<string name="already_the_newest_version">Already the newest version</string>
-	<string name="you_are_ahead_of_the_newest_verion">You are ahead of the newest verion</string>
+	<string name="you_are_ahead_of_the_newest_version">You are ahead of the newest version</string>
 	<string name="confirm_email">Confirm Email</string>
 	<string name="find_password">Find Password</string>
 	<string name="send_reset_email">Send Reset Email</string>

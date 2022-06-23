@@ -40,7 +40,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 									Toast.makeText(requireContext(), getString(R.string.already_the_newest_version), Toast.LENGTH_SHORT).show()
 								}
 								AppVersion.CompareResult.Less -> {
-									Toast.makeText(requireContext(), getString(R.string.you_are_ahead_of_the_newest_verion), Toast.LENGTH_SHORT).show()
+									Toast.makeText(requireContext(), getString(R.string.you_are_ahead_of_the_newest_version), Toast.LENGTH_SHORT).show()
 								}
 							}
 						}

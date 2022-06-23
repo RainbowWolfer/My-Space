@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.TextUtils
 import android.view.LayoutInflater
 import androidx.core.widget.doAfterTextChanged
 import com.rainbowwolfer.myspacedemo1.R

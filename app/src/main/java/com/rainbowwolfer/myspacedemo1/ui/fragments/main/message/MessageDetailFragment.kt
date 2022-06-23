@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
