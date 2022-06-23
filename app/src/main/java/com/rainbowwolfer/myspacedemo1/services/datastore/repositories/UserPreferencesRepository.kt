@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.services.datastore.repositories
 
 import android.content.Context
-import android.text.TextUtils
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.rainbowwolfer.myspacedemo1.UserPreferences
@@ -13,7 +12,7 @@ class UserPreferencesRepository(
 ) {
 	companion object {
 		fun UserPreferences.hasUserValue(): Boolean {
-			return !TextUtils.isEmpty(this.email) && !TextUtils.isEmpty(this.password)
+			return this.email.isNotBlank() && this.password.isNotBlank()
 		}
 	}
 	

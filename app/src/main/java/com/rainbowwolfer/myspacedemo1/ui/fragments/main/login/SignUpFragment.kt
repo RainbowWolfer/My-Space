@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.login
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
@@ -24,18 +23,18 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
+
 //		binding.signupEditTextUsername.setText("rainbow_wolfer")
 //		binding.signupEditTextEmail.setText("1519787190@qq.com")
 //		binding.signupEditTextPassword.setText("123456789")
 //		binding.signupEditTextConfirmPassword.setText("123456789")
-
+		
 		binding.signupEditTextUsername.doAfterTextChanged {
 			if (skip) {
 				return@doAfterTextChanged
 			}
 			val text = it.toString()
-			binding.signupInputUsername.error = if (TextUtils.isEmpty(text)) {
+			binding.signupInputUsername.error = if (text.isBlank()) {
 				getString(R.string.username_cannot_be_empty)
 			} else {
 				null
@@ -97,7 +96,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				return@doAfterTextChanged
 			}
 			val password = binding.signupEditTextPassword.text.toString()
-			if (TextUtils.isEmpty(password)) {
+			if (password.isBlank()) {
 				binding.signupInputConfirmPassword.error = getString(R.string.no_password_entered_yet)
 				return@doAfterTextChanged
 			}
@@ -114,7 +113,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				return@doAfterTextChanged
 			}
 			val password = binding.signupEditTextPassword.text.toString()
-			if (TextUtils.isEmpty(password)) {
+			if (password.isBlank()) {
 				binding.signupInputConfirmPassword.error = getString(R.string.no_password_entered_yet)
 				return@doAfterTextChanged
 			}
@@ -131,7 +130,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 				binding.signupEditTextEmail,
 				binding.signupEditTextPassword,
 				binding.signupEditTextConfirmPassword,
-			).any { input -> TextUtils.isEmpty(input.text.toString()) }
+			).any { input -> input.text.toString().isBlank() }
 			
 			if (hasEmpty) {
 				Snackbar.make(view, getString(R.string.you_have_empty_fields_to_fill), Snackbar.LENGTH_SHORT).show()

@@ -2,7 +2,6 @@ package com.rainbowwolfer.myspacedemo1.models
 
 import android.net.Uri
 import android.os.Parcelable
-import android.text.TextUtils
 import androidx.core.net.toUri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -56,7 +55,7 @@ data class Draft(
 		imagesURI.split(SEPARATOR_URIS).forEach {
 			result.add(it.toUri())
 		}
-		return result.filter { !TextUtils.isEmpty(it.toString()) }
+		return result.filter { it.toString().isNotBlank() }
 	}
 	
 	fun getTagsList(): List<String> {
@@ -64,7 +63,7 @@ data class Draft(
 		tags.split(SEPARATOR_TAGS).forEach {
 			result.add(it)
 		}
-		return result.filter { !TextUtils.isEmpty(it) }
+		return result.filter { it.isNotBlank() }
 	}
 	
 	override fun getDatabaseID(): Long = id

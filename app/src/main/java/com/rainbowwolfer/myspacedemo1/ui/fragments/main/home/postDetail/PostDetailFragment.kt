@@ -333,7 +333,7 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 		binding.postDetailTextContent.text = post.textContent
 		binding.postDetailChipGroupTags.removeAllViews()
 		post.tags.split(',').forEach {
-			if (!TextUtils.isEmpty(it)) {
+			if (it.isNotBlank()) {
 				binding.postDetailChipGroupTags.addView(Chip(context).apply {
 					text = it
 				})

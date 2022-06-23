@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import android.view.animation.AlphaAnimation
@@ -321,7 +320,7 @@ class PostActivity : AppCompatActivity() {
 				tagInputBinding.bottomSheetDialogInputTag.error = when {
 					//as long as it is not a-z, A-z or 0-9 (or chinese character)
 					arrayListOf('!', '@', '#', '$', '%', '^', '&', '*', '&', '(', ')', '_', '=', '+', '{', '}', '/', '.', '<', '>', '|', '\\', '[', ']', '~', '-', ' ').any { c -> it.toString().contains(c) } -> getString(R.string.no_special_character_allowed)
-					TextUtils.isEmpty(it.toString()) -> getString(R.string.tag_cannot_be_empty)
+					it.toString().isBlank() -> getString(R.string.tag_cannot_be_empty)
 					it.toString().length > 20 -> getString(R.string.max_length_is_20)
 					viewModel.hasTag(it.toString()) -> getString(R.string.already_exists)
 					else -> null
@@ -509,8 +508,11 @@ class PostActivity : AppCompatActivity() {
 					}
 				}
 				
-				SuccessBackDialog(this@PostActivity).showDialog {
-					finish()
+				SuccessBackDialog(this@PostActivity).also { dialog ->
+					dialog.showDialog {
+						dialog.hideDialog()
+						finish()
+					}
 				}
 			}
 			create()

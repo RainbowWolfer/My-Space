@@ -34,7 +34,7 @@ class ChangeUsernameDialog(
 			var enable = true
 			var errorMessage = ""
 			when {
-				TextUtils.isEmpty(text) -> {
+				text.isBlank() -> {
 					enable = false
 					errorMessage = "Username cannot be empty"
 				}

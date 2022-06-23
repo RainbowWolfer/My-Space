@@ -219,4 +219,10 @@ interface MyApi {
 	
 	@GET("myspace/version")
 	suspend fun getAppVersion(): Response<GetAppVersion>
+	
+	@POST("user/sendResetPasswordEmail")
+	suspend fun sendResetPasswordEmail(
+	
+	):ResponseBody
+	
 }

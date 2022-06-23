@@ -63,7 +63,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
 			isSelf = true
 		}
 		
-		if (TextUtils.isEmpty(userID)) {
+		if (userID.isBlank()) {
 			binding.userLayoutMain.visibility = View.GONE
 			binding.userIncludeNotLoggedIn.root.visibility = View.VISIBLE
 			return

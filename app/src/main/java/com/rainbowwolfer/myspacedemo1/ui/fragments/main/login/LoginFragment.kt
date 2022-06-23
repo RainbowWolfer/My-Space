@@ -2,7 +2,6 @@ package com.rainbowwolfer.myspacedemo1.ui.fragments.main.login
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.appcompat.content.res.AppCompatResources
@@ -79,7 +78,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 		}
 		
 		binding.loginEditTextEmail.doAfterTextChanged {
-			if (TextUtils.isEmpty(it.toString())) {
+			if (it.toString().isBlank()) {
 				binding.loginEditTextEmail.error = getString(R.string.empty_email)
 			} else {
 				binding.loginEditTextEmail.error = null
@@ -87,7 +86,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 		}
 		
 		binding.loginEditTextPassword.doAfterTextChanged {
-			if (TextUtils.isEmpty(it.toString())) {
+			if (it.toString().isBlank()) {
 				binding.loginEditTextPassword.error = getString(R.string.empty_password)
 			} else {
 				binding.loginEditTextPassword.error = null
@@ -97,11 +96,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 	
 	private fun checkParametersValid(): Boolean {
 		var error = false
-		if (TextUtils.isEmpty(binding.loginEditTextEmail.text)) {
+		if (binding.loginEditTextEmail.text?.isBlank() != false) {
 			binding.loginEditTextEmail.error = getString(R.string.empty_email)
 			error = true
 		}
-		if (TextUtils.isEmpty(binding.loginEditTextPassword.text)) {
+		if (binding.loginEditTextPassword.text?.isBlank() != false) {
 			binding.loginEditTextPassword.error = getString(R.string.empty_password)
 			error = true
 		}
@@ -109,10 +108,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 	}
 	
 	fun fill(email: String?, password: String?) {
-		if (!TextUtils.isEmpty(email)) {
+		if (email?.isNotBlank() == true) {
 			binding.loginEditTextEmail.setText(email)
 		}
-		if (!TextUtils.isEmpty(password)) {
+		if (email?.isNotBlank() == true) {
 			binding.loginEditTextPassword.setText(password)
 		}
 	}

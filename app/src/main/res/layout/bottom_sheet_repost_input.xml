@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/bottomSheetCommentDialog_root"
+	android:id="@+id/bottomSheetRepostDialog_root"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/layout_background_bottom_input_dialog">

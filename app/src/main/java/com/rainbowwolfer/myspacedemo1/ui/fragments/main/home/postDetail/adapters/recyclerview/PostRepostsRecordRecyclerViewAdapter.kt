@@ -1,7 +1,6 @@
 package com.rainbowwolfer.myspacedemo1.ui.fragments.main.home.postDetail.adapters.recyclerview
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +74,7 @@ class PostRepostsRecordRecyclerViewAdapter(
 				PostDetailFragment.updateRepostButton(holder.binding.rowRepostRecordIconRepost, true)
 			}
 			
-			if (!TextUtils.isEmpty(data.quote)) {
+			if (data.quote.isNotBlank()) {
 				holder.binding.rowRepostRecordButtonQuote.visibility = View.VISIBLE
 				holder.binding.root.setOnClickListener {
 					if (holder.binding.root.tag == true) {

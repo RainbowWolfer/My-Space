@@ -217,4 +217,11 @@
 	<string name="you_need_to_update_the_app">You need to update the app</string>
 	<string name="already_the_newest_version">Already the newest version</string>
 	<string name="you_are_ahead_of_the_newest_verion">You are ahead of the newest verion</string>
+	<string name="confirm_email">Confirm Email</string>
+	<string name="find_password">Find Password</string>
+	<string name="send_reset_email">Send Reset Email</string>
+	<string name="confirm_email_is_not_matched">Confirm email is not matched</string>
+	<string name="empty_confirm_email">Empty Confirm Email</string>
+	<string name="successfully_send_reset_password_email">Successfully send reset password email</string>
+	<string name="error_sending_email">Error sending email</string>
 </resources>

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import com.rainbowwolfer.myspacedemo1.databinding.DialogSuccessBackLayoutBinding
@@ -25,7 +24,7 @@ class SuccessBackDialog(
 			create()
 			show()
 		}
-		if (!TextUtils.isEmpty(title)) {
+		if (title?.isNotBlank() != false) {
 			binding.successBackDialogTextTitle.text = title
 		}
 		binding.successBackDialogButtonBack.setOnClickListener {

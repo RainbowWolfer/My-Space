@@ -77,7 +77,7 @@ class PostDetailCommentsFragment : Fragment(R.layout.fragment_post_detail_commen
 		
 		binding.postDetailCommentsEditTextComment.setOnEditorActionListener { _, _, _ ->
 			val text = binding.postDetailCommentsEditTextComment.text?.toString() ?: ""
-			if (TextUtils.isEmpty(text) || text.length > 200) {
+			if (text.isBlank() || text.length > 200) {
 				return@setOnEditorActionListener true
 			} else {
 				uploadComment(postID, text)

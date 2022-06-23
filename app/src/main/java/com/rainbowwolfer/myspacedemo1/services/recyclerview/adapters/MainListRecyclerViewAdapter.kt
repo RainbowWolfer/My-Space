@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -428,7 +427,7 @@ class MainListRecyclerViewAdapter(
 	private fun MainRowLayoutBinding.setTags(tags: String) {
 		this.rowChipGroupsTags.removeAllViews()
 		tags.split(',').forEach {
-			if (!TextUtils.isEmpty(it)) {
+			if (it.isNotBlank()) {
 				this.rowChipGroupsTags.addView(Chip(context).apply {
 					text = it
 				})

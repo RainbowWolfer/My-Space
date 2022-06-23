@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import com.rainbowwolfer.myspacedemo1.databinding.LoadingDialogBinding
@@ -25,7 +24,7 @@ class LoadingDialog(
 			window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 		}
 		
-		if (!TextUtils.isEmpty(content)) {
+		if (content?.isNotBlank() != false) {
 			binding.loadingDialogTextContent.text = content
 		}
 		binding.loadingDialogButtonCancel.visibility = if (showCancelButton) View.VISIBLE else View.GONE

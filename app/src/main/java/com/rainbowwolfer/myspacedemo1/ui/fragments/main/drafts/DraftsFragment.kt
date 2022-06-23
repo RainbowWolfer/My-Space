@@ -50,7 +50,7 @@ class DraftsFragment : Fragment(R.layout.fragment_drafts) {
 		
 		binding.draftsEditSearch.setOnEditorActionListener { _, _, _ ->
 			val text = binding.draftsEditSearch.text?.toString() ?: ""
-			if (!TextUtils.isEmpty(text)) {
+			if (text.isNotBlank()) {
 				val imm = requireContext().getSystemService(InputMethodManager::class.java)
 				imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 				binding.draftsEditSearch.clearFocus()
