@@ -6,7 +6,6 @@ class PostInfo(
 	val id: String,
 	var post: Post,
 ) {
-	var originPost: Post? = null
 	val images: Array<BitmapLoader>
 	
 	//true  ->  voted up

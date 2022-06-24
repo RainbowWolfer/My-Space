@@ -97,24 +97,24 @@ class MessageRecyclerViewAdapter(
 	
 	@SuppressLint("NotifyDataSetChanged")
 	fun setData(new: List<MessageContact>) {
-		val result = list.toMutableList()
-		for (i in new) {
-			var found: MessageContact? = null
-			for (j in result) {
-				if (i.senderID == j.senderID) {
-					found = j
-				}
-			}
-			if (found != null) {
-				found.username = i.username
-				found.dateTime = i.dateTime
-				found.textContent = i.textContent
-				found.unreadCount = i.unreadCount
-			} else {
-				result.add(i)
-			}
-		}
-		list = result
+//		val result = list.toMutableList()
+//		for (i in new) {
+//			var found: MessageContact? = null
+//			for (j in result) {
+//				if (i.senderID == j.senderID) {
+//					found = j
+//				}
+//			}
+//			if (found != null) {
+//				found.username = i.username
+//				found.dateTime = i.dateTime
+//				found.textContent = i.textContent
+//				found.unreadCount = i.unreadCount
+//			} else {
+//				result.add(i)
+//			}
+//		}
+		list = new
 		notifyDataSetChanged()
 	}
 }

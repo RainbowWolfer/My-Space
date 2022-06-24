@@ -21,6 +21,11 @@ object ChatSocket {
 	val read: MutableLiveData<String> by lazy { MutableLiveData() }
 	private val application = MySpaceApplication.instance
 	
+	fun test(): String {
+		
+		return client?.isConnected?.toString() ?: "NULL"
+	}
+	
 	fun connect(forceRefresh: Boolean = false) {
 		if (!application.hasLoggedIn()) {
 			println("Not Logged In Yet!")
@@ -29,12 +34,16 @@ object ChatSocket {
 		CoroutineScope(Dispatchers.IO).launch {
 			val result = kotlin.runCatching {
 				if (client == null || forceRefresh) {
-					client = Socket(host, port)
+					client = Socket(host, port).apply {
+						keepAlive = true
+					}
+					println("connected to server : ${client!!.isConnected}")
 				}
 				console("/sign ${application.getCurrentID()}")
 				BufferedReader(client!!.getInputStream().reader()).use { r ->
 					r.lineSequence().forEach {
 						withContext(Dispatchers.Main) {
+							println("Receive : $it")
 							read.value = it
 						}
 					}

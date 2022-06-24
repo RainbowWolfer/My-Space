@@ -171,7 +171,11 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				}
 				
 				withContext(Dispatchers.IO) {
-					saveLocal(viewModel.messages.value!!.toTypedArray())
+					val list = viewModel.messages.value ?: emptyList()
+					list.forEach {
+						it.hasReceived = true
+					}
+					saveLocal(list.toTypedArray())
 					RetrofitInstance.api.flagReceived(
 						FlagMessage(
 							email = application.getCurrentEmail(),

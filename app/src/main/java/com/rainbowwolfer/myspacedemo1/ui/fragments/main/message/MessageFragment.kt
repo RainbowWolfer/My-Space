@@ -174,6 +174,7 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.item_selection -> {
+				println(ChatSocket.test())
 //				val contact = viewModel.contacts.value!!.firstOrNull()
 //				if (contact != null) {
 //					contact.unreadCount += 5
