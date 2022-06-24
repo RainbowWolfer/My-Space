@@ -175,15 +175,8 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 					list.forEach {
 						it.hasReceived = true
 					}
+					
 					saveLocal(list.toTypedArray())
-					RetrofitInstance.api.flagReceived(
-						FlagMessage(
-							email = application.getCurrentEmail(),
-							password = application.getCurrentPassword(),
-							senderID = contact.senderID.toString(),
-							flagHasReceived = true,
-						)
-					)
 				}
 			} catch (ex: Exception) {
 				ex.printStackTrace()
@@ -196,6 +189,21 @@ class MessageDetailFragment : Fragment(R.layout.fragment_message_detail) {
 				} catch (ex: Exception) {
 				
 				}
+			}
+		}
+		
+		lifecycleScope.launch(Dispatchers.IO) {
+			try {
+				RetrofitInstance.api.flagReceived(
+					FlagMessage(
+						email = application.getCurrentEmail(),
+						password = application.getCurrentPassword(),
+						senderID = contact.senderID.toString(),
+						flagHasReceived = true,
+					)
+				)
+			} catch (ex: Exception) {
+				ex.printStackTrace()
 			}
 		}
 	}

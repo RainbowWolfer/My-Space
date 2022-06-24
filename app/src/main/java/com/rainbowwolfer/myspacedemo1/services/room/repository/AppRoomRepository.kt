@@ -46,6 +46,10 @@ class AppRoomRepository(
 		dao_contact.update(contact)
 	}
 	
+	@WorkerThread
+	suspend fun deleteAllContacts() {
+		dao_contact.deleteAll()
+	}
 	//draft
 	@WorkerThread
 	suspend fun insertDraft(draft: Draft) {

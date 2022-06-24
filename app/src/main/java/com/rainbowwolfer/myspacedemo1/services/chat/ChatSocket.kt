@@ -21,11 +21,6 @@ object ChatSocket {
 	val read: MutableLiveData<String> by lazy { MutableLiveData() }
 	private val application = MySpaceApplication.instance
 	
-	fun test(): String {
-		
-		return client?.isConnected?.toString() ?: "NULL"
-	}
-	
 	fun connect(forceRefresh: Boolean = false) {
 		if (!application.hasLoggedIn()) {
 			println("Not Logged In Yet!")

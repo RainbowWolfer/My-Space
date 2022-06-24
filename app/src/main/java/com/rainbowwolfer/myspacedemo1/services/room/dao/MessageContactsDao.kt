@@ -14,4 +14,7 @@ interface MessageContactsDao {
 	
 	@Update(entity = MessageContact::class)
 	suspend fun update(contact: MessageContact)
+	
+	@Query("DELETE FROM message_contacts")
+	suspend fun deleteAll()
 }

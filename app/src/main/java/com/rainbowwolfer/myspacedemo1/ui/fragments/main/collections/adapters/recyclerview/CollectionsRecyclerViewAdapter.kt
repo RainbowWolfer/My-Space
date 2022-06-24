@@ -76,7 +76,6 @@ class CollectionsRecyclerViewAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (holder is RowPostViewHolder) {
 			val data = list[position]
-			println(data)
 			holder.binding.rowCollectionPostTextDate.text = data.time.convertToRecentFormat(context)
 			holder.binding.rowCollectionPostTextUsername.text = "@${data.publisherUsername}"
 			holder.binding.rowCollectionPostIconRepost.visibility = if (data.isRepost) View.VISIBLE else View.GONE

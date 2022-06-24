@@ -127,6 +127,9 @@ class MainActivity : AppCompatActivity() {
 		application.currentUser.observe(this) {
 			application.updateAvatar()
 			updateNav()
+			lifecycleScope.launch(Dispatchers.IO) {
+				application.roomRepository.deleteAllContacts()
+			}
 		}
 		
 		application.currentAvatar.observe(this) {
