@@ -63,9 +63,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation files('libs\\joda-time-2.10.14.jar')
+
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'com.google.truth:truth:1.0.1'
+    testImplementation 'com.google.truth:truth:1.0.1'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
@@ -125,6 +129,7 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
+
 }
 
 

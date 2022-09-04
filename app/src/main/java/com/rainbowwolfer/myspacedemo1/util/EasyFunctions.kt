@@ -165,31 +165,6 @@ object EasyFunctions {
 		} while (new.isNotEmpty() && count <= RELOAD_THRESHOLD && triedCount++ <= maxTryCount)
 	}
 	
-	fun LifecycleOwner.loadAvatar(userID: String, setAction: (Bitmap?) -> Unit) {
-		val application = MySpaceApplication.instance
-		if (application.currentUser.value?.id == userID) {
-			application.currentAvatar.observe(this) {
-				setAction.invoke(it)
-			}
-		} else {
-			val userInfo: MutableLiveData<UserInfo> by lazy { MutableLiveData() }
-			val found = application.usersPool.findUserInfo(userID)
-			if (found != null) {
-				userInfo.value = found
-			} else {
-				application.findOrGetUserInfo(userID, {
-					userInfo.value = application.usersPool.findUserInfo(userID)
-				}, {
-					userInfo.value = application.usersPool.findUserInfo(userID)
-				}, this.lifecycleScope)
-			}
-			
-			userInfo.observe(this) {
-				setAction.invoke(it.avatar)
-			}
-		}
-	}
-	
 	fun defaultTransitionNavOption(): NavOptions {
 		return NavOptions.Builder().apply {
 			setEnterAnim(R.anim.from_right)

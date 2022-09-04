@@ -61,27 +61,29 @@ class PasswordStrengthCalculator : TextWatcher {
 		}
 	}
 	
-	private fun CharSequence.hasLowerCase(): Boolean {
-		val pattern: Pattern = Pattern.compile("[a-z]")
-		val hasLowerCase: Matcher = pattern.matcher(this)
-		return hasLowerCase.find()
-	}
-	
-	private fun CharSequence.hasUpperCase(): Boolean {
-		val pattern: Pattern = Pattern.compile("[A-Z]")
-		val hasUpperCase: Matcher = pattern.matcher(this)
-		return hasUpperCase.find()
-	}
-	
-	private fun CharSequence.hasDigit(): Boolean {
-		val pattern: Pattern = Pattern.compile("[0-9]")
-		val hasDigit: Matcher = pattern.matcher(this)
-		return hasDigit.find()
-	}
-	
-	private fun CharSequence.hasSpecialChar(): Boolean {
-		val pattern: Pattern = Pattern.compile("[!@#$%^&*()_=+{}/.<>|\\[\\]~-]")
-		val hasSpecialChar: Matcher = pattern.matcher(this)
-		return hasSpecialChar.find()
+	companion object {
+		internal fun CharSequence.hasLowerCase(): Boolean {
+			val pattern: Pattern = Pattern.compile("[a-z]")
+			val hasLowerCase: Matcher = pattern.matcher(this)
+			return hasLowerCase.find()
+		}
+		
+		internal fun CharSequence.hasUpperCase(): Boolean {
+			val pattern: Pattern = Pattern.compile("[A-Z]")
+			val hasUpperCase: Matcher = pattern.matcher(this)
+			return hasUpperCase.find()
+		}
+		
+		internal fun CharSequence.hasDigit(): Boolean {
+			val pattern: Pattern = Pattern.compile("[0-9]")
+			val hasDigit: Matcher = pattern.matcher(this)
+			return hasDigit.find()
+		}
+		
+		internal fun CharSequence.hasSpecialChar(): Boolean {
+			val pattern: Pattern = Pattern.compile("[!@#$%^&*()_=+{}/.<>|\\[\\]~-]")
+			val hasSpecialChar: Matcher = pattern.matcher(this)
+			return hasSpecialChar.find()
+		}
 	}
 }
